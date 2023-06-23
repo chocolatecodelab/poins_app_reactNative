@@ -3,21 +3,19 @@ import { TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import NavigationService from '../../tools/navigationService';
 import { H3 } from '../labels/Labels';
-import { COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
+import { COLOR_DISABLED, COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
 import { iconTools, ios } from "../../tools/helper";
 
 
 const styles = {
   container: {
-    height: ios ? 40 : 35,
+    height: 50,
     width: '100%',
     backgroundColor: COLOR_PRIMARY,
     flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    elevation: 3,
+    borderBottomWidth: 2,
+    borderCollor: COLOR_DISABLED,
     position: 'relative',
   },
 };
@@ -26,7 +24,7 @@ const renderBackButton = (backButton, onBackPressed,) => {
   if (backButton) {
     return (
       <TouchableOpacity
-        style={{ marginLeft: 10, position: 'absolute',zIndex:9 }}
+        style={{ marginLeft: 10, position: 'absolute', zIndex: 9 }}
         onPress={onBackPressed}
       >
         <iconTools.Ionicons

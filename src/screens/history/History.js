@@ -1,9 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native'
-import { BaseScreen, H1, SearchBar, BodyLarge, Body, BodyExtraSmall } from "../../components";
+import { BaseScreen, H1, SearchBar, BodyLarge, Body, BodySmall, BodyExtraSmall } from "../../components";
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant';
 import moment from 'moment';
 import { ios } from '../../tools/helper';
+import PageHeader from '../../components/header/Header';
 
 const renderEmptyComponent = () => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: '70%' }}>
@@ -11,9 +12,10 @@ const renderEmptyComponent = () => (
   </View>
 );
 
-const History = ({ userId, listHistory, onAppear, isLoading }) => {
+const History = ({ userId, listHistory, onAppear, isLoading, onDetailPressed }) => {
   // const [searchBarText, setSearchBarText] = useState('');
   // const [changeFilter, setChangeFilter] = useState('Today')
+  // console.log('history', listHistory);
   useEffect(() => {
     onAppear(userId)
   }, [])
@@ -62,57 +64,56 @@ const History = ({ userId, listHistory, onAppear, isLoading }) => {
           renderItem={({ item }) => {
             return (
               <Fragment>
-                <View style={styles.card}>
-                  <BodyLarge bold style={{ color: COLOR_PRIMARY }}>{item.COMPANY}</BodyLarge>
-                  <Body style={{ color: COLOR_DISABLED }} >
+                <TouchableOpacity style={styles.card} onPress={onDetailPressed}>
+                  <Body bold style={{ color: COLOR_PRIMARY }}>{item.COMPANY}</Body>
+                  <BodySmall style={{ color: COLOR_DISABLED }} >
                     {moment(item.date).format('DD MMMM YYYY')}
-                  </Body>
+                  </BodySmall>
                   <View style={{ marginTop: 10, }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 2 }}>
-                      <Body bold style={{ width: 100 }}>Jetty</Body>
-                      <Body >: </Body>
-                      <Body>{item.JETTY}</Body>
+                      <BodySmall bold style={{ width: 100 }}>Jetty</BodySmall>
+                      <BodySmall>: </BodySmall>
+                      <BodySmall>{item.JETTY}</BodySmall>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 2 }}>
-                      <Body bold style={{ width: 100 }}>Tug Boat</Body>
-                      <Body >: </Body>
-                      <Body>{item.TUG_BOAT}</Body>
+                      <BodySmall bold style={{ width: 100 }}>Tug Boat</BodySmall>
+                      <BodySmall>: </BodySmall>
+                      <BodySmall>{item.TUG_BOAT}</BodySmall>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 2 }}>
-                      <Body bold style={{ width: 100 }}>Barge</Body>
-                      <Body >: </Body>
-                      <Body>{item.BARGE}</Body>
+                      <BodySmall bold style={{ width: 100 }}>Barge</BodySmall>
+                      <BodySmall>: </BodySmall>
+                      <BodySmall>{item.BARGE}</BodySmall>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 2 }}>
-                      <Body bold style={{ width: 100 }}>Booking Date</Body>
-                      <Body >: </Body>
-                      <Body>{moment(item.DATE_BOOKING).format('DD MMMM YYYY')}</Body>
+                      <BodySmall bold style={{ width: 100 }}>Capacity</BodySmall>
+                      <BodySmall>: </BodySmall>
+                      <BodySmall>{item.CAPACITY}</BodySmall>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 2 }}>
-                      <Body bold style={{ width: 100 }}>Finish Date</Body>
-                      <Body >: </Body>
-                      <Body>{!item.FINISH_BOOKING ? '-' : moment(item.FINISH_BOOKING).format('DD MMMM YYYY')}</Body>
+                      <BodySmall bold style={{ width: 100 }}>Booking Date</BodySmall>
+                      <BodySmall>: </BodySmall>
+                      <BodySmall>{moment(item.DATE_BOOKING).format('DD MMMM YYYY')}</BodySmall>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 2 }}>
+                      <BodySmall bold style={{ width: 100 }}>Finish Date</BodySmall>
+                      <BodySmall>: </BodySmall>
+                      <BodySmall>{!item.FINISH_BOOKING ? '-' : moment(item.FINISH_BOOKING).format('DD MMMM YYYY')}</BodySmall>
                     </View>
                     <View style={{ flexDirection: 'row', marginVertical: 2, paddingRight: 120 }}>
-                      <Body bold style={{ width: 100 }}>Tujuan/Vessel</Body>
-                      <Body >: </Body>
-                      <Body>{item.VESSEL}</Body>
+                      <BodySmall bold style={{ width: 100 }}>Tujuan/Vessel</BodySmall>
+                      <BodySmall>: </BodySmall>
+                      <BodySmall>{item.VESSEL}</BodySmall>
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
                       <View style={{ alignItems: 'center', marginRight: 5 }}>
-                        <BodyLarge>{item.START_TIME < 10 ? `0${item.START_TIME}:00` : `${item.START_TIME}:00`}</BodyLarge>
+                        <Body>{item.START_TIME < 10 ? `0${item.START_TIME}:00` : `${item.START_TIME}:00`}</Body>
                         <View style={{ backgroundColor: COLOR_TRANSPARENT_DARK, padding: 5, marginTop: 8, borderRadius: 10 }}>
                           <BodyExtraSmall bold >START</BodyExtraSmall>
                         </View>
                       </View>
                       <View style={{ justifyContent: 'center' }}>
-                        <View
-                          style={{
-                            height: 8,
-                            width: 8,
-                            borderRadius: 8,
-                            backgroundColor: COLOR_DISABLED,
-                          }} />
+                        <View style={styles.line} />
                       </View>
                       <View style={{ flex: 1, justifyContent: 'center' }}>
                         <View
@@ -122,7 +123,7 @@ const History = ({ userId, listHistory, onAppear, isLoading }) => {
                           }} />
                       </View>
                       <View style={{ alignItems: 'center', justifyContent: 'center', marginHorizontal: 5 }}>
-                        <Body>{item.PROCESS_TIME} hour</Body>
+                        <BodySmall>{item.PROCESS_TIME} hour</BodySmall>
                       </View>
                       <View style={{ flex: 1, justifyContent: 'center' }}>
                         <View
@@ -133,22 +134,17 @@ const History = ({ userId, listHistory, onAppear, isLoading }) => {
                       </View>
                       <View style={{ justifyContent: 'center' }}>
                         <View
-                          style={{
-                            height: 8,
-                            width: 8,
-                            borderRadius: 8,
-                            backgroundColor: COLOR_DISABLED,
-                          }} />
+                          style={styles.line} />
                       </View>
                       <View style={{ alignItems: 'center', marginLeft: 5 }}>
-                        <BodyLarge>{item.FINISH_TIME < 10 ? `0${item.FINISH_TIME}:00` : `${item.FINISH_TIME}:00`}</BodyLarge>
+                        <Body>{item.FINISH_TIME < 10 ? `0${item.FINISH_TIME}:00` : `${item.FINISH_TIME}:00`}</Body>
                         <View style={{ backgroundColor: COLOR_TRANSPARENT_DARK, padding: 5, marginTop: 8, borderRadius: 10 }}>
-                          <BodyExtraSmall bold >Finish</BodyExtraSmall>
+                          <BodyExtraSmall bold >FINISH</BodyExtraSmall>
                         </View>
                       </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               </Fragment>
             )
           }}
@@ -200,5 +196,11 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: 10,
     padding: 15
+  },
+  line: {
+    height: 8,
+    width: 8,
+    borderRadius: 8,
+    backgroundColor: COLOR_DISABLED,
   }
 })

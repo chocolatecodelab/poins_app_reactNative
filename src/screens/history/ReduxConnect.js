@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import { downloadingHistoryBarginOnlineAsync, resetHistoryBarginOnline } from '../../redux/features/history/historyBarginOnlineSlice';
 import HistoryBarginOnlineStepOneScreen from './History';
+import NavigationService from '../../tools/navigationService';
+import { NAV_NAME_HISTORY_DETAIL } from '../../tools/constant';
 
 const mapStateToProps = state => {
     return ({
@@ -19,7 +21,10 @@ const mapDispatchToProps = (dispatch) => ({
     },
     onCloseModalError: () => {
         dispatch(resetHistoryBarginOnline())
-    }
+    },
+   onDetailPressed: () => {
+        NavigationService.navigate(NAV_NAME_HISTORY_DETAIL)
+    } 
 });
 
 

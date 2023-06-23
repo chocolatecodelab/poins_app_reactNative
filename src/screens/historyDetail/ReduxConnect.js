@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import DetailHistoryScreen from './DetailHistory';
+import HistoryDetailScreen from './DetailHistory';
 
 const mapStateToProps = state => {
     return ({
@@ -12,4 +12,4 @@ const mapDispatchToProps = () => ({
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailHistoryScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(HistoryDetailScreen);

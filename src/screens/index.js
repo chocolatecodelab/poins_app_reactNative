@@ -7,7 +7,7 @@ export { default as ProfileScreen } from './profile';
 export { default as HistoryScreen } from './history';
 export { default as BarginOnlineStepOneScreen } from './barginOnlineStepOne';
 export { default as BarginOnlineStepTwoScreen } from './barginOnlineStepTwo';
-export { default as DetailHistory } from './detailHistory';
+export { default as HistoryDetailScreen } from './historyDetail';
 export { default as ForgetPasswordScreen } from './forgetPassword';
 export { default as OtpForgetPasswordScreen } from './otpForgetPassword';
 export { default as ChangePasswordScreen } from './changePassword';

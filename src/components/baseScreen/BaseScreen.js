@@ -3,16 +3,17 @@ import { View, ScrollView, StatusBar, SafeAreaView } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLOR_WHITE } from '../../tools/constant';
-import { ios } from '../../tools/helper';
+import { android, ios } from '../../tools/helper';
 
 const BaseScreen = ({
-  children, containerStyle, contentStyle, barBackgroundColor,
+  children, containerStyle, contentStyle, barBackgroundColor, translucent,
   statusBarColor, hiddenBar, useScrollViewContainer = false, ...props
 }) => {
   return (
     <SafeAreaProvider style={[styles.container, containerStyle]}>
       <StatusBar
         hidden={hiddenBar}
+        translucent={translucent}
         backgroundColor={barBackgroundColor}
         barStyle={statusBarColor === COLOR_WHITE ? 'light-content' : 'dark-content'}
       />

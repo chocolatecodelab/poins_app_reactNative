@@ -5,13 +5,13 @@ import {
 } from '@react-navigation/stack';
 import {
   LoginScreen, RegisterScreen, SplashScreen, OtpLoginScreen, BarginOnlineStepOneScreen,
-  BarginOnlineStepTwoScreen, DetailHistory, OtpForgetPasswordScreen, ForgetPasswordScreen, ChangePasswordScreen, HistoryScreen,
+  BarginOnlineStepTwoScreen, OtpForgetPasswordScreen, ForgetPasswordScreen, ChangePasswordScreen, HistoryDetailScreen,
 } from "./screens";
 import BottomTab from "./components/bottomTab/BottomTab";
 import {
   NAV_NAME_HOME_MENU, NAV_NAME_LOGIN, NAV_NAME_REGISTER, NAV_NAME_OTP_LOGIN,
-  NAV_NAME_BARGIN_ONLINE_STEP_ONE, NAV_NAME_BARGIN_ONLINE_STEP_TWO, NAV_NAME_BARGIN_ONLINE_STEP_THREE,
-  NAV_NAME_OTP_FORGET_PASSWORD, NAV_NAME_SPLASH, NAV_NAME_FORGET_PASSWORD, NAV_NAME_CHANGE_NEW_PASSWORD, NAV_NAME_HISTORY
+  NAV_NAME_BARGIN_ONLINE_STEP_ONE, NAV_NAME_BARGIN_ONLINE_STEP_TWO,
+  NAV_NAME_OTP_FORGET_PASSWORD, NAV_NAME_SPLASH, NAV_NAME_FORGET_PASSWORD, NAV_NAME_CHANGE_NEW_PASSWORD, NAV_NAME_HISTORY_DETAIL
 } from "./tools/constant";
 import { NavigationContainer, } from '@react-navigation/native';
 import NavigationService from './tools/navigationService';
@@ -110,11 +110,11 @@ function MainNavigation() {
                 headerShown: false,
               }}
             />
-            <Stack.Screen
-              name={NAV_NAME_BARGIN_ONLINE_STEP_THREE}
-              component={DetailHistory}
+             <Stack.Screen
+              name={NAV_NAME_HISTORY_DETAIL}
+              component={HistoryDetailScreen}
               options={{
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
                 headerShown: false,
               }}
             />
