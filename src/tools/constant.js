@@ -39,9 +39,9 @@ export const REST_METHOD_DELETE = 'Delete';
 
 export const HTTP_HEADER_VALUE_JSON = 'application/json';
 
-export const COLOR_PRIMARY = '#23286B';
-export const COLOR_SECONDARY_MAIN_IOS = '#F9603B';
-export const COLOR_SECONDARY_MAIN_ANDROID = '#F77E21';
+export const COLOR_PRIMARY = '#009C4E';
+export const COLOR_SECONDARY_MAIN_IOS = '#FFAC1F';
+export const COLOR_SECONDARY_MAIN_ANDROID = '#FFAC1F';
 export const COLOR_SECONDARY_SUB = '#FFF3E9';
 export const COLOR_ERROR = '#B00020'
 export const COLOR_WHITE = '#FFFFFF';
@@ -49,7 +49,10 @@ export const COLOR_BLACK = '#000000';
 export const COLOR_DISABLED = '#A4A4A4';
 export const COLOR_TRANSPARENT_DARK = 'rgba(0, 0, 0, 0.1)';
 export const COLOR_HORIZONTAL_LINE = '#E5E5E5';
-export const COLOR_TRANSPARENT_DISABLED = '#F5F4F7'
+export const COLOR_TRANSPARENT_DISABLED = '#F5F4F7';
+// 5dc86e
+//11998e
+export const STATUS_TRANSPARENT = 'transparent'
 
 export const FONT_NUNITO_REGULAR = 'Nunito-Regular';
 export const FONT_NUNITO_BOLD = 'Nunito-Bold';

@@ -16,7 +16,7 @@ const TextInputFloating = (props) => {
     label, errorText, value, style, onBlur, onFocus,
     iconType, IconName, iconSize, iconColor, iconStyle,
     iconActive, onPressed, disableFloating, activeTextColor,
-    activeBorderColor, ...restOfProps
+    activeBorderColor, borderRadius, ...restOfProps
   } = props
   const [isFocused, setIsFocused] = useState(false)
   const { height } = getScreenDimension()
@@ -46,7 +46,7 @@ const TextInputFloating = (props) => {
         <TextInput
           style={[
             styles.input(iconActive, isFocused, errorText, height),
-            { borderColor: borderColor },
+            { borderColor: borderColor, borderRadius: borderRadius ? borderRadius : 4 },
           ]}
           {...restOfProps}
           placeholder={label}
@@ -65,7 +65,7 @@ const TextInputFloating = (props) => {
         <TextInput
           style={[
             styles.input(iconActive, isFocused, errorText, height),
-            { borderColor: borderColor },
+            { borderColor: borderColor, borderRadius: borderRadius ? borderRadius : 4 },
           ]}
           ref={inputRef}
           {...restOfProps}
@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
   input: (iconActive, isFocused, error, height) => ({
     height: 50,
     borderWidth: 1,
-    borderRadius: 4,
     fontFamily: 'Avenir-Medium',
     fontSize: isFocused ? 16 : 14,
     paddingRight: iconActive ? 50 : 16,
