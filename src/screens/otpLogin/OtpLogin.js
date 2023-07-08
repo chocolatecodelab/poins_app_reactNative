@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native'
 import { BaseScreen, BodyLarge, MyModalError } from "../../components";
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_SECONDARY_MAIN_ANDROID, COLOR_SECONDARY_SUB, COLOR_WHITE } from '../../tools/constant';
+import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_PRIMARY, COLOR_TRANSPARENT_PRIMARY, COLOR_WHITE } from '../../tools/constant';
 import { getScreenDimension, iconTools } from '../../tools/helper';
 import NavigationService from '../../tools/navigationService';
 
@@ -112,6 +112,7 @@ const OtpLogin = ({
           <Image
             source={require('../../assets/images/padlock.png')}
             style={styles.imageSize(height)}
+            resizeMode='contain'
           />
           <Text style={styles.title}>ENTER OTP</Text>
           <Text style={styles.secondaryTitle}>OTP will expire in?</Text>
@@ -223,8 +224,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     marginHorizontal: 5,
-    borderColor: COLOR_SECONDARY_SUB,
-    backgroundColor: COLOR_SECONDARY_SUB,
+    borderColor: COLOR_PRIMARY,
+    backgroundColor: COLOR_TRANSPARENT_PRIMARY,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -249,6 +250,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     elevation: 5,
-    borderColor: COLOR_SECONDARY_MAIN_ANDROID
+    borderColor: COLOR_PRIMARY
   }
 })

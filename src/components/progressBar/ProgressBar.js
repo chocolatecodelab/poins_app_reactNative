@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
-import { COLOR_DISABLED, COLOR_SECONDARY_MAIN_ANDROID, COLOR_SECONDARY_MAIN_IOS, COLOR_WHITE } from '../../tools/constant'
+import { COLOR_DISABLED, COLOR_PRIMARY, COLOR_SECONDARY_MAIN_ANDROID, COLOR_SECONDARY_MAIN_IOS, COLOR_TRANSPARENT_DARK, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant'
 import { ios } from '../../tools/helper'
 import { Body, BodySmall } from '../labels/Labels'
 import PropTypes from 'prop-types';
@@ -13,7 +13,7 @@ const ProgressBar = ({ stepOneActive, stepTwoActive }) => {
                     <Body
                         bold
                         style={{
-                            color: stepOneActive ? ios ? COLOR_SECONDARY_MAIN_IOS : COLOR_SECONDARY_MAIN_ANDROID : COLOR_DISABLED,
+                            color: stepOneActive ? COLOR_PRIMARY : COLOR_DISABLED,
                             marginBottom: 10,
                         }}>
                         FORM
@@ -24,7 +24,7 @@ const ProgressBar = ({ stepOneActive, stepTwoActive }) => {
                     <Body
                         bold
                         style={{
-                            color: stepTwoActive ? ios ? COLOR_SECONDARY_MAIN_IOS : COLOR_SECONDARY_MAIN_ANDROID : COLOR_DISABLED,
+                            color: stepTwoActive ? COLOR_PRIMARY : COLOR_DISABLED,
                             marginBottom: 10,
                         }}>
                         DATE
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 5,
         borderWidth: 0.5,
-        borderColor: stepOneActive ? ios ? COLOR_SECONDARY_MAIN_IOS : COLOR_SECONDARY_MAIN_ANDROID : COLOR_DISABLED,
-        backgroundColor: stepOneActive ? ios ? COLOR_SECONDARY_MAIN_IOS : COLOR_SECONDARY_MAIN_ANDROID : COLOR_DISABLED,
+        borderColor: stepOneActive ? COLOR_PRIMARY : COLOR_TRANSPARENT_DARK,
+        backgroundColor: stepOneActive ? COLOR_PRIMARY : COLOR_TRANSPARENT_DARK,
     }),
     secondCircle: () => ({
         height: 25,
@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 5,
         borderWidth: 0.5,
-        borderColor: active ? ios ? COLOR_SECONDARY_MAIN_IOS : COLOR_SECONDARY_MAIN_ANDROID : COLOR_DISABLED,
-        backgroundColor: active ? ios ? COLOR_SECONDARY_MAIN_IOS : COLOR_SECONDARY_MAIN_ANDROID : COLOR_DISABLED,
+        borderColor: active ? COLOR_PRIMARY : COLOR_TRANSPARENT_DARK,
+        backgroundColor: active ? COLOR_PRIMARY : COLOR_TRANSPARENT_DARK,
     }),
 })
 

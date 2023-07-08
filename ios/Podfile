@@ -6,6 +6,7 @@ install! 'cocoapods', :deterministic_uuids => false
 pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 production = ENV["PRODUCTION"] == "1"
+ENV['USE_HERMES'] = '0'
 
 target 'poins' do
   config = use_native_modules!

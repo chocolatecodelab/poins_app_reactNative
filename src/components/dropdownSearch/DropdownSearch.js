@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { FlatList, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
+import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant';
 import { iconTools } from '../../tools/helper';
 import { Body, BodyLarge, HorizontalLine, MyModal, SearchBar } from '../../components';
 
@@ -13,7 +13,7 @@ const renderEmptyComponent = () => (
 
 const DropdownSearch = ({
     selected, data, placeholder, containerStyle, value, dropdownActive, dropdownPressed,
-    headerActive, headerTitle
+    headerActive, headerTitle, borderColor, borderRadius
 }) => {
     const [number, setNumber] = useState(25)
     const [selectedOption, setSelectedOption] = useState(value)
@@ -39,7 +39,7 @@ const DropdownSearch = ({
     return (
         <View style={[styles.dropdownContainer, containerStyle]}>
             <TouchableOpacity
-                style={styles.menuButton}
+                style={[styles.menuButton, { borderColor: borderColor, borderRadius: borderRadius }]}
                 onPress={() => [setNumber(25), dropdownPressed()]}>
                 <Body style={{ color: selectedOption ? COLOR_BLACK : COLOR_DISABLED }}>{selectedOption ? selectedOption : placeholder}</Body>
                 <iconTools.MaterialIcons
@@ -63,7 +63,7 @@ const DropdownSearch = ({
                                 activeIcon={false}
                                 iconSearch='right'
                                 value={searchBarText}
-                                containerStyle={[styles.menuButton, { backgxroundColor: COLOR_WHITE }]}
+                                containerStyle={[styles.menuButton, { backgroundColor: COLOR_TRANSPARENT_DISABLED }]}
                                 onTextChanged={(e) => onSearch(e)}
                                 onDeletePressed={() => setSearchBarText('')}
                             />

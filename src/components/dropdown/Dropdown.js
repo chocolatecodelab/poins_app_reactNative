@@ -5,14 +5,15 @@ import { iconTools } from '../../tools/helper';
 import { Body, BodyLarge, HorizontalLine, MyModal } from '../../components';
 
 const renderEmptyComponent = () => (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height:200 }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: 200 }}>
         <BodyLarge>No items to display</BodyLarge>
     </View>
 );
 
 const Dropdown = ({
     children, custom, selected, data, placeholder, containerStyle,
-    value, dropdownActive, dropdownPressed, headerActive, headerTitle
+    value, dropdownActive, dropdownPressed, headerActive, headerTitle,
+    borderColor, borderRadius
 }) => {
     const [selectedOption, setSelectedOption] = useState(value)
 
@@ -23,7 +24,7 @@ const Dropdown = ({
     return (
         <View style={[styles.dropdownContainer, containerStyle]}>
             <TouchableOpacity
-                style={styles.menuButton}
+                style={[styles.menuButton, { borderColor: borderColor, borderRadius: borderRadius }]}
                 onPress={dropdownPressed}>
                 <Body style={{ color: selectedOption ? COLOR_BLACK : COLOR_DISABLED }}>
                     {selectedOption ? selectedOption : placeholder}
@@ -31,7 +32,7 @@ const Dropdown = ({
                 <iconTools.MaterialIcons
                     name={!dropdownActive ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
                     size={24}
-                    color={selectedOption ? COLOR_PRIMARY : COLOR_DISABLED}
+                    color={COLOR_DISABLED}
                     style={styles.icon}
                 />
             </TouchableOpacity>

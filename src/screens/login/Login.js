@@ -3,7 +3,6 @@ import { StyleSheet, Text, Pressable, View, Image, ImageBackground } from 'react
 import { TextInputFloating, Button, KeyboardView, BaseScreen, MyModalError, BodyExtraSmall, Body } from "../../components";
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_SECONDARY_MAIN_ANDROID, COLOR_WHITE, STATUS_TRANSPARENT } from '../../tools/constant';
 import { android, iconTools, getScreenDimension } from "../../tools/helper";
-import LinearGradient from 'react-native-linear-gradient';
 
 const Login = ({
     email, password, isError, isSuccess, isLoading, message, onChangeEmail,
@@ -14,8 +13,7 @@ const Login = ({
     const [showPassword, setShowPassword] = useState(true)
     const [errorEmail, setErrorEmail] = useState(null)
     const [errorPassword, setErrorPassword] = useState(null)
-    const { height, width } = getScreenDimension()
-    const circleSize = Math.min(width, height) * 1;
+    const { height } = getScreenDimension()
     const handlerVisiblePassword = () => {
         setShowPassword(!showPassword)
         if (!showPassword) return setIconPassword('eye')
@@ -86,7 +84,7 @@ const Login = ({
                             </View>
                         </View>
 
-                        <View style={{ flex: .8, paddingHorizontal: 20 }}>
+                        <View style={{ flex: .8, paddingHorizontal: 40 }}>
                             <TextInputFloating
                                 style={[{ marginBottom: 15 }]}
                                 iconType={iconTools.MaterialCommunityIcons}
@@ -251,6 +249,11 @@ const Login = ({
                     </View> */}
                 </View>
             </KeyboardView>
+            <MyModalError
+                isVisible={isError}
+                closeModal={onCloseModalError}
+                message={message}
+            />
         </BaseScreen>
     )
 }

@@ -20,14 +20,14 @@ export const uploadBargin = async (data) => {
     return respon
 }
 
-export const downloadListBooking = async (id) => {
-    const url = REST_URL_BARGIN_ONLINE_BOOKING_DATE.replace(/\{id\}/, id);
+export const downloadListBooking = async (params) => {
+    const url = REST_URL_BARGIN_ONLINE_BOOKING_DATE.replace(/\{id\}/, params.id).replace(/\{jetty\}/, params.jetty);
     const respon = await sendGetRequest(url)
     return respon.Data
 }
 
-export const downloadTimeBooking = async (date) => {
-    const url = REST_URL_TIME_BARGIN_ONLINE.replace(/\{date\}/, date);
+export const downloadTimeBooking = async (params) => {
+    const url = REST_URL_TIME_BARGIN_ONLINE.replace(/\{date\}/, params.date).replace(/\{jetty\}/, params.jetty);
     const respon = await sendGetRequest(url)
     return respon.Data
 }

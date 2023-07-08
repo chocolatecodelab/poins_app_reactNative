@@ -1,11 +1,17 @@
-import React, { useEffect, useRef } from 'react'
-import { StyleSheet, TouchableOpacity, View, FlatList, Image, Animated, Linking } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { StyleSheet, TouchableOpacity, View, FlatList, Image, Animated, Linking, Dimensions, ScrollView } from 'react-native'
 import { COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
-import { BaseScreen, BodySmall, H3, MyModalError } from '../../components';
+import { BaseScreen, BodySmall, H3, KeyboardView, MyModalError, MyModalInfo } from '../../components';
 import LocalizedString from "../../tools/localization";
 import { ios } from '../../tools/helper';
+import Header from "./Header";
+import Apps from "./Apps";
+import Banner from "./Banner";
 
-const Home = ({ apps, userId, onAppear, onCloseModalError, isError, message }) => {
+const Home = ({
+    apps, userId, isDownloadingApps, isError, isInfo, message, onAppear, onCloseModal,
+    onProfilePressed, onItemPressed,
+}) => {
     const scaleValue = useRef(new Animated.Value(0)).current;
     const toggleModal = () => {
         Animated.spring(scaleValue, {
@@ -14,15 +20,28 @@ const Home = ({ apps, userId, onAppear, onCloseModalError, isError, message }) =
             useNativeDriver: true,
         }).start();
     };
-
+    // console.log(apps);
     useEffect(() => {
-        toggleModal();
+        // toggleModal();
         onAppear(userId)
     }, [])
 
     return (
-        <BaseScreen barBackgroundColor={COLOR_WHITE}>
-            <View style={styles.appsContainer(ios)}>
+        <BaseScreen
+            barBackgroundColor={COLOR_PRIMARY}
+            statusBarColor={COLOR_WHITE}
+            translucent
+            containerStyle={{ backgroundColor: COLOR_PRIMARY, paddingBottom: 0 }}
+        >
+            <Header onProfilePressed={onProfilePressed} />
+            <Apps
+                data={apps}
+                onItemPressed={onItemPressed}
+            />
+            <Banner />
+            {/* </ScrollView> */}
+
+            {/* <View style={styles.appsContainer(ios)}>
                 <H3 style={{ color: COLOR_PRIMARY, marginBottom: 20, alignSelf: 'center' }} bold>{LocalizedString.homeScreen.title}</H3>
                 <FlatList
                     data={apps}
@@ -48,10 +67,15 @@ const Home = ({ apps, userId, onAppear, onCloseModalError, isError, message }) =
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                 />
-            </View>
+            </View> */}
             <MyModalError
                 isVisible={isError}
-                closeModal={onCloseModalError}
+                closeModal={onCloseModal}
+                message={message}
+            />
+            <MyModalInfo
+                isVisible={isInfo}
+                closeModal={onCloseModal}
                 message={message}
             />
         </BaseScreen>

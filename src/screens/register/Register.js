@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, Pressable, View, } from 'react-native'
-import { TextInputFloating, Button, KeyboardView, BaseScreen, MyModalError, MyModalSuccess } from "../../components";
+import { StyleSheet, Text, Pressable, View, Image, } from 'react-native'
+import { TextInputFloating, Button, KeyboardView, BaseScreen, MyModalError, MyModalSuccess, Dropdown, Body } from "../../components";
 import NavigationService from "../../tools/navigationService";
-import { COLOR_PRIMARY, COLOR_WHITE, NAV_NAME_LOGIN } from '../../tools/constant';
-import { android, iconTools } from "../../tools/helper";
+import { COLOR_BLACK, COLOR_DISABLED, COLOR_MAIN_SECONDARY, COLOR_MEDIUM_BLACK, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE, NAV_NAME_LOGIN } from '../../tools/constant';
+import { android, iconTools, getScreenDimension } from "../../tools/helper";
 import LocalizedString from '../../tools/localization';
 
-const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onAppear, onCloseModal }) => {
+const Register = ({ customers, message, isError, isLoading, isSuccess, onSubmitPressed, onAppear, onCloseModal }) => {
+  const { height } = getScreenDimension()
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -21,13 +22,14 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
   const [errorPassword, setErrorPassword] = useState(null)
   const [errorPhoneNumber, setErrorPhoneNumber] = useState(null)
   const [errorConfirmPassword, setErrorConfirmPassword] = useState(null)
-
+  const [showCompanyMenu, setShowCompanyMenu] = useState(false);
+  const [selectCompany, setSelectCompany] = useState('');
   const handlerVisiblePassword = () => {
     setShowPassword(!showPassword)
     if (!showPassword) return setIconPassword('eye')
     if (showPassword) return setIconPassword('eye-off')
   }
-
+  console.log('selectCompany', selectCompany);
   const handlerVisibleConfirmPassword = () => {
     setShowConfirmPassword(!showConfirmPassword)
     if (!showConfirmPassword) return setIconConfirmPassword('eye')
@@ -56,7 +58,14 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
 
     if (name && email && phoneNumber && password && confirmPassword) {
       if (password === confirmPassword) {
-        const data = { name, email, password, phoneNumber };
+        let idCompany
+        const company = customers?.company
+        for (let i = 0; i < company.length; i++) {
+          if (selectCompany === company[i].name) {
+            idCompany = company[i].id
+          }
+        }
+        const data = { name, email, password, phoneNumber, idCompany };
         onSubmitPressed(data);
       }
     }
@@ -73,7 +82,7 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
     <BaseScreen
       useScrollViewContainer={true}
       containerStyle={{ backgroundColor: COLOR_PRIMARY, paddingVertical: 0 }}
-      contentStyle={{ backgroundColor: COLOR_WHITE }}
+      contentStyle={{ backgroundColor: COLOR_WHITE, paddingTop: 0 }}
       barBackgroundColor={COLOR_PRIMARY}
       statusBarColor={COLOR_WHITE}>
       <KeyboardView
@@ -81,17 +90,52 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
         barBackgroundColor={COLOR_PRIMARY}
         statusbarColor={COLOR_WHITE}>
         <View style={{ backgroundColor: COLOR_PRIMARY, }}>
-          <Text style={styles.title}>POINS</Text>
+          {/* <Text style={styles.title}>POINS</Text> */}
+          <View style={{
+            height: height / 5,
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingTop: 15
+          }}>
+            <Image
+              source={require('../../assets/images/titlePoins.png')}
+              style={{
+                height: '100%',
+                width: '50%',
+              }}
+              resizeMode='cover'
+            />
+          </View>
+
           <View style={styles.content}>
             <View>
+              <View style={{ marginBottom: 20 }}>
+                <Dropdown
+                  selected={setSelectCompany}
+                  value={selectCompany}
+                  data={customers?.company}
+                  dropdownActive={showCompanyMenu}
+                  dropdownPressed={() => {
+                    setShowCompanyMenu(!showCompanyMenu)
+                  }}
+                  headerActive={true}
+                  headerTitle={'LIST COMPANY'}
+                  placeholder={'Select Company'}
+                  containerStyle={{ marginVertical: 0 }}
+                  borderColor={COLOR_DISABLED}
+                  borderRadius={30}
+                />
+              </View>
               <TextInputFloating
-                style={[{ marginBottom: 30 }]}
+                style={[{ marginBottom: 20 }]}
                 editable={isLoading ? false : true}
                 iconType={iconTools.MaterialCommunityIcons}
                 IconName={'account'}
                 iconSize={24}
                 maxLength={40}
                 iconColor={COLOR_PRIMARY}
+                borderRadius={30}
                 errorText={errorName}
                 iconActive={true}
                 value={name}
@@ -103,13 +147,14 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
                 autoCapitalize='none'
               />
               <TextInputFloating
-                style={[{ marginBottom: 30 }]}
+                style={[{ marginBottom: 20 }]}
                 editable={isLoading ? false : true}
                 iconType={iconTools.MaterialCommunityIcons}
                 IconName={'email'}
                 iconSize={24}
                 maxLength={40}
                 iconColor={COLOR_PRIMARY}
+                borderRadius={30}
                 errorText={errorEmail}
                 iconActive={true}
                 value={email}
@@ -121,13 +166,14 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
                 autoCapitalize='none'
               />
               <TextInputFloating
-                style={[{ marginBottom: 30 }]}
+                style={[{ marginBottom: 20 }]}
                 editable={isLoading ? false : true}
                 iconType={iconTools.MaterialCommunityIcons}
                 IconName={'phone'}
                 iconSize={24}
                 keyboardType="number-pad"
                 iconColor={COLOR_PRIMARY}
+                borderRadius={30}
                 errorText={errorPhoneNumber}
                 iconActive={true}
                 maxLength={15}
@@ -144,12 +190,13 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
               />
               <TextInputFloating
                 secureTextEntry={showPassword}
-                style={[{ marginBottom: 30 }]}
+                style={[{ marginBottom: 20 }]}
                 editable={isLoading ? false : true}
                 iconType={iconTools.MaterialCommunityIcons}
                 IconName={iconPasssword}
                 iconSize={24}
                 iconColor={COLOR_PRIMARY}
+                borderRadius={30}
                 errorText={errorPassword}
                 iconActive={true}
                 value={password}
@@ -168,6 +215,7 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
                 IconName={iconConfirmPasssword}
                 iconSize={24}
                 iconColor={COLOR_PRIMARY}
+                borderRadius={30}
                 iconActive={true}
                 errorText={errorConfirmPassword}
                 value={confirmPassword}
@@ -185,6 +233,7 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
               onPress={handleSubmit}
               loading={isLoading}
               disabled={isLoading}
+              containerStyle={{ borderRadius: 30 }}
             />
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
               <Text style={{ fontSize: 12, color: '#000' }} >{LocalizedString.registerScreen.labelAskRegister}</Text>
@@ -192,7 +241,7 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
                 style={{ marginLeft: 5 }}
                 onPress={() => NavigationService.navigate(NAV_NAME_LOGIN)}
               >
-                <Text style={{ color: '#F9603B', fontWeight: '500' }}>{LocalizedString.registerScreen.buttonLogin}</Text>
+                <Text style={{ color: COLOR_MAIN_SECONDARY, fontWeight: '500' }}>{LocalizedString.registerScreen.buttonLogin}</Text>
               </Pressable>
             </View>
           </View>
@@ -218,17 +267,17 @@ const Register = ({ message, isError, isLoading, isSuccess, onSubmitPressed, onA
 
 const styles = StyleSheet.create({
   containerKeyboardView: {
-    height: '100%',
+    height: '90%',
     backgroundColor: COLOR_WHITE,
-    paddingBottom: 40
+    paddingBottom: 100
   },
   content: {
     position: 'relative',
     backgroundColor: 'white',
-    paddingHorizontal: 20,
-    borderTopStartRadius: 30,
-    borderTopEndRadius: 30,
-    paddingTop: 60,
+    paddingHorizontal: 40,
+    borderTopStartRadius: 40,
+    borderTopEndRadius: 40,
+    paddingTop: 40,
   },
   title: {
     color: 'white',

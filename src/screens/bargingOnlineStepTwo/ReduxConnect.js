@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { downloadingListBookingAsync, downloadingTimeBookingAsync, resetStatuBarginOnline, uploadingBarginAsync } from '../../redux/features/barginOnline/barginOnlineSlice';
+import { downloadingListBookingAsync, downloadingTimeBookingAsync, resetListBooking, resetStatuBarginOnline, uploadingBarginAsync } from '../../redux/features/barginOnline/barginOnlineSlice';
 import { NAV_NAME_HOME_MENU } from '../../tools/constant';
 import { stringMonth } from '../../tools/helper';
 import NavigationService from '../../tools/navigationService';
-import BarginOnlineStepTwoScreen from './BarginOnlineStepTwo';
+import BargingOnlineStepTwoScreen from './BargingOnlineStepTwo';
 
 const enumerateDaysBetweenDates = (state) => {
     const ListBooking = state.barginOnline.listBooking
@@ -37,13 +37,6 @@ const enumerateDaysBetweenDates = (state) => {
     return dates;
 };
 
-const enumerateSelectedHours = (state) => {
-    const hours = Array.from(Array(24), (_, i) => ({
-        hour: i,
-    }))
-    return hours;
-};
-
 const mapStateToProps = (state, props) => {
     return ({
         isUploading: state.barginOnline.isUploading,
@@ -53,15 +46,15 @@ const mapStateToProps = (state, props) => {
         props: props.route.params,
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
         listDate: enumerateDaysBetweenDates(state),
-        hours: enumerateSelectedHours(state),
         listTime: state.barginOnline.listTime,
         isLoadingTimeBooking: state.barginOnline.isLoadingTimeBooking,
     })
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    onAppear: (id) => {
-        dispatch(downloadingListBookingAsync(id))
+    onAppear: (id, jetty) => {
+        const params = { id, jetty }
+        dispatch(downloadingListBookingAsync(params))
     },
     onSubmitPressed: (props, selectTime, selectedDay, userId, setIsOrder) => {
         const data = {
@@ -79,9 +72,10 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(uploadingBarginAsync(data))
         setIsOrder(false)
     },
-    onSelectedDatePressed: (selectedDay) => {
+    onSelectedDatePressed: (selectedDay, jetty) => {
         const date = `${selectedDay?.year}-${selectedDay?.month + 1}-${selectedDay?.day}`
-        dispatch(downloadingTimeBookingAsync(date))
+        const params = { date, jetty }
+        dispatch(downloadingTimeBookingAsync(params))
     },
     onCloseModalSuccess: () => {
         dispatch(resetStatuBarginOnline())
@@ -94,4 +88,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(BarginOnlineStepTwoScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(BargingOnlineStepTwoScreen);

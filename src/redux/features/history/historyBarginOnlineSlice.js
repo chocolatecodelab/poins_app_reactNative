@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { downloadHistoryBarginOnline } from './historyBarginOnlineService'
 
 export const downloadingHistoryBarginOnlineAsync = createAsyncThunk(
-    'history', async (id, thunkAPI) => {
+    'history', async (params, thunkAPI) => {
         try {
-            return await downloadHistoryBarginOnline(id)
+            return await downloadHistoryBarginOnline(params)
         } catch (error) {
             const message =
                 (JSON.stringify(error.response) &&

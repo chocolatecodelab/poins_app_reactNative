@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, ActivityIndicator, } from 'react-native'
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_HORIZONTAL_LINE, COLOR_PRIMARY, COLOR_WHITE, } from '../../tools/constant';
+import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_HORIZONTAL_LINE, COLOR_MAIN_SECONDARY, COLOR_MEDIUM_BLACK, COLOR_PRIMARY, COLOR_WHITE, } from '../../tools/constant';
 import { ios, } from '../../tools/helper';
 import { Button, BaseScreen, Body, H4, MyModal, ProgressBar, BodyLarge, BodySmall, BodyExtraSmall, MyModalError, MyModalSuccess } from '../../components';
 
-const BarginOnllineStepTwo = ({
+const BargingOnllineStepTwo = ({
     isUploadingSuccess, isUploading, isError, message, onSubmitPressed, props, userId, onCloseModalError,
     onCloseModalSuccess, onAppear, listDate, listTime, onSelectedDatePressed, isLoadingTimeBooking,
 }) => {
@@ -44,7 +44,7 @@ const BarginOnllineStepTwo = ({
         }
     }
     useEffect(() => {
-        onAppear(userId)
+        onAppear(userId, props?.jetty)
     }, [])
 
     useEffect(() => {
@@ -55,8 +55,10 @@ const BarginOnllineStepTwo = ({
 
     return (
         <BaseScreen
-            containerStyle={{ paddingTop: ios ? 50 : 20, paddingBottom: 0 }}
             barBackgroundColor={COLOR_WHITE}
+            statusBarColor={COLOR_BLACK}
+            translucent={true}
+            containerStyle={{ paddingTop: ios ? 50 : 40, paddingBottom: 0 }}
         >
             <View style={{ paddingHorizontal: 20 }}>
                 <ProgressBar stepTwoActive />
@@ -77,7 +79,7 @@ const BarginOnllineStepTwo = ({
                                             onPress={() => {
                                                 setSelectedDay(item)
                                                 setIndexDate(index)
-                                                onSelectedDatePressed(item)
+                                                onSelectedDatePressed(item, props.jetty)
                                                 // setErrorMessage('All Booked')
                                             }}
                                             style={styles.dateButton(item.day, selectedDay?.day, item.isBooked)}
@@ -243,8 +245,8 @@ const BarginOnllineStepTwo = ({
             </MyModal>
             <MyModal isVisible={isBooked} closeModal={() => setIsBooked(false)}>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <Image source={require('../../assets/images/alarm.png')} style={{ height: 100, width: 100, marginVertical: 20 }} />
-                    <Text style={{ fontSize: 20, fontWeight: '500', color: COLOR_PRIMARY, marginBottom: 10 }}>{errorMessage}</Text>
+                    <Image source={require('../../assets/images/alarm.png')} style={{ height: 100, width: 100, marginVertical: 15 }} />
+                    <Text style={{ fontSize: 20, fontWeight: '500', color: COLOR_MEDIUM_BLACK, marginBottom: 10 }}>{errorMessage}</Text>
                 </View>
             </MyModal>
             <MyModalError
@@ -263,7 +265,7 @@ const BarginOnllineStepTwo = ({
     )
 }
 
-export default BarginOnllineStepTwo
+export default BargingOnllineStepTwo
 
 const styles = StyleSheet.create({
     cardColumn: {
@@ -276,16 +278,16 @@ const styles = StyleSheet.create({
     card: {
         width: '18%',
         height: 50,
-        backgroundColor: '#ffffff',
+        backgroundColor: COLOR_WHITE,
         borderRadius: 5,
-        shadowColor: '#000000',
+        shadowColor: COLOR_BLACK,
         shadowOffset: {
             width: 0,
             height: 1,
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
+        elevation: 4,
         marginBottom: 10,
         padding: 10,
     },
@@ -303,7 +305,7 @@ const styles = StyleSheet.create({
         color: COLOR_PRIMARY,
     },
     dateButton: (day, selectedDay, myBooked) => ({
-        backgroundColor: day === selectedDay ? COLOR_PRIMARY : myBooked === true ? '#357C3C' : COLOR_WHITE,
+        backgroundColor: day === selectedDay ? COLOR_MAIN_SECONDARY : myBooked === true ? COLOR_PRIMARY : COLOR_WHITE,
         alignItems: 'center',
         justifyContent: 'center',
         width: '18%',
@@ -317,7 +319,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
+        elevation: 4,
         marginBottom: 10,
         padding: 10,
     }),
@@ -331,7 +333,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     hoursButton: (bookingUserId, currentUser, isBooked) => ({
-        backgroundColor: bookingUserId === currentUser ? '#357C3C' : bookingUserId !== currentUser && isBooked ? COLOR_ERROR : COLOR_WHITE,
+        backgroundColor: bookingUserId === currentUser ? COLOR_PRIMARY : bookingUserId !== currentUser && isBooked ? COLOR_ERROR : COLOR_WHITE,
         alignItems: 'center',
         justifyContent: 'center',
         width: '23%',
@@ -345,7 +347,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
+        elevation: 4,
         marginBottom: 10,
         padding: 10,
     }),
@@ -364,7 +366,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
+        elevation: 4,
         marginBottom: 10,
         padding: 10,
     }),
@@ -374,11 +376,13 @@ const styles = StyleSheet.create({
     }),
     hour: (isBooked) => ({
         fontWeight: '500',
-        color: isBooked ? COLOR_WHITE : COLOR_BLACK
+        color: isBooked ? COLOR_WHITE : COLOR_BLACK,
+        textAlign: 'center'
     }),
     hourDisabled: (isBooked,) => ({
         fontWeight: '500',
-        color: isBooked ? COLOR_ERROR : COLOR_BLACK
+        color: isBooked ? COLOR_ERROR : COLOR_BLACK,
+        textAlign: 'center'
     }),
     filterButton: {
         backgroundColor: 'white',
@@ -398,7 +402,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         position: 'absolute',
         bottom: 0,
-        elevation: 5
+        elevation: 4
     },
     timeContainer: {
         borderBottomWidth: 1,

@@ -43,6 +43,7 @@ const styles = {
   },
   contentWrapper: {
     flex: 1,
+    backgroundColor: COLOR_WHITE,
   }
 };
 

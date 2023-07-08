@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchRegister, resetError, resetRegister } from '../../redux/features/register/registerSlice';
+import { downloadingCustomerAsync } from '../../redux/features/barginOnline/barginOnlineSlice';
 import RegisterScreen from './Register';
 
 const mapStateToProps = state => {
@@ -8,6 +9,7 @@ const mapStateToProps = state => {
         isSuccess: state.register.isSuccess,
         isLoading: state.register.isLoading,
         message: state.register.message,
+        customers: state.barginOnline.customers,
     })
 };
 
@@ -17,11 +19,15 @@ const mapDispatchToProps = (dispatch) => ({
             EMAIL: data.email,
             PASSWORD: data.password,
             TELEPON: data.phoneNumber,
-            NAMA: data.name
+            NAMA: data.name,
+            ID_COMPANY: data.idCompany,
         }
         dispatch(fetchRegister(userData))
     },
-    onAppear: () => dispatch(resetRegister()),
+    onAppear: () => {
+        dispatch(resetRegister())
+        dispatch(downloadingCustomerAsync())
+    },
     onCloseModal: () => dispatch(resetError()),
 });
 

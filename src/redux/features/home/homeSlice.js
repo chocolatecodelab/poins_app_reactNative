@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { downlodingCheckVersion, downlodingMenu, updateMenu } from './homeService'
+import { downlodingCheckVersion, downlodingMenu } from './homeService'
 
 export const downlodingMenuAppsAsync = createAsyncThunk(
     'downlodingMenuAppsAsync', async (_, thunkAPI) => {
@@ -34,22 +34,24 @@ export const downlodingCheckVersionAsync = createAsyncThunk(
 export const homeSlice = createSlice({
     name: 'home',
     initialState: {
-        isErrorApps: false,
+        isError: false,
+        isInfo: false,
         isDownloadingApps: false,
-        isErrorVersion: false,
         isDownloadingVersion: false,
-        apps: {},
+        apps: [],
         versions: {},
         message: '',
     },
     reducers: {
         resetHome: (state) => {
-            state.isErrorApps = false;
+            state.isError = false;
+            state.isInfo = false;
             state.isDownloadingApps = false;
-            state.isErrorVersion = false;
             state.isDownloadingVersion = false;
             state.message = '';
         },
+        showInfo: (state, action) => { state.isError = action.payload },
+        addMessage: (state, action) => { state.message = action.payload }
     },
     extraReducers: (builder) => {
         builder
@@ -62,7 +64,7 @@ export const homeSlice = createSlice({
             })
             .addCase(downlodingMenuAppsAsync.rejected, (state, action) => {
                 state.isDownloadingApps = false;
-                state.isErrorApps = true;
+                state.isError = true;
                 state.message = action.payload;
             })
             .addCase(downlodingCheckVersionAsync.pending, (state) => {
@@ -74,11 +76,11 @@ export const homeSlice = createSlice({
             })
             .addCase(downlodingCheckVersionAsync.rejected, (state, action) => {
                 state.isDownloadingVersion = false;
-                state.isErrorVersion = true;
+                state.isError = true;
                 state.message = action.payload;
             })
     },
 })
 
-export const { resetHome } = homeSlice.actions
+export const { resetHome, showInfo, addMessage } = homeSlice.actions
 export default homeSlice.reducer

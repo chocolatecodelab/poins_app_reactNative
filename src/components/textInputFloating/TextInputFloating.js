@@ -13,7 +13,7 @@ import { getScreenDimension, ios } from '../../tools/helper'
 
 const TextInputFloating = (props) => {
   const {
-    label, errorText, value, style, onBlur, onFocus,
+    label, errorText, showLabelError, value, style, onBlur, onFocus,
     iconType, IconName, iconSize, iconColor, iconStyle,
     iconActive, onPressed, disableFloating, activeTextColor,
     activeBorderColor, borderRadius, ...restOfProps
@@ -129,12 +129,12 @@ const TextInputFloating = (props) => {
         <Tag
           name={IconName}
           size={iconSize}
-          color={errorText && !value ? COLOR_DISABLED : isFocused ? iconColor : value ? iconColor : COLOR_DISABLED}
+          color={!value ? COLOR_DISABLED : isFocused ? iconColor : value ? COLOR_DISABLED : COLOR_DISABLED}
           style={styles.icon}
           onPress={onPressed}
         /> : null
       }
-      {!!errorText && <Text style={styles.error}>{errorText}</Text>}
+      {!!errorText && showLabelError ? <Text style={styles.error}>{errorText}</Text> : null}
     </View>
   )
 }
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     color: COLOR_DISABLED,
     fontSize: ios ? 13 : 14,
     zIndex: 2,
-    fontWeight: "bold"
+    fontWeight: "500"
   },
   icon: {
     backgroundColor: 'white',

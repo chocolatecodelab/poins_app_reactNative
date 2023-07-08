@@ -32,9 +32,9 @@ export const uploadingBarginAsync = createAsyncThunk(
     })
 
 export const downloadingListBookingAsync = createAsyncThunk(
-    'barginOnline/listBooking', async (id, thunkAPI) => {
+    'barginOnline/listBooking', async (params, thunkAPI) => {
         try {
-            return await downloadListBooking(id)
+            return await downloadListBooking(params)
         } catch (error) {
             const message =
                 (JSON.stringify(error.response) &&
@@ -47,9 +47,9 @@ export const downloadingListBookingAsync = createAsyncThunk(
     })
 
 export const downloadingTimeBookingAsync = createAsyncThunk(
-    'barginOnline/listTime', async (date, thunkAPI) => {
+    'barginOnline/listTime', async (params, thunkAPI) => {
         try {
-            return await downloadTimeBooking(date)
+            return await downloadTimeBooking(params)
         } catch (error) {
             const message =
                 (JSON.stringify(error.response) &&
@@ -89,7 +89,7 @@ export const barginOnlineSlice = createSlice({
             state.listBooking = []
             state.listTime = []
             state.customers = []
-        }
+        },
     },
     extraReducers: (builder) => {
         builder

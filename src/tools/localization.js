@@ -71,7 +71,7 @@ const LocalizedString = new LocalizedStrings({
       name: 'Name',
       email: 'Email',
       phoneNumber: 'Phone Number',
-      password: 'password',
+      password: 'Password',
       confirmPassword: 'Confirm Password',
       labelAskRegister: 'Already have an account?',
       buttonRegister: 'Register',

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { downloadingCustomerAsync, resetDataBarginOnline, resetStatuBarginOnline } from '../../redux/features/barginOnline/barginOnlineSlice';
-import BarginOnlineStepOneScreen from './BarginOnlineStepOne';
+import BargingOnlineStepOneScreen from './BargingOnlineStepOne';
 
 const mapStateToProps = state => {
     return ({
@@ -23,4 +23,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(BarginOnlineStepOneScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(BargingOnlineStepOneScreen);

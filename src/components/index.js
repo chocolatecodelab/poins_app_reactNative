@@ -1,8 +1,8 @@
-import BaseScreen  from './baseScreen/BaseScreen';
-import TextInputFloating  from './textInputFloating/TextInputFloating';
-import Button  from './button/Button';
-import CustomIcon  from './customIcon/CustomIcon';
-import PinInput  from './pinInput/PinInput';
+import BaseScreen from './baseScreen/BaseScreen';
+import TextInputFloating from './textInputFloating/TextInputFloating';
+import Button from './button/Button';
+import CustomIcon from './customIcon/CustomIcon';
+import PinInput from './pinInput/PinInput';
 import KeyboardView from "./keyboardAwareScrollView/KeyboardAwareScrollView";
 import Label from "./label/Label";
 import SearchBar from "./searchBar/SearchBar";
@@ -12,9 +12,10 @@ import MyModalSuccess from "./modalSuccess/ModalSuccess";
 import MyModalInfo from "./modalInfo/ModalInfo";
 import Dropdown from "./dropdown/Dropdown";
 import DropdownSearch from "./dropdownSearch/DropdownSearch";
-import Header from "./header/Header";
+import MyHeader from "./header/Header";
 import ProgressBar from "./progressBar/ProgressBar";
 import HorizontalLine from "./horizontalLine/HorizontalLine";
+import DatePicker from "./calender/Calender";
 export * from "./labels/Labels";
 
 export {
@@ -32,7 +33,8 @@ export {
     MyModalInfo,
     Dropdown,
     DropdownSearch,
-    Header,
+    MyHeader,
     ProgressBar,
-    HorizontalLine
+    HorizontalLine,
+    DatePicker
 };

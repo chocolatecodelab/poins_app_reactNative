@@ -38,9 +38,6 @@ const CustomModal = ({ isVisible, children, closeModal, headerActive, headerTitl
                                     name={'close'}
                                     size={25}
                                     color={COLOR_WHITE}
-                                    style={{
-                                        fontWeight: 'bold'
-                                    }}
                                 />
                             </TouchableOpacity>
                         </View>
@@ -65,7 +62,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalContainer: {
-        width: '80%',
+        width: '90%',
         backgroundColor: COLOR_WHITE,
         borderRadius: 10,
         elevation: 20,

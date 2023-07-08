@@ -2,12 +2,10 @@ import { connect } from 'react-redux';
 import ProfileScreen from './Profile';
 import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import { NativeModules } from 'react-native';
 import { downlodingProfileAsync, resetProfile, updatingProfileAsync, uploadImageProfileAsync } from '../../redux/features/profile/profileSlice';
 import { logout } from '../../redux/features/auth/authSlice';
 import NavigationService from '../../tools/navigationService';
 import { NAV_NAME_LOGIN } from '../../tools/constant';
-// const RNFetchBlob = NativeModules.RNFetchBlob
 
 const mapStateToProps = state => {
     return ({
@@ -19,6 +17,7 @@ const mapStateToProps = state => {
         message: state.profile.message,
         data: state.profile.data,
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
+        version: state.home.versions,
     })
 };
 

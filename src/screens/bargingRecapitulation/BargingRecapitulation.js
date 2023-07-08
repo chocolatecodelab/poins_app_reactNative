@@ -1,10 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native'
-import { BaseScreen, H1, SearchBar, BodyLarge, Body, BodySmall, BodyExtraSmall } from "../../components";
+import { BaseScreen, Button, BodyLarge, Body, BodySmall, BodyExtraSmall, MyHeader, DatePicker, MyModal } from "../../components";
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant';
 import moment from 'moment';
 import { ios } from '../../tools/helper';
-import PageHeader from '../../components/header/Header';
 
 const renderEmptyComponent = () => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: '70%' }}>
@@ -12,49 +11,54 @@ const renderEmptyComponent = () => (
   </View>
 );
 
-const History = ({ userId, listHistory, onAppear, isLoading, onDetailPressed }) => {
-  // const [searchBarText, setSearchBarText] = useState('');
-  // const [changeFilter, setChangeFilter] = useState('Today')
-  // console.log('history', listHistory);
-  useEffect(() => {
-    onAppear(userId)
-  }, [])
+const BargingRecapitulation = ({ userId, listHistory, onAppear, isLoading, onDetailPressed }) => {
+  const [startDate, setStartDate] = useState(new Date())
+  const [finishDate, setFinishDate] = useState(new Date())
+  const [modalStartDate, setModalStartDate] = useState(false)
+  const [modalFinishDate, setModalFinishDate] = useState(false)
+  useEffect(() => { onAppear(userId, startDate, finishDate) }, [startDate, finishDate])
+
   return (
-    <BaseScreen barBackgroundColor={COLOR_WHITE} contentStyle={{ paddingHorizontal: 20, paddingTop: ios ? 20 : 0 }}>
-      <H1 bold style={{ color: COLOR_PRIMARY, alignSelf: 'center', marginBottom: 20 }}>History Booking</H1>
-      {/* <View style={styles.filterSearchContainer}>
-        <View style={styles.filterContainer}>
-          <TouchableOpacity
-            style={[styles.filterButton, { backgroundColor: changeFilter === "Today" ? COLOR_WHITE : COLOR_TRANSPARENT_DISABLED }]}
-            onPress={() => setChangeFilter('Today')}>
-            <Body style={{ color: changeFilter === "Today" ? COLOR_PRIMARY : COLOR_DISABLED, fontWeight: '500' }}>Today</Body>
+    <BaseScreen
+      barBackgroundColor={COLOR_PRIMARY}
+      statusBarColor={COLOR_WHITE}
+      translucent
+      containerStyle={{ paddingTop: ios ? 30 : 20, paddingBottom: 0, backgroundColor: COLOR_PRIMARY }}
+    >
+      <MyHeader
+        pageTitle='Barging Recapitulation'
+        backButton
+      />
+      <View style={{ paddingHorizontal: 25 }}>
+        <View style={{ width: '100%', marginTop: 15 }}>
+          <Body>Start date</Body>
+          <TouchableOpacity style={{
+            backgroundColor: COLOR_WHITE,
+            borderBottomWidth: 1,
+            borderColor: COLOR_TRANSPARENT_DARK,
+            marginBottom: 15,
+            paddingVertical: 5,
+            paddingLeft: 5
+          }}
+            onPress={() => setModalStartDate(!modalStartDate)}>
+            <Body bold>{moment(startDate).format('DD MMMM YYYY')}</Body>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, { backgroundColor: changeFilter === "Week" ? COLOR_WHITE : COLOR_TRANSPARENT_DISABLED }]}
-            onPress={() => setChangeFilter('Week')}>
-            <Body style={{ color: changeFilter === "Week" ? COLOR_PRIMARY : COLOR_DISABLED, fontWeight: '500' }}>Week</Body>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, { backgroundColor: changeFilter === "Month" ? COLOR_WHITE : COLOR_TRANSPARENT_DISABLED }]}
-            onPress={() => setChangeFilter('Month')}>
-            <Body style={{ color: changeFilter === "Month" ? COLOR_PRIMARY : COLOR_DISABLED, fontWeight: '500' }}>Month</Body>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, { backgroundColor: changeFilter === "Year" ? COLOR_WHITE : COLOR_TRANSPARENT_DISABLED }]}
-            onPress={() => setChangeFilter('Year')}>
-            <Body style={{ color: changeFilter === "Year" ? COLOR_PRIMARY : COLOR_DISABLED, fontWeight: '500' }}>Year</Body>
+          <Body>Finish date</Body>
+          <TouchableOpacity style={{
+            backgroundColor: COLOR_WHITE,
+            borderBottomWidth: 1,
+            borderColor: COLOR_TRANSPARENT_DARK,
+            marginBottom: 15,
+            paddingVertical: 5,
+            paddingLeft: 5
+          }}
+            onPress={() => setModalFinishDate(!modalFinishDate)}>
+            <Body bold>{moment(finishDate).format('DD MMMM YYYY')}</Body>
           </TouchableOpacity>
         </View>
-        <SearchBar
-          placeholder={"Search company"}
-          activeIcon={true}
-          onTextChanged={(e) => setSearchBarText(e)}
-          onDeletePressed={() => setSearchBarText('')}
-        />
-      </View> */}
-      <View>
+
         <FlatList
-          contentContainerStyle={{ justifyContent: 'center', paddingBottom: 200 }}
+          contentContainerStyle={{ justifyContent: 'center', paddingBottom: 150, paddingTop: 20 }}
           showsVerticalScrollIndicator={false}
           style={{ width: '100%' }}
           data={listHistory}
@@ -119,7 +123,7 @@ const History = ({ userId, listHistory, onAppear, isLoading, onDetailPressed }) 
                         <View
                           style={{
                             height: 1,
-                            backgroundColor: '#000',
+                            backgroundColor: COLOR_BLACK,
                           }} />
                       </View>
                       <View style={{ alignItems: 'center', justifyContent: 'center', marginHorizontal: 5 }}>
@@ -129,7 +133,7 @@ const History = ({ userId, listHistory, onAppear, isLoading, onDetailPressed }) 
                         <View
                           style={{
                             height: 1,
-                            backgroundColor: '#000',
+                            backgroundColor: COLOR_BLACK,
                           }} />
                       </View>
                       <View style={{ justifyContent: 'center' }}>
@@ -151,49 +155,45 @@ const History = ({ userId, listHistory, onAppear, isLoading, onDetailPressed }) 
           ListEmptyComponent={renderEmptyComponent}
         />
       </View>
+      <MyModal isVisible={modalStartDate} closeModal={() => setModalStartDate(!modalStartDate)}>
+        <View style={{ maxHeight: '100%', paddingVertical: 20, paddingHorizontal: 25 }}>
+          <DatePicker
+            value={startDate}
+            onChangeDate={setStartDate}
+            closeDate={() => setModalStartDate(!modalStartDate)}
+          />
+        </View>
+      </MyModal>
+      <MyModal isVisible={modalFinishDate} closeModal={() => setModalFinishDate(!modalFinishDate)}>
+        <View style={{ maxHeight: '100%', paddingVertical: 20, paddingHorizontal: 25 }}>
+          <DatePicker
+            value={finishDate}
+            onChangeDate={setFinishDate}
+            closeDate={() => setModalFinishDate(!modalFinishDate)}
+          />
+        </View>
+      </MyModal>
     </BaseScreen>
   )
 }
 
-export default History
+export default BargingRecapitulation
 
 const styles = StyleSheet.create({
-  filterSearchContainer: {
-    marginVertical: 20,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  filterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: COLOR_TRANSPARENT_DISABLED,
-    borderRadius: 50,
-    width: '100%',
-    height: 40,
-    marginTop: 5,
-    marginBottom: 10
-  },
-  filterButton: {
-    alignItems: 'center',
-    paddingVertical: 7,
-    width: '20%',
-    borderRadius: 50
-  },
   card: {
     borderWidth: 1,
-    borderColor: COLOR_PRIMARY,
+    borderColor: COLOR_TRANSPARENT_DARK,
     marginTop: 5,
     marginBottom: 15,
     backgroundColor: COLOR_WHITE,
     shadowColor: COLOR_BLACK,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 4,
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
     borderRadius: 10,
     padding: 15
   },

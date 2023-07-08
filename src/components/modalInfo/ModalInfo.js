@@ -1,6 +1,6 @@
 import { StyleSheet, Modal, TouchableOpacity, KeyboardAvoidingView, Text, View, Image, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
+import { COLOR_DISABLED, COLOR_MEDIUM_BLACK, COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
 import { iconTools } from '../../tools/helper';
 
 const MyModalInfo = ({ isVisible, message, closeModal, transparent = 0.6 }) => {
@@ -34,18 +34,16 @@ const MyModalInfo = ({ isVisible, message, closeModal, transparent = 0.6 }) => {
                         <iconTools.MaterialIcons
                             name={'close'}
                             size={25}
-                            color={COLOR_PRIMARY}
-                            style={{
-                                fontWeight: 'bold'
-                            }}
+                            color={COLOR_DISABLED}
                         />
                     </TouchableOpacity>
                     <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
                         <Image
                             source={require('../../assets/images/info.png')}
-                            style={{ height: 100, width: 100, marginVertical: 20 }}
+                            style={{ height: 100, width: 100, marginTop: 15, marginBottom: 5 }}
+                            resizeMode='contain'
                         />
-                        <Text style={{ fontSize: 17, fontWeight: '500', color: COLOR_PRIMARY, marginBottom: 10, textTransform: 'capitalize' }}>
+                        <Text style={styles.text}>
                             {message}
                         </Text>
                     </View>
@@ -65,7 +63,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalContainer: {
-        width: '80%',
+        width: '85%',
         backgroundColor: COLOR_WHITE,
         paddingHorizontal: 20,
         paddingVertical: 10,
@@ -73,4 +71,12 @@ const styles = StyleSheet.create({
         elevation: 20,
         maxHeight: '80%',
     },
+    text: {
+        textAlign: 'center',
+        textTransform: 'capitalize',
+        fontSize: 20,
+        fontWeight: '500',
+        color: COLOR_MEDIUM_BLACK,
+        marginBottom: 10
+    }
 })

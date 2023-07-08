@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
-import { Button, TextInputFloating, KeyboardView, BaseScreen, H1, MyModalSuccess, MyModalError, MyModal, Body, BodyLarge } from "../../components";
-import { COLOR_DISABLED, COLOR_ERROR, COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
-import { iconTools } from '../../tools/helper';
+import { Button, TextInputFloating, BaseScreen, MyModalSuccess, MyModalError, MyModal, Body, BodyLarge, MyHeader, HorizontalLine } from "../../components";
+import {
+  COLOR_BLACK, COLOR_ERROR, COLOR_MAIN_SECONDARY, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE
+} from '../../tools/constant';
+import { iconTools, ios } from '../../tools/helper';
 import LocalizedString from '../../tools/localization';
 
 const Profile = ({
   onAppear, data, onSelectedGallery, onUpdateProfile, isUpdatingProfile, isUpdatingProfileSuccess,
   isUpdatingImage, isUpdatingImageSuccess, isError, message, onCloseModalSuccess, onCloseModalError,
-  onSelectedCamera, onLogoutPressed, userId
+  onSelectedCamera, onLogoutPressed, userId, version
 }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -28,17 +30,24 @@ const Profile = ({
   }, [isUpdatingImageSuccess, isUpdatingProfileSuccess])
 
   return (
-    <BaseScreen contentStyle={{ paddingHorizontal: 20, paddingTop: 20 }}>
-      <KeyboardView>
-        <H1 bold style={styles.title}>PROFILE</H1>
+    <BaseScreen
+      barBackgroundColor={COLOR_PRIMARY}
+      statusBarColor={COLOR_WHITE}
+      translucent
+      containerStyle={{ paddingTop: ios ? 30 : 20, paddingBottom: 0, backgroundColor: COLOR_PRIMARY }}
+    >
+      <MyHeader
+        pageTitle='Profile'
+        backButton
+        rightButton
+        iconType={iconTools.MaterialCommunityIcons}
+        iconName={'logout'}
+        onRightPressed={onLogoutPressed}
+      />
+      <View style={{ paddingHorizontal: 25 }}>
+        {/* <H1 bold style={styles.title}>PROFILE</H1> */}
         <View style={{ marginVertical: 50, width: '100%', alignItems: 'center' }}>
-          <View style={{
-            borderWidth: 2.5,
-            height: 135,
-            width: 135,
-            borderRadius: 135,
-            borderColor: COLOR_PRIMARY
-          }}>
+          <View style={styles.wrapperAvatar}>
             {data.photo ?
               <Image
                 source={{ uri: data?.photo }}
@@ -52,62 +61,39 @@ const Profile = ({
             <TouchableOpacity
               style={styles.addPicture}
               onPress={() => setShowModalFilePicker(!showModalFilePicker)}>
-              <iconTools.MaterialIcons
-                name={'add'}
-                size={28}
+              <iconTools.Ionicons
+                name={'camera'}
+                size={18}
                 color={COLOR_WHITE}
               />
             </TouchableOpacity>
           </View>
         </View>
-        <TextInputFloating
-          style={[{ marginBottom: 30 }]}
-          iconType={iconTools.MaterialCommunityIcons}
-          IconName={'account'}
-          iconSize={24}
-          iconColor={COLOR_DISABLED}
-          iconActive={true}
-          value={name ? name : data.name}
-          label="Name"
-          editable={false}
-        />
-        <TextInputFloating
-          style={[{ marginBottom: 30 }]}
-          iconType={iconTools.MaterialCommunityIcons}
-          IconName={'email'}
-          iconSize={24}
-          iconColor={COLOR_DISABLED}
-          iconActive={true}
-          value={email ? email : data.email}
-          label="Email"
-          editable={false}
-        />
-        <TextInputFloating
-          style={[{ marginBottom: 30 }]}
-          iconType={iconTools.MaterialCommunityIcons}
-          IconName={'cellphone'}
-          iconSize={24}
-          iconColor={COLOR_DISABLED}
-          iconActive={true}
-          value={data.phoneNumber}
-          label="Phone Number"
-          editable={false}
-        />
+        <View style={styles.card}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, marginBottom: 10 }}>
+            <Body>Nama :</Body>
+            <Body style={{ flex: 0.8, textAlign: 'right' }}>{data?.name}</Body>
+          </View>
+          <HorizontalLine width={'100%'} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, marginVertical: 10 }}>
+            <Body>Email :</Body>
+            <Body style={{ flex: 0.8, textAlign: 'right' }}>{data?.email}</Body>
+          </View>
+          <HorizontalLine width={'100%'} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, marginTop: 10 }}>
+            <Body>Nomor HP :</Body>
+            <Body style={{ flex: 0.8, textAlign: 'right' }}>{data?.phoneNumber}</Body>
+          </View>
+        </View>
+
         <Button
           caption={'Edit'}
-          containerStyle={{ backgroundColor: COLOR_PRIMARY, marginVertical: 5 }}
+          containerStyle={{ backgroundColor: COLOR_MAIN_SECONDARY, marginVertical: 5 }}
           disabled={isUpdatingProfile || isUpdatingImage}
           loading={isUpdatingProfile || isUpdatingImage}
           onPress={() => setEditProfile(!editProfile)}
         />
-        <Button
-          caption={'Logout'}
-          containerStyle={{ backgroundColor: COLOR_ERROR, marginVertical: 5 }}
-          disabled={isUpdatingProfile || isUpdatingImage}
-          loading={isUpdatingProfile || isUpdatingImage}
-          onPress={() => onLogoutPressed()}
-        />
-      </KeyboardView>
+      </View>
       {showModalFilePicker &&
         <MyModal
           contentStyle={{ padding: 15 }}
@@ -125,7 +111,7 @@ const Profile = ({
               >
                 <iconTools.Ionicons
                   name={'camera-outline'}
-                  size={60}
+                  size={50}
                   color={COLOR_WHITE}
                 />
                 <Body style={{ color: COLOR_WHITE }}>Camera</Body>
@@ -136,7 +122,7 @@ const Profile = ({
               >
                 <iconTools.Ionicons
                   name={'images-outline'}
-                  size={60}
+                  size={50}
                   color={COLOR_WHITE}
                 />
                 <Body style={{ color: COLOR_WHITE }}>Gallery</Body>
@@ -208,6 +194,9 @@ const Profile = ({
           </View>
         </MyModal>
       }
+      <View style={{ position: 'absolute', left: 0, right: 0, bottom: 15, alignItems: 'center' }}>
+        <Body>Versi {ios ? version[1].app_version : version[0].app_version}</Body>
+      </View>
       <MyModalSuccess
         isVisible={isUpdatingProfileSuccess || isUpdatingImageSuccess}
         closeModal={() => onCloseModalSuccess(userId)}
@@ -229,6 +218,13 @@ const styles = StyleSheet.create({
     color: COLOR_PRIMARY,
     alignSelf: 'center'
   },
+  wrapperAvatar: {
+    borderWidth: 2.5,
+    height: 135,
+    width: 135,
+    borderRadius: 135,
+    borderColor: COLOR_TRANSPARENT_DISABLED
+  },
   avatar: {
     height: 130,
     width: 130,
@@ -237,13 +233,16 @@ const styles = StyleSheet.create({
   },
   addPicture: {
     position: 'absolute',
-    top: 95,
+    top: 90,
     left: 96,
-    backgroundColor: COLOR_PRIMARY,
+    backgroundColor: COLOR_MAIN_SECONDARY,
     borderRadius: 50,
-    width: 28,
-    height: 28,
+    borderWidth: 2.5,
+    borderColor: COLOR_WHITE,
+    width: 30,
+    height: 30,
     justifyContent: 'center',
+    alignItems: 'center'
   },
   photoButton: {
     height: 120,
@@ -260,5 +259,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 5,
+  },
+  card: {
+    backgroundColor: COLOR_WHITE,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: COLOR_TRANSPARENT_DARK,
+    shadowColor: COLOR_BLACK,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 4,
+    padding: 15,
+    marginBottom: 15
   }
 })

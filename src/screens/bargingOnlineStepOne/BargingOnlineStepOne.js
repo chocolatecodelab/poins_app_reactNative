@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View, FlatList, ActivityIndicator, TextInput, } from 'react-native'
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_WHITE, NAV_NAME_BARGIN_ONLINE_STEP_TWO, } from '../../tools/constant';
+import { COLOR_BLACK, COLOR_MEDIUM_BLACK, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE, NAV_NAME_BARGING_ONLINE_STEP_TWO, } from '../../tools/constant';
 import { ios, getScreenDimension } from '../../tools/helper';
 import {
     Button, BaseScreen, Body, H4, Dropdown, DropdownSearch, ProgressBar, MyModalInfo, MyModalError,
@@ -8,7 +8,7 @@ import {
 } from '../../components';
 import navigationService from '../../tools/navigationService';
 
-const BarginOnlineStepOne = ({
+const BargingOnlineStepOne = ({
     customers, isSuccess, isLoading, isError, message, onAppear, onCloseModalError
 }) => {
     const [showTugBoatMenu, setShowTugBoatMenu] = useState(false);
@@ -33,7 +33,12 @@ const BarginOnlineStepOne = ({
     }, [isSuccess])
 
     return (
-        <BaseScreen containerStyle={{ paddingTop: ios ? 50 : 20, paddingBottom: 0 }}>
+        <BaseScreen
+            barBackgroundColor={COLOR_WHITE}
+            statusBarColor={COLOR_BLACK}
+            translucent={true}
+            containerStyle={{ paddingTop: ios ? 50 : 40, paddingBottom: 0 }}
+        >
             <View style={{ paddingHorizontal: 20 }}>
                 <ProgressBar stepOneActive />
             </View>
@@ -42,7 +47,7 @@ const BarginOnlineStepOne = ({
                 :
                 <KeyboardView style={styles.containerKeyboardView(getScreenDimension.height)}>
                     <View>
-                        <Body bold style={{ color: COLOR_PRIMARY }}>Select Jetty <Body style={{ color: 'red' }}>*</Body> : </Body>
+                        <Body style={{ color: COLOR_BLACK }}>Select Jetty <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <View style={styles.cardColumn}>
                             {customers?.jetty?.map((item) => {
                                 return (
@@ -62,7 +67,7 @@ const BarginOnlineStepOne = ({
                         </View>
                     </View>
                     <View style={{ marginBottom: 20 }}>
-                        <Body bold style={{ color: COLOR_PRIMARY, marginBottom: 10 }}>Company <Body style={{ color: 'red' }}>*</Body> : </Body>
+                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Company <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <Dropdown
                             selected={setSelectCompany}
                             value={selectCompany}
@@ -80,10 +85,12 @@ const BarginOnlineStepOne = ({
                             headerTitle={'LIST COMPANY'}
                             placeholder={'Select Company'}
                             containerStyle={{ marginVertical: 0 }}
+                            borderColor={COLOR_MEDIUM_BLACK}
+                            borderRadius={8}
                         />
                     </View>
                     <View style={{ marginBottom: 20 }}>
-                        <Body bold style={{ color: COLOR_PRIMARY, marginBottom: 10 }}>Tug Boat <Body style={{ color: 'red' }}>*</Body> : </Body>
+                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Tug Boat <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <DropdownSearch
                             selected={setSelectTugBoat}
                             value={selectTugBoat}
@@ -102,10 +109,12 @@ const BarginOnlineStepOne = ({
                             placeholder={'Select Tug Boat'}
                             heightContent={155}
                             containerStyle={{ marginVertical: 0 }}
+                            borderColor={COLOR_MEDIUM_BLACK}
+                            borderRadius={8}
                         />
                     </View>
                     <View style={{ marginBottom: 20 }}>
-                        <Body bold style={{ color: COLOR_PRIMARY, marginBottom: 10 }}>Barge Ship <Body style={{ color: 'red' }}>*</Body> : </Body>
+                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Barge Ship <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <DropdownSearch
                             selected={setSelectBarge}
                             value={selectBarge}
@@ -124,10 +133,12 @@ const BarginOnlineStepOne = ({
                             placeholder={'Select Barge'}
                             heightContent={155}
                             containerStyle={{ marginVertical: 0 }}
+                            borderColor={COLOR_MEDIUM_BLACK}
+                            borderRadius={8}
                         />
                     </View>
                     <View style={{ marginBottom: 20 }}>
-                        <Body bold style={{ color: COLOR_PRIMARY, marginBottom: 10 }}>Capacity (ton) <Body style={{ color: 'red' }}>*</Body> : </Body>
+                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Capacity (ton) <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <Dropdown
                             custom={true}
                             value={selectCapacity && duration ? `${selectCapacity} (${duration} jam)` : ''}
@@ -143,6 +154,8 @@ const BarginOnlineStepOne = ({
                             data={customers?.capacity}
                             placeholder={'Select Capacity'}
                             containerStyle={{ marginVertical: 0 }}
+                            borderColor={COLOR_MEDIUM_BLACK}
+                            borderRadius={8}
                         >
                             <MyModal
                                 isVisible={showCapacityMenu}
@@ -181,18 +194,19 @@ const BarginOnlineStepOne = ({
                         </Dropdown>
                     </View>
                     <View style={{ marginBottom: 20 }}>
-                        <Body bold style={{ color: COLOR_PRIMARY, marginBottom: 10 }}>Vessel/Tujuan : </Body>
+                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Vessel/Tujuan : </Body>
                         <TextInput
                             multiline
                             onChangeText={(e) => setVessel(e)}
                             style={{
-                                borderColor: COLOR_PRIMARY,
+                                borderColor: COLOR_MEDIUM_BLACK,
                                 borderWidth: 1,
-                                borderRadius: 4,
+                                borderRadius: 8,
                                 minHeight: 100,
                                 maxHeight: 200,
                                 padding: 10,
-                                textAlignVertical: 'top'
+                                textAlignVertical: 'top',
+                                color: COLOR_MEDIUM_BLACK
                             }}
                         />
                     </View>
@@ -209,8 +223,8 @@ const BarginOnlineStepOne = ({
                 <Button
                     caption='Next'
                     disabled={jetty && selectCompany && selectCapacity && selectBarge && selectTugBoat ? false : true}
-                    containerStyle={[styles.next, { backgroundColor: jetty && selectCompany && selectCapacity && selectBarge && selectTugBoat ? COLOR_PRIMARY : COLOR_DISABLED }]}
-                    onPress={() => navigationService.navigate(NAV_NAME_BARGIN_ONLINE_STEP_TWO, { jetty, duration, selectCompany, selectBarge, selectTugBoat, selectCapacity, vessel })}
+                    containerStyle={[styles.next, { backgroundColor: jetty && selectCompany && selectCapacity && selectBarge && selectTugBoat ? COLOR_PRIMARY : COLOR_TRANSPARENT_DARK }]}
+                    onPress={() => navigationService.navigate(NAV_NAME_BARGING_ONLINE_STEP_TWO, { jetty, duration, selectCompany, selectBarge, selectTugBoat, selectCapacity, vessel })}
                 />
             </View>
             <MyModalError
@@ -230,21 +244,22 @@ const BarginOnlineStepOne = ({
     )
 }
 
-export default BarginOnlineStepOne
+export default BargingOnlineStepOne
 
 const styles = StyleSheet.create({
     containerKeyboardView: (height) => ({
         height,
         paddingHorizontal: 20,
         paddingBottom: 100,
-        marginBottom:80
+        marginBottom: 80
     }),
     cardColumn: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        padding: 10,
+        // padding: 10,
+        marginTop: 5
     },
     jettyCard: (jetty, value) => ({
         width: '30%',
@@ -257,8 +272,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.23,
         shadowRadius: 2.62,
         borderWidth: 1,
-        borderRadius: 6,
-        borderColor: COLOR_PRIMARY,
+        borderRadius: 8,
+        borderColor: jetty === value ? COLOR_PRIMARY : COLOR_MEDIUM_BLACK,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: jetty === value ? COLOR_PRIMARY : COLOR_WHITE,
@@ -278,8 +293,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'center',
         backgroundColor: COLOR_WHITE,
-        borderColor: COLOR_PRIMARY,
-        borderWidth: 1,
         marginRight: 10
     },
     next: {

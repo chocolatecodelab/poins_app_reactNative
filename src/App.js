@@ -4,14 +4,16 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import {
-  LoginScreen, RegisterScreen, SplashScreen, OtpLoginScreen, BarginOnlineStepOneScreen,
-  BarginOnlineStepTwoScreen, OtpForgetPasswordScreen, ForgetPasswordScreen, ChangePasswordScreen, HistoryDetailScreen,
+  LoginScreen, RegisterScreen, SplashScreen, OtpLoginScreen, BargingOnlineStepOneScreen, BargingOnlineStepTwoScreen,
+  OtpForgetPasswordScreen, ForgetPasswordScreen, ChangePasswordScreen, HistoryDetailScreen, ProfileScreen,
+  BargingRecapitulationScreen,
+  BargingScheduleScreen,
 } from "./screens";
 import BottomTab from "./components/bottomTab/BottomTab";
 import {
-  NAV_NAME_HOME_MENU, NAV_NAME_LOGIN, NAV_NAME_REGISTER, NAV_NAME_OTP_LOGIN,
-  NAV_NAME_BARGIN_ONLINE_STEP_ONE, NAV_NAME_BARGIN_ONLINE_STEP_TWO,
-  NAV_NAME_OTP_FORGET_PASSWORD, NAV_NAME_SPLASH, NAV_NAME_FORGET_PASSWORD, NAV_NAME_CHANGE_NEW_PASSWORD, NAV_NAME_HISTORY_DETAIL
+  NAV_NAME_HOME_MENU, NAV_NAME_LOGIN, NAV_NAME_REGISTER, NAV_NAME_OTP_LOGIN, NAV_NAME_BARGING_ONLINE_STEP_ONE,
+  NAV_NAME_BARGING_ONLINE_STEP_TWO, NAV_NAME_OTP_FORGET_PASSWORD, NAV_NAME_SPLASH, NAV_NAME_FORGET_PASSWORD,
+  NAV_NAME_CHANGE_NEW_PASSWORD, NAV_NAME_BARGING_RECAPITULATION_DETAIL, NAV_NAME_PROFILE, NAV_NAME_BARGING_RECAPITULATION, NAV_NAME_BARGING_SCHEDULE
 } from "./tools/constant";
 import { NavigationContainer, } from '@react-navigation/native';
 import NavigationService from './tools/navigationService';
@@ -95,24 +97,48 @@ function MainNavigation() {
               }}
             />
             <Stack.Screen
-              name={NAV_NAME_BARGIN_ONLINE_STEP_ONE}
-              component={BarginOnlineStepOneScreen}
+              name={NAV_NAME_BARGING_ONLINE_STEP_ONE}
+              component={BargingOnlineStepOneScreen}
               options={{
                 cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
                 headerShown: false,
               }}
             />
             <Stack.Screen
-              name={NAV_NAME_BARGIN_ONLINE_STEP_TWO}
-              component={BarginOnlineStepTwoScreen}
+              name={NAV_NAME_BARGING_ONLINE_STEP_TWO}
+              component={BargingOnlineStepTwoScreen}
               options={{
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
                 headerShown: false,
               }}
             />
-             <Stack.Screen
-              name={NAV_NAME_HISTORY_DETAIL}
+            <Stack.Screen
+              name={NAV_NAME_BARGING_RECAPITULATION_DETAIL}
               component={HistoryDetailScreen}
+              options={{
+                cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={NAV_NAME_PROFILE}
+              component={ProfileScreen}
+              options={{
+                cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={NAV_NAME_BARGING_RECAPITULATION}
+              component={BargingRecapitulationScreen}
+              options={{
+                cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={NAV_NAME_BARGING_SCHEDULE}
+              component={BargingScheduleScreen}
               options={{
                 cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
                 headerShown: false,

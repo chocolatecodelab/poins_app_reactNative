@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import NavigationService from '../../tools/navigationService';
 import { H3 } from '../labels/Labels';
 import { COLOR_DISABLED, COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
-import { iconTools, ios } from "../../tools/helper";
+import { iconTools } from "../../tools/helper";
 
 
 const styles = {
@@ -15,7 +15,7 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 2,
-    borderCollor: COLOR_DISABLED,
+    borderColor: COLOR_DISABLED,
     position: 'relative',
   },
 };
@@ -30,7 +30,7 @@ const renderBackButton = (backButton, onBackPressed,) => {
         <iconTools.Ionicons
           name={'chevron-back-outline'}
           color={COLOR_WHITE}
-          size={25}
+          size={35}
         />
       </TouchableOpacity>
     );
@@ -43,12 +43,13 @@ const renderRightIcon = (rightButton, onRightPressed, iconType, iconName) => {
     let Tag = iconType;
     return (
       <TouchableOpacity
+        style={{ right: 15, position: 'absolute', zIndex: 9 }}
         onPress={onRightPressed}
       >
         <Tag
           name={iconName}
           color={COLOR_WHITE}
-          size={25}
+          size={28}
         />
       </TouchableOpacity>
     );
@@ -62,7 +63,7 @@ const renderTitle = (pageTitle, fontSize) => (
       flex: 1,
       color: COLOR_WHITE,
       fontWeight: 'bold',
-      fontSize: fontSize ? fontSize : 16,
+      fontSize: fontSize ? fontSize : 20,
       textAlign: 'center'
     }}>
     {pageTitle}
