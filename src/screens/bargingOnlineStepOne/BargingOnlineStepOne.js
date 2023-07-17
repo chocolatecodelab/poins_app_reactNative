@@ -66,7 +66,7 @@ const BargingOnlineStepOne = ({
                             })}
                         </View>
                     </View>
-                    <View style={{ marginBottom: 20 }}>
+                    {/* <View style={{ marginBottom: 20 }}>
                         <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Company <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <Dropdown
                             selected={setSelectCompany}
@@ -88,7 +88,7 @@ const BargingOnlineStepOne = ({
                             borderColor={COLOR_MEDIUM_BLACK}
                             borderRadius={8}
                         />
-                    </View>
+                    </View> */}
                     <View style={{ marginBottom: 20 }}>
                         <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Tug Boat <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <DropdownSearch
@@ -222,9 +222,9 @@ const BargingOnlineStepOne = ({
                 />
                 <Button
                     caption='Next'
-                    disabled={jetty && selectCompany && selectCapacity && selectBarge && selectTugBoat ? false : true}
-                    containerStyle={[styles.next, { backgroundColor: jetty && selectCompany && selectCapacity && selectBarge && selectTugBoat ? COLOR_PRIMARY : COLOR_TRANSPARENT_DARK }]}
-                    onPress={() => navigationService.navigate(NAV_NAME_BARGING_ONLINE_STEP_TWO, { jetty, duration, selectCompany, selectBarge, selectTugBoat, selectCapacity, vessel })}
+                    disabled={jetty && selectCapacity && selectBarge && selectTugBoat ? false : true}
+                    containerStyle={[styles.next, { backgroundColor: jetty && selectCapacity && selectBarge && selectTugBoat ? COLOR_PRIMARY : COLOR_TRANSPARENT_DARK }]}
+                    onPress={() => navigationService.navigate(NAV_NAME_BARGING_ONLINE_STEP_TWO, { jetty, duration, selectBarge, selectTugBoat, selectCapacity, vessel })}
                 />
             </View>
             <MyModalError

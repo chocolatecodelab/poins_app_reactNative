@@ -50,7 +50,7 @@ export const homeSlice = createSlice({
             state.isDownloadingVersion = false;
             state.message = '';
         },
-        showInfo: (state, action) => { state.isError = action.payload },
+        showInfo: (state, action) => { state.isInfo = action.payload },
         addMessage: (state, action) => { state.message = action.payload }
     },
     extraReducers: (builder) => {

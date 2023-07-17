@@ -4,7 +4,7 @@ import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_WHITE } from '../../t
 import { iconTools } from '../../tools/helper';
 import { Body, BodySmall } from '../../components';
 
-const Header = ({onProfilePressed}) => {
+const Header = ({ onProfilePressed, onFiturDevelopmentPressed }) => {
     return (
         <View style={styles.container}>
             <View style={{ height: 40 }}>
@@ -19,7 +19,7 @@ const Header = ({onProfilePressed}) => {
             </View>
             <View style={styles.contentItem}>
                 <View style={{ width: '65%', paddingLeft: 8 }}>
-                    <TouchableOpacity style={styles.buttonSearch}>
+                    <TouchableOpacity style={styles.buttonSearch} onPress={onFiturDevelopmentPressed}>
                         <iconTools.MaterialIcons
                             name={'search'}
                             size={25}
@@ -30,7 +30,7 @@ const Header = ({onProfilePressed}) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity style={{ marginRight: 7 }}>
+                    <TouchableOpacity style={{ marginRight: 7 }} onPress={onFiturDevelopmentPressed}>
                         <iconTools.MaterialIcons
                             name={'mail'}
                             size={30}
@@ -40,7 +40,7 @@ const Header = ({onProfilePressed}) => {
                             <BodySmall bold style={{ color: COLOR_WHITE }}>1</BodySmall>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ marginRight: 7 }}>
+                    <TouchableOpacity style={{ marginRight: 7 }} onPress={onFiturDevelopmentPressed}>
                         <iconTools.MaterialIcons
                             name={'notifications'}
                             size={30}

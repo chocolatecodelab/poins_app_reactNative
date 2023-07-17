@@ -5,18 +5,49 @@ import HomeScreen from './Home';
 import NavigationService from '../../tools/navigationService';
 import { NAV_NAME_PROFILE } from '../../tools/constant';
 import { Linking } from 'react-native';
-import { ios } from '../../tools/helper';
+import { downloadingActiveBargingAsync } from '../../redux/features/activeBarging/activeBargingSlice';
 
 const transformDataApp = (state) => {
-    let item = []
-    let size = 2;
-    let listApp = [...state.home.apps];
-    if (!state.home.isDownloadingApps) {
-        while (listApp?.length > 0)
-            item.push(listApp?.splice(0, size));
-        return item
+    const dummyData = [
+        {
+            EndDate: "2023-07-13T08:42:00",
+            Customer: "Not Order",
+            Barge: "Not Order",
+            Tug_Boat: "Not Order",
+            StartWeight: 0,
+            Target_Barging: 0,
+            persentasevolumeProgres: 0,
+            Jetty: "JETTY-J",
+            Kode: "STAND BY"
+        },
+        {
+            EndDate: "2023-07-13T08:42:00",
+            Customer: "Not Order",
+            Barge: "Not Order",
+            Tug_Boat: "Not Order",
+            StartWeight: 0,
+            Target_Barging: 0,
+            persentasevolumeProgres: 0,
+            Jetty: "JETTY-U",
+            Kode: "STAND BY"
+        },
+        {
+            EndDate: null,
+            Customer: "Not Order",
+            Barge: "Not Order",
+            Tug_Boat: "Not Order",
+            StartWeight: 0,
+            Target_Barging: 0,
+            persentasevolumeProgres: 0,
+            Jetty: "JETTY-K",
+            Kode: "STAND BY"
+        }
+    ];
+    if (state.activeBarging.listHistory.length === 0) {
+        return dummyData
     } else {
-        return []
+        let data = state.activeBarging.listHistory.map((item) => item);
+        return data
     }
 };
 
@@ -25,7 +56,8 @@ const mapStateToProps = state => {
         isError: state.home.isError,
         isInfo: state.home.isInfo,
         message: state.home.message,
-        apps: transformDataApp(state),
+        apps: state.home?.apps,
+        listHistory: transformDataApp(state),
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
         isDownloadingApps: state.home.isDownloadingApps
     })
@@ -38,18 +70,35 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(downlodingProfileAsync(userId))
         dispatch(downlodingMenuAppsAsync())
         dispatch(downlodingCheckVersionAsync())
+        dispatch(downloadingActiveBargingAsync())
     },
-    onCloseModal: () => { dispatch(resetHome()) },
+    onCloseModal: () => {
+        dispatch(resetHome())
+    },
     onProfilePressed: () => {
         NavigationService.navigate(NAV_NAME_PROFILE)
     },
-    onItemPressed: (url) => {
+    onItemPressed: async (url) => {
         if (url === null) {
             dispatch(showInfo(true))
             dispatch(addMessage("Tahap Development"))
         } else {
-            Linking.openURL(url)
+            await Linking.canOpenURL(url).then(supported => {
+                console.log('supported? :', supported);
+                if (supported) {
+                    Linking.openURL(url)
+                        .then(aa => console.log('openURL resp.:', aa))
+                        .catch(err => console.log('openURL error:', err));
+                } else {
+                    console.log('url not valid');
+                }
+            });
+
         }
+    },
+    onFiturDevelopmentPressed: () => {
+        dispatch(showInfo(true))
+        dispatch(addMessage("Tahap Development"))
     }
 });
 

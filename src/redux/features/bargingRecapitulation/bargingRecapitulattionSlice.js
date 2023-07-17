@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { downloadHistoryBarginOnline } from './historyBarginOnlineService'
+import { downloadBargingRecapitulation } from './bargingRecapitulationService'
 
-export const downloadingHistoryBarginOnlineAsync = createAsyncThunk(
-    'history', async (params, thunkAPI) => {
+export const downloadingBargingRecapitulationAsync = createAsyncThunk(
+    'bargingRecapitulation', async (params, thunkAPI) => {
         try {
-            return await downloadHistoryBarginOnline(params)
+            return await downloadBargingRecapitulation(params)
         } catch (error) {
             const message =
                 (JSON.stringify(error.response) &&
@@ -16,8 +16,8 @@ export const downloadingHistoryBarginOnlineAsync = createAsyncThunk(
         }
     })
 
-export const historyBarginOnlineSlice = createSlice({
-    name: 'historyBarginOnline',
+export const bargingRecapitulationSlice = createSlice({
+    name: 'bargingRecapitulation',
     initialState: {
         listHistory: [],
         isError: false,
@@ -26,7 +26,7 @@ export const historyBarginOnlineSlice = createSlice({
         message: '',
     },
     reducers: {
-        resetHistoryBarginOnline: (state) => {
+        resetBargingRecapitulation: (state) => {
             state.isLoading = false
             state.isSuccess = false
             state.isError = false
@@ -35,15 +35,15 @@ export const historyBarginOnlineSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(downloadingHistoryBarginOnlineAsync.pending, (state) => {
+            .addCase(downloadingBargingRecapitulationAsync.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(downloadingHistoryBarginOnlineAsync.fulfilled, (state, action) => {
+            .addCase(downloadingBargingRecapitulationAsync.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
                 state.listHistory = action.payload
             })
-            .addCase(downloadingHistoryBarginOnlineAsync.rejected, (state, action) => {
+            .addCase(downloadingBargingRecapitulationAsync.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload
@@ -51,5 +51,5 @@ export const historyBarginOnlineSlice = createSlice({
     },
 })
 
-export const { resetHistoryBarginOnline } = historyBarginOnlineSlice.actions
-export default historyBarginOnlineSlice.reducer
+export const { resetBargingRecapitulation } = bargingRecapitulationSlice.actions
+export default bargingRecapitulationSlice.reducer

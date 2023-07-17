@@ -1,4 +1,4 @@
-package com.poins.newarchitecture.modules;
+package com.kppmining.poins.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

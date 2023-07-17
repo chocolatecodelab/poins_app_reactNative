@@ -1,4 +1,4 @@
-package com.poins;
+package com.kppmining.poins;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

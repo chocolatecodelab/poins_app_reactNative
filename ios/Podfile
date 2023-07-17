@@ -3,7 +3,6 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
-pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 production = ENV["PRODUCTION"] == "1"
 ENV['USE_HERMES'] = '0'
@@ -27,13 +26,22 @@ target 'poins' do
 
   target 'poinsTests' do
     inherit! :complete
+    config = use_native_modules!
+    use_react_native!(:path => config["reactNativePath"])
     # Pods for testing
+    pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   end
 
   post_install do |installer|
     # NOTE: Change IPHONEOS_DEPLOYMENT_TARGET to 12.4.
     installer.pods_project.targets.each do |target|
+      if target.name == "React-Core.common-AccessibilityResources"
+        target.remove_from_project
+      end
       target.build_configurations.each do |config|
+        # config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ""
+        config.build_settings['CODE_SIGNING_REQUIRED'] = "NO"
+        config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
       end
     end

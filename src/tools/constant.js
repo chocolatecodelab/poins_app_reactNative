@@ -30,8 +30,10 @@ export const REST_URL_BARGIN_ONLINE_BOOKING_DATE = '/barging_online/Get_BargingO
 export const REST_URL_FORGET_PASSWORD_STEP_ONE = '/login/ForgetPassword';
 export const REST_URL_FORGET_PASSWORD_STEP_TWO = '/login/ValidateOtp_ForgetPassword';
 export const REST_URL_FORGET_PASSWORD_STEP_THREE = '/login/ChangePassword';
-export const REST_URL_HISTORY_BARGIN_ONLINE = '/barging_online/Get_BargingOnlineByFilter/{id}?startDate={startDate}&endDate={finishDate}';
+export const REST_URL_BARGING_RECAPITULATION = '/barging_online/Get_BargingOnlineByFilter/{id}?startDate={startDate}&endDate={finishDate}';
 export const REST_URL_TIME_BARGIN_ONLINE = '/barging_online/Get_ValidasiBookingTime?filterDate={date}&jetty={jetty}';
+export const REST_URL_BARGING_SCHEDULE = '/barging_online/Get_BargingSchedule/{id}?startDate={startDate}&endDate={finishDate}';
+export const REST_URL_ACTIVE_BARGING = '/barging_online/Get_ActiveBarging';
 
 export const REST_METHOD_GET = 'Get';
 export const REST_METHOD_POST = 'Post';

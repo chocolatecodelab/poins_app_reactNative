@@ -12,7 +12,7 @@ const SplashScreen = ({ loginInfo, onAppear }) => {
   )
   return (
     <BaseScreen barBackgroundColor={COLOR_WHITE} contentStyle={{ paddingHorizontal: 20 }}>
-      <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: COLOR_WHITE }}>
         <Image
           source={require('../../assets/images/logo.jpeg')}
           resizeMode="contain"

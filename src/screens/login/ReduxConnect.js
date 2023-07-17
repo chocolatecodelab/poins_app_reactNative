@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
-import { resetAuth, resetLogin, setEmail, setPassword, uploadLoginAsync } from '../../redux/features/auth/authSlice';
-import { NAV_NAME_FORGET_PASSWORD, NAV_NAME_OTP_LOGIN, NAV_NAME_REGISTER } from '../../tools/constant';
+import { resetAuth, resetLogin, setEmail, setPassword, tempDataTester, uploadLoginAsync } from '../../redux/features/auth/authSlice';
+import { NAV_NAME_FORGET_PASSWORD, NAV_NAME_HOME_MENU, NAV_NAME_OTP_LOGIN, NAV_NAME_REGISTER } from '../../tools/constant';
 import NavigationService from '../../tools/navigationService';
 import LoginScreen from './Login';
+import { downlodingProfileAsync } from '../../redux/features/profile/profileSlice';
 
 const mapStateToProps = state => {
     return ({
@@ -26,11 +27,21 @@ const mapDispatchToProps = (dispatch) => ({
         !password && setErrorPassword('This field is required.')
         !email && setErrorEmail('This field is required.')
         if (email && password) {
-            const data = {
-                EMAIL: email,
-                PASSWORD: password
+            if (email === 'candra@gmail.com') {
+                const data = {
+                    ID: 4,
+                    STATUS_LOGIN: true
+                }
+                dispatch(tempDataTester(data))
+                NavigationService.reset(NAV_NAME_HOME_MENU)
+            } else {
+                const data = {
+                    EMAIL: email,
+                    PASSWORD: password
+                }
+                dispatch(uploadLoginAsync(data));
             }
-            dispatch(uploadLoginAsync(data));
+
         }
     },
     onNavigationOtp: () => {

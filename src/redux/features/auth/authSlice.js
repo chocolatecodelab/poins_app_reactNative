@@ -63,6 +63,9 @@ export const authSlice = createSlice({
         },
         setEmail: (state, action) => { state.email = action.payload },
         setPassword: (state, action) => { state.password = action.payload },
+        tempDataTester: (state, action) => {
+            state.loginInfo = action.payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -94,5 +97,5 @@ export const authSlice = createSlice({
     },
 })
 
-export const { resetAuth, resetLogin, resetOtpLogin, setEmail, setPassword, logout } = authSlice.actions
+export const { resetAuth, resetLogin, resetOtpLogin, setEmail, setPassword, logout, tempDataTester } = authSlice.actions
 export default authSlice.reducer
