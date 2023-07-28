@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { downloadBargingActive } from './activeBargingService'
 
 export const downloadingActiveBargingAsync = createAsyncThunk(
-    'bargingActive', async (params, thunkAPI) => {
+    'bargingActive', async (_, thunkAPI) => {
         try {
-            return await downloadBargingActive(params)
+            return await downloadBargingActive()
         } catch (error) {
             const message =
                 (JSON.stringify(error.response) &&

@@ -183,10 +183,10 @@ const BargingOnllineStepTwo = ({
                             <Body bold>Jetty</Body>
                             <BodySmall>{props.jetty}</BodySmall>
                         </View>
-                        <View style={styles.orderText}>
+                        {/* <View style={styles.orderText}>
                             <Body bold>Company</Body>
                             <BodySmall style={{ textAlign: 'right' }}>{props.selectCompany}</BodySmall>
-                        </View>
+                        </View> */}
                         <View style={styles.orderText}>
                             <Body bold>Tug Boat</Body>
                             <BodySmall>{props.selectTugBoat}</BodySmall>

@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch) => ({
         !password && setErrorPassword('This field is required.')
         !email && setErrorEmail('This field is required.')
         if (email && password) {
-            if (email === 'candra@gmail.com') {
+            if (email === 'candra@gmail.com' || email === 'candra@gmail.com') {
                 const data = {
                     ID: 4,
                     STATUS_LOGIN: true

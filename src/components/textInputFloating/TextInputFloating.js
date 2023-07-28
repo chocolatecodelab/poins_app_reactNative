@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native'
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant'
-import { getScreenDimension, ios } from '../../tools/helper'
+import { getScreenDimension, iPad, ios } from '../../tools/helper'
 
 const TextInputFloating = (props) => {
   const {
@@ -45,7 +45,7 @@ const TextInputFloating = (props) => {
       {disableFloating ?
         <TextInput
           style={[
-            styles.input(iconActive, isFocused, errorText, height),
+            styles.input(iconActive, isFocused, errorText, iPad),
             { borderColor: borderColor, borderRadius: borderRadius ? borderRadius : 4 },
           ]}
           {...restOfProps}
@@ -134,41 +134,41 @@ const TextInputFloating = (props) => {
           onPress={onPressed}
         /> : null
       }
-      {!!errorText && showLabelError ? <Text style={styles.error}>{errorText}</Text> : null}
+      {!!errorText && showLabelError ? <Text style={styles.error}>{errorText}s</Text> : null}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  input: (iconActive, isFocused, error, height) => ({
-    height: 50,
+  input: (iconActive, isFocused, error) => ({
+    height: iPad ? 70 : 50,
     borderWidth: 1,
     fontFamily: 'Avenir-Medium',
-    fontSize: isFocused ? 16 : 14,
-    paddingRight: iconActive ? 50 : 16,
-    marginBottom: error ? 2 : 0,
-    paddingLeft: 16,
+    fontSize: iPad ? isFocused ? 28 : 22 : isFocused ? 16 : 14,
+    paddingRight: iPad ? iconActive ? 100 : 32 : iconActive ? 50 : 16,
+    marginBottom: iPad ? error ? 18 : 15 : error ? 2 : 0,
+    paddingLeft: iPad ? 28 : 16,
     color: COLOR_BLACK
   }),
   labelContainer: (isFocused, value, iconActive) => ({
     position: 'absolute',
-    paddingHorizontal: 8,
+    paddingHorizontal: iPad ? 16 : 8,
     paddingLeft: iconActive ? isFocused ? 0 : value ? 0 : 5 : isFocused ? 0 : value ? 0 : 10,
-    top: isFocused || value ? 0 : -12,
+    top: iPad ? isFocused || value ? -3 : -6 : isFocused || value ? 0 : -12,
     width: '50%'
   }),
   backLabel: (value, isFocused) => ({
     position: 'absolute',
     backgroundColor: value ? COLOR_WHITE : isFocused ? COLOR_WHITE : null,
-    height: 20,
+    height: iPad ? 40 : 20,
     color: COLOR_WHITE,
-    paddingHorizontal: 10,
-    left: -8
+    paddingHorizontal: iPad ?30 : 10,
+    left: iPad ? -25 : -8
   }),
   label: {
     fontFamily: 'Avenir-Heavy',
     color: COLOR_DISABLED,
-    fontSize: ios ? 13 : 14,
+    fontSize: iPad ? 20 : ios ? 13 : 14,
     zIndex: 2,
     fontWeight: "500"
   },
@@ -176,14 +176,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignSelf: 'center',
     position: 'absolute',
-    right: 12,
-    top: 12
+    right: iPad ? 24 : 12,
+    top: iPad ? 22 : 12
   },
   error: {
     position: 'absolute',
-    bottom: -15,
-    marginLeft: 12,
-    fontSize: 12,
+    bottom: iPad ? -5 : -15,
+    marginLeft: iPad ? 24 : 12,
+    fontSize: iPad ? 14 : 12,
     color: COLOR_ERROR,
     fontFamily: 'Avenir-Medium',
   },

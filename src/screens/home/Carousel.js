@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, ImageBackground, useWindowDimensions } from 'react-native'
-import { COLOR_BLACK, COLOR_ERROR, COLOR_MAIN_SECONDARY, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant'
-import { Body, BodySmall, BodyExtraSmall } from '../../components'
+import React from 'react';
+import { StyleSheet, View, ImageBackground } from 'react-native'
+import { COLOR_BLACK, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant'
+import { Body, BodySmall, BodyExtraSmall, BodyLarge } from '../../components'
 import moment from 'moment'
-import { getScreenDimension, iconTools } from '../../tools/helper'
+import { getScreenDimension, iPad, iconTools } from '../../tools/helper'
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { ProgressBar } from 'react-native-paper';
 
@@ -18,66 +18,125 @@ const Carousel = ({ item }) => {
                     style={styles.bgBanner}
                 >
                     <View style={styles.transparentBanner} />
-                    <Body bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</Body>
-                    <Body bold style={{ color: COLOR_BLACK }}>{item.Jetty}</Body>
-                    <BodySmall style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</BodySmall>
+                    {iPad ?
+                        <>
+                            <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
+                            <BodyLarge bold style={{ color: COLOR_BLACK }}>{item.nodeDesc}</BodyLarge>
+                            <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
+                        </>
+                        :
+                        <>
+                            <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
+                            <BodyLarge bold style={{ color: COLOR_BLACK }}>{item.nodeDesc}</BodyLarge>
+                            <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
+                        </>
+                    }
+
                 </ImageBackground>
             </View>
-            <View style={{ paddingHorizontal: 10 }}>
-                <View style={{ paddingVertical: 10 }}>
-                    <View style={styles.company}>
-                        <iconTools.MaterialIcons
-                            name={'apartment'}
-                            size={16}
-                            color={COLOR_PRIMARY}
-                            style={{ marginRight: 3 }}
-                        />
-                        <Body>{item.Customer}</Body>
-                    </View>
+            <View style={{ paddingHorizontal: 10, justifyContent: 'center' }}>
+                <View style={{ marginVertical: 10 }}>
+                    {iPad ?
+                        <View style={styles.company}>
+                            <iconTools.MaterialIcons
+                                name={'apartment'}
+                                size={24}
+                                color={COLOR_PRIMARY}
+                                style={{ marginRight: 3 }}
+                            />
+                            <BodyLarge>{item.Company}</BodyLarge>
+                        </View> :
+                        <View style={styles.company}>
+                            <iconTools.MaterialIcons
+                                name={'apartment'}
+                                size={16}
+                                color={COLOR_PRIMARY}
+                                style={{ marginRight: 3 }}
+                            />
+                            <Body>{item.Company}</Body>
+                        </View>
+                    }
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <View style={styles.boat}>
-                            <iconTools.MaterialIcons
-                                name={'directions-boat'}
-                                size={14}
-                                color={COLOR_PRIMARY}
-                                style={{ marginRight: 3 }}
-                            />
-                            <BodyExtraSmall>{item.Barge}</BodyExtraSmall>
-                        </View>
-                        <View style={styles.boat}>
-                            <iconTools.MaterialIcons
-                                name={'directions-boat'}
-                                size={14}
-                                color={COLOR_PRIMARY}
-                                style={{ marginRight: 3 }}
-                            />
-                            <BodyExtraSmall>{item.Tug_Boat}</BodyExtraSmall>
-                        </View>
+                        {iPad ?
+                            <View style={styles.boat}>
+                                <iconTools.MaterialIcons
+                                    name={'directions-boat'}
+                                    size={20}
+                                    color={COLOR_PRIMARY}
+                                    style={{ marginRight: 3 }}
+                                />
+                                <Body>{item.Barge}</Body>
+                            </View> :
+                            <View style={styles.boat}>
+                                <iconTools.MaterialIcons
+                                    name={'directions-boat'}
+                                    size={14}
+                                    color={COLOR_PRIMARY}
+                                    style={{ marginRight: 3 }}
+                                />
+                                <BodyExtraSmall>{item.Barge}</BodyExtraSmall>
+                            </View>
+                        }
+                        {iPad ?
+                            <View style={styles.boat}>
+                                <iconTools.MaterialIcons
+                                    name={'directions-boat'}
+                                    size={20}
+                                    color={COLOR_PRIMARY}
+                                    style={{ marginRight: 3 }}
+                                />
+                                <Body>{item.Boat}</Body>
+                            </View> :
+                            <View style={styles.boat}>
+                                <iconTools.MaterialIcons
+                                    name={'directions-boat'}
+                                    size={14}
+                                    color={COLOR_PRIMARY}
+                                    style={{ marginRight: 3 }}
+                                />
+                                <BodyExtraSmall>{item.Boat}</BodyExtraSmall>
+                            </View>
+                        }
                     </View>
                 </View>
                 <View style={styles.capacityProgress}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <View style={{ alignItems: 'center', marginRight: 5 }}>
-                            <BodyExtraSmall>Current</BodyExtraSmall>
-                            <BodyExtraSmall>{item.StartWeight} MT</BodyExtraSmall>
-                        </View>
-                        <ProgressBar progress={0.5} color={COLOR_PRIMARY} style={{ width: 60 }} indeterminate={true} />
-                        <View style={{ alignItems: 'center', marginLeft: 5 }}>
-                            <BodyExtraSmall>Plan Load</BodyExtraSmall>
-                            <BodyExtraSmall>{item.Target_Barging} MT</BodyExtraSmall>
-                        </View>
+                        {iPad ?
+                            <View style={{ alignItems: 'center', marginRight: 5 }}>
+                                <Body>Current</Body>
+                                <Body>{item.Weight} MT</Body>
+                            </View> :
+                            <View style={{ alignItems: 'center', marginRight: 5 }}>
+                                <BodyExtraSmall>Current</BodyExtraSmall>
+                                <BodyExtraSmall>{item.Weight} MT</BodyExtraSmall>
+                            </View>
+                        }
+                        <ProgressBar progress={0.5} color={COLOR_PRIMARY} style={{ width: iPad ? 120 : 60 }} indeterminate={true} />
+                        {iPad ?
+                            <View style={{ alignItems: 'center', marginLeft: 5 }}>
+                                <Body>Plan Load</Body>
+                                <Body>{item.Planload} MT</Body>
+                            </View> :
+                            <View style={{ alignItems: 'center', marginLeft: 5 }}>
+                                <BodyExtraSmall>Plan Load</BodyExtraSmall>
+                                <BodyExtraSmall>{item.Planload} MT</BodyExtraSmall>
+                            </View>
+                        }
                     </View>
                     <View style={{ alignItems: 'center' }}>
                         <CircularProgress
-                            value={item.persentasevolumeProgres}
+                            value={item.WeightPercentage}
                             progressValueColor={COLOR_PRIMARY}
                             activeStrokeColor={COLOR_PRIMARY}
                             inActiveStrokeColor={COLOR_PRIMARY}
                             inActiveStrokeOpacity={0.2}
                             valueSuffix={'%'}
-                            radius={width / 18}
+                            radius={iPad ? width / 30 : width / 18}
                         />
-                        <BodyExtraSmall style={{ textAlign: 'center', color: COLOR_PRIMARY, fontSize: 10 }}>{item.Kode}</BodyExtraSmall>
+                        {iPad ?
+                            <Body style={{ textAlign: 'center', color: COLOR_PRIMARY }}>{item.Kode}</Body> :
+                            <BodyExtraSmall style={{ textAlign: 'center', color: COLOR_PRIMARY, fontSize: 10 }}>{item.Kode}</BodyExtraSmall>
+                        }
                     </View>
                 </View>
             </View>
@@ -89,8 +148,9 @@ export default Carousel
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        marginTop: 5,
+        // flex: 1,
+        marginTop: 10,
+        marginBottom: 10,
         backgroundColor: COLOR_WHITE,
         borderWidth: 1,
         borderColor: COLOR_TRANSPARENT_DARK,
@@ -127,14 +187,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    animatedContainer: {
-        borderRadius: 18,
-        overflow: 'hidden',
-        backgroundColor: COLOR_WHITE,
-        borderWidth: 1,
-        borderColor: COLOR_TRANSPARENT_DARK,
-        height: '100%',
     },
     capacityProgress: {
         flexDirection: 'row',

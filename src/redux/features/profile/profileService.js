@@ -1,4 +1,4 @@
-import { REST_URL_EDIT_PROFILE, REST_URL_MY_PROFILE, REST_URL_UPLOAD_IMAGE_PROFILE } from "../../../tools/constant";
+import { REST_URL_DELETE_ACCOUNT, REST_URL_EDIT_PROFILE, REST_URL_MY_PROFILE, REST_URL_UPLOAD_IMAGE_PROFILE } from "../../../tools/constant";
 import { sendGetRequest, sendPostFormRequest, sendPostRequest } from "../../../tools/helper";
 
 export const downlodingProfile = async (id) => {
@@ -31,6 +31,13 @@ export const updatingProfile = async (data) => {
         TELEPON: data.phoneNumber,
         NAMA: data.name
     }
+    const respon = await sendPostRequest(url, body)
+    return respon
+}
+
+export const deletingProfile = async (id) => {
+    const url = REST_URL_DELETE_ACCOUNT.replace(/\{id\}/, id);
+    const body = {}
     const respon = await sendPostRequest(url, body)
     return respon
 }

@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { downlodingCheckVersionAsync, downlodingMenuAppsAsync, resetHome, showInfo, addMessage, downlodingListNotificationAsync } from '../../redux/features/home/homeSlice';
 import { downlodingProfileAsync, resetProfile } from '../../redux/features/profile/profileSlice';
-import HomeScreen from './Home';
+import NotificationScreen from './Notification';
 import NavigationService from '../../tools/navigationService';
-import { NAV_NAME_NOTIFICATION, NAV_NAME_PROFILE } from '../../tools/constant';
+import { NAV_NAME_PROFILE } from '../../tools/constant';
 import { Linking } from 'react-native';
 import { downloadingActiveBargingAsync } from '../../redux/features/activeBarging/activeBargingSlice';
 
@@ -11,42 +11,43 @@ const transformDataBarging = (state) => {
     const dummyData = [
         {
             EndDate: "2023-07-13T08:42:00",
-            Company: "Not Order",
+            Customer: "Not Order",
             Barge: "Not Order",
-            Boat: "Not Order",
-            Weight: 0,
-            Planload: 0,
+            Tug_Boat: "Not Order",
+            StartWeight: 0,
+            Target_Barging: 0,
             persentasevolumeProgres: 0,
-            nodeDesc: "JETTY-J",
+            Jetty: "JETTY-J",
             Kode: "STAND BY"
         },
         {
             EndDate: "2023-07-13T08:42:00",
-            Company: "Not Order",
+            Customer: "Not Order",
             Barge: "Not Order",
-            Boat: "Not Order",
-            Weight: 0,
-            Planload: 0,
+            Tug_Boat: "Not Order",
+            StartWeight: 0,
+            Target_Barging: 0,
             persentasevolumeProgres: 0,
-            nodeDesc: "JETTY-U",
+            Jetty: "JETTY-U",
             Kode: "STAND BY"
         },
         {
             EndDate: null,
-            Company: "Not Order",
+            Customer: "Not Order",
             Barge: "Not Order",
-            Boat: "Not Order",
-            Weight: 0,
-            Planload: 0,
+            Tug_Boat: "Not Order",
+            StartWeight: 0,
+            Target_Barging: 0,
             persentasevolumeProgres: 0,
-            nodeDesc: "JETTY-K",
+            Jetty: "JETTY-K",
             Kode: "STAND BY"
         }
     ];
     if (state.activeBarging.listHistory.length === 0) {
         return dummyData
     } else {
-        return state.activeBarging.listHistory
+        let data = state.activeBarging.listHistory.map((item) => item);
+        return data
     }
 };
 
@@ -56,7 +57,7 @@ const mapStateToProps = state => {
         isInfo: state.home.isInfo,
         message: state.home.message,
         apps: state.home?.apps,
-        notification: state.home?.notification,
+        data: state.home?.notification,
         listHistory: transformDataBarging(state),
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
         isDownloadingApps: state.home.isDownloadingApps
@@ -70,8 +71,11 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(downlodingProfileAsync(userId))
         dispatch(downlodingMenuAppsAsync(userId))
         dispatch(downlodingCheckVersionAsync())
-        dispatch(downloadingActiveBargingAsync())
+    },
+    onAppearFocus: (userId) => {
+        dispatch(resetHome())
         dispatch(downlodingListNotificationAsync(userId))
+        dispatch(downloadingActiveBargingAsync())
     },
     onCloseModal: () => {
         dispatch(resetHome())
@@ -96,14 +100,7 @@ const mapDispatchToProps = (dispatch) => ({
 
         }
     },
-    onFiturDevelopmentPressed: () => {
-        dispatch(showInfo(true))
-        dispatch(addMessage("Tahap Development"))
-    },
-    onNotificationPressed: () => {
-        NavigationService.navigate(NAV_NAME_NOTIFICATION)
-    }
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);

@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { iconTools, ios } from '../../tools/helper';
+import { iconTools, ios, iPad } from '../../tools/helper';
 import {
   COLOR_DISABLED, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE,
   NAV_NAME_BARGING_RECAPITULATION,
@@ -52,7 +52,7 @@ const BottomTab = () => {
       barStyle={{
         backgroundColor: COLOR_WHITE,
         borderTopWidth: 1,
-        marginBottom: ios ? -10 : 0,
+        marginBottom: iPad ? 0 : ios ? -10 : 0,
         borderColor: COLOR_TRANSPARENT_DARK,
         alignItems: 'center',
         justifyContent: 'center'
@@ -68,7 +68,7 @@ const BottomTab = () => {
             component={item.component}
             style={{ flex: 1 }}
             options={{
-              tabBarLabel: <Body style={{color:COLOR_PRIMARY}}>{item.label}</Body>,
+              tabBarLabel: <Body style={{ color: COLOR_PRIMARY }}>{item.label}</Body>,
               tabBarIcon: ({ color, focused }) => {
                 return (
                   <item.type name={focused ? item.activeIcon : item.inActiveIcon} size={28} color={color} />

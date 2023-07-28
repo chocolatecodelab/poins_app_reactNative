@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "470095899545",
+    "project_id": "poins-a2e4c",
+    "storage_bucket": "poins-a2e4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470095899545:android:3628414a00bd56bcd6c108",
+        "android_client_info": {
+          "package_name": "com.kppmining.poins"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470095899545-kkotphpdagmng20t637l05q8hfm4bptl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAedJV01AcRqWUktUapl0wqdv5Qfn8h0bE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470095899545-kkotphpdagmng20t637l05q8hfm4bptl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

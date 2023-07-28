@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { BodyExtraSmall } from '../../components';
-import { getScreenDimension, ios } from '../../tools/helper';
+import { Body, BodyExtraSmall } from '../../components';
+import { getScreenDimension, iPad, ios } from '../../tools/helper';
 import { COLOR_GRAY_1, COLOR_WHITE } from '../../tools/constant';
 
 const MenuHorizontal = ({ data, onItemPressed }) => {
@@ -27,57 +27,13 @@ const MenuHorizontal = ({ data, onItemPressed }) => {
                                 />
                             }
                         </View>
-                        <BodyExtraSmall style={{ textAlign: 'center' }}>{item.NAMA}</BodyExtraSmall>
+                        {iPad ?
+                            <Body style={{ textAlign: 'center' }}>{item.NAMA}</Body> :
+                            <BodyExtraSmall style={{ textAlign: 'center' }}>{item.NAMA}</BodyExtraSmall>
+                        }
                     </TouchableOpacity>
                 )
             })}
-            {/* <FlatList
-                data={data}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) =>
-                (
-                    <View>
-                        <TouchableOpacity
-                            style={styles.appCard(width, height)}
-                            onPress={() => { onItemPressed(ios ? item[0].URL_IOS : item[0].URL_ANDROID) }}
-                        >
-                            <View style={styles.appIconSize}>
-                                {item[0].ICON ?
-                                    <Image
-                                        source={{ uri: item[0].ICON }}
-                                        style={styles.appImageSize}
-                                    /> :
-                                    <Image
-                                        source={require('../../assets/images/defaultApp.png')}
-                                        style={styles.appImageSize}
-                                    />
-                                }
-                            </View>
-                            <BodyExtraSmall style={{ textAlign: 'center' }}>{item[0].NAMA}</BodyExtraSmall>
-                        </TouchableOpacity>
-                        {item.length > 1 ?
-                            <TouchableOpacity
-                                style={styles.appCard(width, height)}
-                                onPress={() => { onItemPressed(ios ? item[1].URL_IOS : item[1].URL_ANDROID) }}
-                            >
-                                <View style={styles.appIconSize}>
-                                    {item[1].ICON ?
-                                        <Image
-                                            source={{ uri: item[1].ICON }}
-                                            style={styles.appImageSize}
-                                        /> :
-                                        <Image
-                                            source={require('../../assets/images/defaultApp.png')}
-                                            style={styles.appImageSize}
-                                        />
-                                    }
-                                </View>
-                                <BodySmall style={{ textAlign: 'center', paddingTop: 5, }}>{item[1].NAMA}</BodySmall>
-                            </TouchableOpacity> : null}
-                    </View>
-                )}
-            /> */}
         </View>
     );
 };
@@ -89,7 +45,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         paddingHorizontal: 10,
-        paddingTop: 15,
+        paddingTop: 30,
         marginBottom: 10
     },
     appCard: (width, height) => ({

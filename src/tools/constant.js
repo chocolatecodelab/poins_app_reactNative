@@ -13,6 +13,9 @@ export const NAV_NAME_BARGING_RECAPITULATION = 'NAV_NAME_BARGING_RECAPITULATION'
 export const NAV_NAME_HOME_MENU = 'NAV_NAME_HOME_MENU';
 export const NAV_NAME_BARGING_RECAPITULATION_DETAIL = 'NAV_NAME_BARGING_RECAPITULATION_DETAIL';
 export const NAV_NAME_BARGING_SCHEDULE = 'NAV_NAME_BARGING_SCHEDULE';
+export const NAV_NAME_NOTIFICATION = 'NAV_NAME_NOTIFICATION';
+export const NAV_NAME_CCTV = 'NAV_NAME_CCTV';
+export const NAV_NAME_DETAIL_CCTV = 'NAV_NAME_DETAIL_CCTV';
 
 export const REST_BASE_URL = 'https://ap.kppmining.com:12201/api';
 export const REST_URL_LOGIN = '/login/Login';
@@ -22,7 +25,7 @@ export const REST_URL_REGISTER = '/login/Create_Register';
 export const REST_URL_EDIT_PROFILE = '/login/Update_Profile/{id}';
 export const REST_URL_UPLOAD_IMAGE_PROFILE = '/login/Upload_Image/{id}';
 export const REST_URL_MY_PROFILE = '/login/Get_Profile/{id}';
-export const REST_URL_MENU_APP = '/menu/Get_Menu';
+export const REST_URL_MENU_APP = '/menu/Get_Menu/{id}';
 export const REST_URL_CHECK_VERSION = '/version/Get_Version';
 export const REST_URL_BARGIN_ONLINE_CUSTOMER = '/barging_online/Get_BargingOnline';
 export const REST_URL_CREATE_BARGIN_ONLINE = '/barging_online/Create_BarginOnline';
@@ -34,6 +37,9 @@ export const REST_URL_BARGING_RECAPITULATION = '/barging_online/Get_BargingOnlin
 export const REST_URL_TIME_BARGIN_ONLINE = '/barging_online/Get_ValidasiBookingTime?filterDate={date}&jetty={jetty}';
 export const REST_URL_BARGING_SCHEDULE = '/barging_online/Get_BargingSchedule/{id}?startDate={startDate}&endDate={finishDate}';
 export const REST_URL_ACTIVE_BARGING = '/barging_online/Get_ActiveBarging';
+export const REST_URL_LIST_NOTIFICATION = '/notifikasi/Get_Notifikasi/{id}';
+export const REST_URL_DELETE_ACCOUNT = '/login/update_verification_user/{id}';
+export const REST_URL_LIST_CCTV = '/cctv/Get_Cctv';
 
 export const REST_METHOD_GET = 'Get';
 export const REST_METHOD_POST = 'Post';

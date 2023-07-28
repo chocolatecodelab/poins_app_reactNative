@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { downlodingCheckVersion, downlodingMenu } from './homeService'
+import { downlodingCheckVersion, downlodingMenu, downlodingNotification } from './homeService'
 
 export const downlodingMenuAppsAsync = createAsyncThunk(
-    'downlodingMenuAppsAsync', async (_, thunkAPI) => {
+    'downlodingMenuAppsAsync', async (id, thunkAPI) => {
         try {
-            return await downlodingMenu()
+            return await downlodingMenu(id)
         } catch (error) {
             const message =
                 (JSON.stringify(error.response) &&
@@ -31,14 +31,31 @@ export const downlodingCheckVersionAsync = createAsyncThunk(
         }
     })
 
+export const downlodingListNotificationAsync = createAsyncThunk(
+    'downlodingListNotificationAsync', async (id, thunkAPI) => {
+        try {
+            return await downlodingNotification(id)
+        } catch (error) {
+            const message =
+                (JSON.stringify(error.response) &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    })
+
 export const homeSlice = createSlice({
     name: 'home',
     initialState: {
         isError: false,
         isInfo: false,
         isDownloadingApps: false,
+        isDownloadingNotification: false,
         isDownloadingVersion: false,
         apps: [],
+        notification: [],
         versions: {},
         message: '',
     },
@@ -47,6 +64,7 @@ export const homeSlice = createSlice({
             state.isError = false;
             state.isInfo = false;
             state.isDownloadingApps = false;
+            state.isDownloadingNotification = false;
             state.isDownloadingVersion = false;
             state.message = '';
         },
@@ -76,6 +94,18 @@ export const homeSlice = createSlice({
             })
             .addCase(downlodingCheckVersionAsync.rejected, (state, action) => {
                 state.isDownloadingVersion = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(downlodingListNotificationAsync.pending, (state) => {
+                state.isDownloadingNotification = true;
+            })
+            .addCase(downlodingListNotificationAsync.fulfilled, (state, action) => {
+                state.isDownloadingNotification = false;
+                state.notification = action.payload;
+            })
+            .addCase(downlodingListNotificationAsync.rejected, (state, action) => {
+                state.isDownloadingNotification = false;
                 state.isError = true;
                 state.message = action.payload;
             })

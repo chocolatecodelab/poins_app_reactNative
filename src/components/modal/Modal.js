@@ -4,7 +4,7 @@ import { COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
 import { android, ios, iconTools } from '../../tools/helper';
 import { BodyLarge } from '../labels/Labels';
 
-const CustomModal = ({ isVisible, children, closeModal, headerActive, headerTitle, headerColor, contentStyle }) => {
+const CustomModal = ({ isVisible, children, closeModal, transparent = 0.6, headerActive, headerTitle, headerColor, contentStyle }) => {
     const [showModal, setShowModal] = useState(isVisible);
     const toggleModal = () => {
         if (isVisible) {
@@ -20,7 +20,7 @@ const CustomModal = ({ isVisible, children, closeModal, headerActive, headerTitl
 
     return (
         <Modal transparent visible={showModal} statusBarTranslucent={true} animationType='fade'>
-            <KeyboardAvoidingView behavior={"padding"} style={[StyleSheet.absoluteFillObject, styles.modalBackGround]}>
+            <KeyboardAvoidingView behavior={"padding"} style={[StyleSheet.absoluteFillObject, styles.modalBackGround, { backgroundColor: `'rgba(0,0,0,${transparent})'` }]}>
                 {/* <View style={[styles.modalBackGround]}> */}
                 <TouchableOpacity
                     onPress={() => closeModal()}

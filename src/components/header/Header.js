@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import NavigationService from '../../tools/navigationService';
 import { H3 } from '../labels/Labels';
 import { COLOR_DISABLED, COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
-import { iconTools } from "../../tools/helper";
+import { iPad, iconTools, ios } from "../../tools/helper";
 
 
 const styles = {
   container: {
-    height: 50,
+    height: iPad ? 70 : ios ? 60 : 50,
     width: '100%',
     backgroundColor: COLOR_PRIMARY,
     flexDirection: 'row',

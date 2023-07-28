@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { downlodingProfile, updatingProfile, uploadImageProfile } from './profileService'
+import { deletingProfile, downlodingProfile, updatingProfile, uploadImageProfile } from './profileService'
 
 export const downlodingProfileAsync = createAsyncThunk(
     'downlodingProfileAsync', async (id, thunkAPI) => {
@@ -44,6 +44,21 @@ export const updatingProfileAsync = createAsyncThunk(
         }
     })
 
+export const deletingProfileAsync = createAsyncThunk(
+    'deletingProfileAsync', async (id, thunkAPI) => {
+        try {
+            return await deletingProfile(id)
+        } catch (error) {
+            const message =
+                (JSON.stringify(error.response) &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    })
+
 export const profileSlice = createSlice({
     name: 'profile',
     initialState: {
@@ -54,6 +69,8 @@ export const profileSlice = createSlice({
         isUpdatingProfileSuccess: false,
         isUpdatingImage: false,
         isUpdatingImageSuccess: false,
+        isDeleting: false,
+        isDeletingSuccess: false,
         data: {},
         message: '',
     },
@@ -66,6 +83,8 @@ export const profileSlice = createSlice({
             state.isUpdatingProfileSuccess = false;
             state.isUpdatingImage = false;
             state.isUpdatingImageSuccess = false;
+            state.isDeleting = false;
+            state.isDeletingSuccess = false;
             state.message = '';
         },
     },
@@ -104,6 +123,18 @@ export const profileSlice = createSlice({
             })
             .addCase(updatingProfileAsync.rejected, (state, action) => {
                 state.isUpdatingProfile = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(deletingProfileAsync.pending, (state) => {
+                state.isDeleting = true;
+            })
+            .addCase(deletingProfileAsync.fulfilled, (state, action) => {
+                state.isDeleting = false;
+                state.isDeletingSuccess = true;
+            })
+            .addCase(deletingProfileAsync.rejected, (state, action) => {
+                state.isDeleting = false;
                 state.isError = true;
                 state.message = action.payload;
             })

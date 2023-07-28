@@ -1,24 +1,19 @@
 import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant'
-import { iconTools } from '../../tools/helper';
+import { getScreenDimension, iPad, iconTools } from '../../tools/helper';
 import { Body, BodySmall } from '../../components';
 
-const Header = ({ onProfilePressed, onFiturDevelopmentPressed }) => {
+const Header = ({
+    onProfilePressed, notification, onFiturDevelopmentPressed, onNotificationPressed
+}) => {
+    const { height, width } = getScreenDimension()
     return (
         <View style={styles.container}>
-            <View style={{ height: 40 }}>
-                <Image
-                    source={require('../../assets/images/titlePoins.png')}
-                    style={{
-                        height: '100%',
-                        width: '30%',
-                    }}
-                    resizeMode='cover'
-                />
-            </View>
+            {/* <View style={{ height: '20%', width: '100%'}}>
+            </View> */}
             <View style={styles.contentItem}>
-                <View style={{ width: '65%', paddingLeft: 8 }}>
+                {/* <View style={{ width: '65%', paddingLeft: 8 }}>
                     <TouchableOpacity style={styles.buttonSearch} onPress={onFiturDevelopmentPressed}>
                         <iconTools.MaterialIcons
                             name={'search'}
@@ -28,32 +23,50 @@ const Header = ({ onProfilePressed, onFiturDevelopmentPressed }) => {
                         />
                         <Body style={{ color: COLOR_DISABLED }}>Cari di poins</Body>
                     </TouchableOpacity>
-                </View>
+                </View> */}
+                <Image
+                    source={require('../../assets/images/titlePoins.png')}
+                    style={{
+                        height: '100%',
+                        width: iPad ? width / 6 : width / 4.5,
+                    }}
+                // resizeMode='contain'
+                />
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity style={{ marginRight: 7 }} onPress={onFiturDevelopmentPressed}>
+                    {/* <TouchableOpacity style={{ marginRight: 7 }} onPress={onFiturDevelopmentPressed}>
                         <iconTools.MaterialIcons
                             name={'mail'}
                             size={30}
                             color={COLOR_WHITE}
                         />
                         <View style={styles.badge}>
-                            <BodySmall bold style={{ color: COLOR_WHITE }}>1</BodySmall>
+                            <BodySmall bold style={{ color: COLOR_WHITE }}>99</BodySmall>
                         </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ marginRight: 7 }} onPress={onFiturDevelopmentPressed}>
+                    </TouchableOpacity> */}
+                    <TouchableOpacity style={{ marginRight: 7 }} onPress={onNotificationPressed}>
                         <iconTools.MaterialIcons
                             name={'notifications'}
-                            size={30}
+                            size={iPad ? 45 : 30}
                             color={COLOR_WHITE}
                         />
-                        <View style={styles.badge}>
-                            <BodySmall bold style={{ color: COLOR_WHITE }}>1</BodySmall>
-                        </View>
+                        {notification?.length !== 0 &&
+                            <View style={[styles.badge, {
+                                borderRadius: iPad ? 23 : 16,
+                                width: iPad ? 23 : 16,
+                                height: iPad ? 23 : 16,
+                            }]}>
+                                {iPad ?
+                                    <Body bold style={{ color: COLOR_WHITE }}>{notification?.length}</Body> :
+                                    <BodySmall bold style={{ color: COLOR_WHITE }}>{notification?.length}</BodySmall>
+                                }
+
+                            </View>
+                        }
                     </TouchableOpacity>
                     <TouchableOpacity style={{ marginRight: 7 }} onPress={onProfilePressed}>
                         <iconTools.MaterialCommunityIcons
                             name={'account-circle'}
-                            size={30}
+                            size={iPad ? 45 : 30}
                             color={COLOR_WHITE}
                         />
                     </TouchableOpacity>
@@ -67,16 +80,17 @@ export default Header
 
 const styles = StyleSheet.create({
     container: {
-        height: '13%',
+        height: '8%',
         backgroundColor: COLOR_PRIMARY,
-        paddingHorizontal: 10
+        paddingHorizontal: 15
     },
     contentItem: {
         width: '100%',
+        height: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 10
+        // paddingTop: 10
     },
     buttonSearch: {
         backgroundColor: COLOR_WHITE,
@@ -90,9 +104,6 @@ const styles = StyleSheet.create({
     },
     badge: {
         backgroundColor: 'red',
-        borderRadius: 16,
-        width: 16,
-        height: 16,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',

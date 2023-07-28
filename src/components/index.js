@@ -10,6 +10,7 @@ import MyModal from "./modal/Modal";
 import MyModalError from "./modalError/ModalError";
 import MyModalSuccess from "./modalSuccess/ModalSuccess";
 import MyModalInfo from "./modalInfo/ModalInfo";
+import MyModalDelete from "./modalDelete/ModalDelete";
 import Dropdown from "./dropdown/Dropdown";
 import DropdownSearch from "./dropdownSearch/DropdownSearch";
 import MyHeader from "./header/Header";
@@ -31,6 +32,7 @@ export {
     MyModalError,
     MyModalSuccess,
     MyModalInfo,
+    MyModalDelete,
     Dropdown,
     DropdownSearch,
     MyHeader,

@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
-import { Button, TextInputFloating, BaseScreen, MyModalSuccess, MyModalError, MyModal, Body, BodyLarge, MyHeader, HorizontalLine } from "../../components";
+import { Button, TextInputFloating, BaseScreen, MyModalSuccess, MyModalError, MyModal, Body, BodyLarge, MyHeader, HorizontalLine, MyModalDelete, MyModalInfo } from "../../components";
 import {
   COLOR_BLACK, COLOR_ERROR, COLOR_MAIN_SECONDARY, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE
 } from '../../tools/constant';
-import { iconTools, ios } from '../../tools/helper';
+import { iPad, iconTools, ios } from '../../tools/helper';
 import LocalizedString from '../../tools/localization';
+import { resetAllDataAuth } from '../../redux/features/auth/authSlice';
 
 const Profile = ({
   onAppear, data, onSelectedGallery, onUpdateProfile, isUpdatingProfile, isUpdatingProfileSuccess,
   isUpdatingImage, isUpdatingImageSuccess, isError, message, onCloseModalSuccess, onCloseModalError,
-  onSelectedCamera, onLogoutPressed, userId, version
+  onSelectedCamera, onLogoutPressed, userId, version, isDeleting, isDeletingSuccess, onDeleteAccountPressed,
+  onCloseModalInfo
 }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [editProfile, setEditProfile] = useState(false)
   const [showModalFilePicker, setShowModalFilePicker] = useState(false)
+  const [showModalDelete, setShowModalDelete] = useState(false)
   useEffect(() => {
     onAppear()
   }, [])
@@ -24,20 +27,23 @@ const Profile = ({
     if (isUpdatingProfileSuccess === true) {
       setEditProfile(false)
     }
-    if (isUpdatingImageSuccess) {
+    if (isUpdatingImageSuccess === true) {
       setShowModalFilePicker(false)
     }
-  }, [isUpdatingImageSuccess, isUpdatingProfileSuccess])
+    if (isDeletingSuccess === true) {
+      setShowModalDelete(false)
+    }
+  }, [isUpdatingImageSuccess, isUpdatingProfileSuccess, isDeletingSuccess])
 
   return (
     <BaseScreen
       barBackgroundColor={COLOR_PRIMARY}
       statusBarColor={COLOR_WHITE}
       translucent
-      containerStyle={{ paddingTop: ios ? 30 : 20, paddingBottom: 0, backgroundColor: COLOR_PRIMARY }}
+      containerStyle={{ paddingTop: iPad ? 10 : ios ? 30 : 20, paddingBottom: 0, backgroundColor: COLOR_PRIMARY }}
     >
       <MyHeader
-        pageTitle='Profile'
+        pageTitle='PROFILE'
         backButton
         rightButton
         iconType={iconTools.MaterialCommunityIcons}
@@ -89,9 +95,17 @@ const Profile = ({
         <Button
           caption={'Edit'}
           containerStyle={{ backgroundColor: COLOR_MAIN_SECONDARY, marginVertical: 5 }}
-          disabled={isUpdatingProfile || isUpdatingImage}
-          loading={isUpdatingProfile || isUpdatingImage}
+          disabled={isUpdatingProfile || isUpdatingImage || isDeleting}
+          loading={isUpdatingProfile || isUpdatingImage || isDeleting}
           onPress={() => setEditProfile(!editProfile)}
+        />
+        <Button
+          caption={'Delete Akun'}
+          containerStyle={{ backgroundColor: COLOR_WHITE, marginVertical: 5 }}
+          textStyle={{ color: COLOR_ERROR }}
+          disabled={isUpdatingProfile || isUpdatingImage || isDeleting}
+          loading={isUpdatingProfile || isUpdatingImage || isDeleting}
+          onPress={() => setShowModalDelete(!showModalDelete)}
         />
       </View>
       {showModalFilePicker &&
@@ -195,7 +209,9 @@ const Profile = ({
         </MyModal>
       }
       <View style={{ position: 'absolute', left: 0, right: 0, bottom: 15, alignItems: 'center' }}>
-        <Body>Versi {ios ? version[1].app_version : version[0].app_version}</Body>
+        {version.length &&
+          <Body>Versi {ios ? version[1].app_version : version[0].app_version}</Body>
+        }
       </View>
       <MyModalSuccess
         isVisible={isUpdatingProfileSuccess || isUpdatingImageSuccess}
@@ -206,6 +222,20 @@ const Profile = ({
         isVisible={isError}
         closeModal={onCloseModalError}
         message={message}
+      />
+      <MyModalDelete
+        animationType={'fade'}
+        isVisible={showModalDelete}
+        loading={isDeleting}
+        disabled={isDeleting}
+        closeModal={() => setShowModalDelete(!showModalDelete)}
+        message={'Are you sure to delete this account?'}
+        onSumbit={() => onDeleteAccountPressed(userId)}
+      />
+      <MyModalInfo
+        isVisible={isDeletingSuccess}
+        closeModal={onCloseModalInfo}
+        message={'Delete Account Success'}
       />
     </BaseScreen>
   )

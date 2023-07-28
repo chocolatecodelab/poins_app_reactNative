@@ -3,7 +3,7 @@ import { View, ScrollView, StatusBar, SafeAreaView } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLOR_WHITE } from '../../tools/constant';
-import { android, ios } from '../../tools/helper';
+import { iPad, ios } from '../../tools/helper';
 
 const BaseScreen = ({
   children, containerStyle, contentStyle, barBackgroundColor, translucent,
@@ -39,7 +39,7 @@ const styles = {
   container: {
     backgroundColor: COLOR_WHITE,
     flex: 1,
-    paddingVertical: ios ? 30 : 25,
+    paddingVertical: iPad ? 15 : ios ? 30 : 25,
   },
   contentWrapper: {
     flex: 1,

@@ -8,7 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { HTTP_HEADER_VALUE_JSON, REST_BASE_URL, REST_METHOD_DELETE, REST_METHOD_GET, REST_METHOD_POST, REST_METHOD_PUT } from "./constant";
-
+import DeviceInfo from 'react-native-device-info';
 
 export const iconTools = {
   MaterialCommunityIcons,
@@ -22,6 +22,7 @@ export const iconTools = {
 }
 export const ios = Platform.OS === 'ios';
 export const android = Platform.OS === 'android';
+export const iPad = DeviceInfo.getModel().includes('iPad');
 
 export const stringMonth = [
   "Jan",
@@ -95,7 +96,7 @@ export const sendPostRequest = async (apiPath, body, authenticationToken, custom
   const method = REST_METHOD_POST;
   const headers = await getHttpHeaders(authenticationToken);
   const response = await fetch(url, { method, headers, body: bodyStr });
-  return processResponse(response);
+  return processResponse(response, url);
 };
 
 export const sendPutRequest = async (apiPath, body, authenticationToken, customBaseUrl) => {
@@ -117,7 +118,7 @@ export const sendDeleteRequest = async (apiPath, authenticationToken, customBase
 
 const processResponse = async (response, url) => {
   const responseJSON = await response.json();
-  // console.log('responseJSON', responseJSON, url);
+  console.log('responseJSON', responseJSON, url);
   if (response.status >= 200 && response.status <= 299) {
     return responseJSON;
   }

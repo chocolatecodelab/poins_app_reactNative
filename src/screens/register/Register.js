@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, Pressable, View, Image, } from 'react-native'
-import { TextInputFloating, Button, KeyboardView, BaseScreen, MyModalError, MyModalSuccess, Dropdown, Body } from "../../components";
+import { Button, KeyboardView, BaseScreen, MyModalError, MyModalSuccess, Dropdown } from "../../components";
 import NavigationService from "../../tools/navigationService";
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_MAIN_SECONDARY, COLOR_MEDIUM_BLACK, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE, NAV_NAME_LOGIN } from '../../tools/constant';
-import { android, iconTools, getScreenDimension } from "../../tools/helper";
+import { COLOR_DISABLED, COLOR_MAIN_SECONDARY, COLOR_PRIMARY, COLOR_WHITE, NAV_NAME_LOGIN } from '../../tools/constant';
+import { getScreenDimension, iPad } from "../../tools/helper";
 import LocalizedString from '../../tools/localization';
+import { TextInput } from 'react-native-paper';
 
 const Register = ({ customers, message, isError, isLoading, isSuccess, onSubmitPressed, onAppear, onCloseModal }) => {
   const { height } = getScreenDimension()
@@ -29,7 +30,6 @@ const Register = ({ customers, message, isError, isLoading, isSuccess, onSubmitP
     if (!showPassword) return setIconPassword('eye')
     if (showPassword) return setIconPassword('eye-off')
   }
-  console.log('selectCompany', selectCompany);
   const handlerVisibleConfirmPassword = () => {
     setShowConfirmPassword(!showConfirmPassword)
     if (!showConfirmPassword) return setIconConfirmPassword('eye')
@@ -102,7 +102,7 @@ const Register = ({ customers, message, isError, isLoading, isSuccess, onSubmitP
               source={require('../../assets/images/titlePoins.png')}
               style={{
                 height: '100%',
-                width: '50%',
+                width: iPad ? '30%' : '50%',
               }}
               resizeMode='cover'
             />
@@ -110,7 +110,7 @@ const Register = ({ customers, message, isError, isLoading, isSuccess, onSubmitP
 
           <View style={styles.content}>
             <View>
-              <View style={{ marginBottom: 20 }}>
+              <View style={{ marginBottom: iPad ? 20 : 10 }}>
                 <Dropdown
                   selected={setSelectCompany}
                   value={selectCompany}
@@ -127,58 +127,85 @@ const Register = ({ customers, message, isError, isLoading, isSuccess, onSubmitP
                   borderRadius={30}
                 />
               </View>
-              <TextInputFloating
-                style={[{ marginBottom: 20 }]}
-                editable={isLoading ? false : true}
-                iconType={iconTools.MaterialCommunityIcons}
-                IconName={'account'}
-                iconSize={24}
-                maxLength={40}
-                iconColor={COLOR_PRIMARY}
-                borderRadius={30}
-                errorText={errorName}
-                iconActive={true}
-                value={name}
+              <TextInput
+                mode='outlined'
                 label={LocalizedString.registerScreen.name}
+                value={name}
+                cursorColor={COLOR_PRIMARY}
+                outlineColor={COLOR_DISABLED}
+                activeOutlineColor={COLOR_PRIMARY}
+                editable={!isLoading}
+                error={errorName ? true : false}
+                theme={{ roundness: 50 }}
+                autoCapitalize='none'
+                style={{
+                  backgroundColor: COLOR_WHITE,
+                  marginBottom: iPad ? 20 : 10,
+                  paddingHorizontal: iPad ? 15 : 10,
+                }}
+                right={
+                  <TextInput.Icon
+                    icon={'account'}
+                    color={COLOR_DISABLED}
+                    size={iPad ? 30 : 24}
+                  />
+                }
                 onChangeText={(text) => {
                   setName(text)
                   setErrorName(null)
                 }}
-                autoCapitalize='none'
               />
-              <TextInputFloating
-                style={[{ marginBottom: 20 }]}
-                editable={isLoading ? false : true}
-                iconType={iconTools.MaterialCommunityIcons}
-                IconName={'email'}
-                iconSize={24}
-                maxLength={40}
-                iconColor={COLOR_PRIMARY}
-                borderRadius={30}
-                errorText={errorEmail}
-                iconActive={true}
-                value={email}
+              <TextInput
+                mode='outlined'
                 label={LocalizedString.registerScreen.email}
+                value={email}
+                cursorColor={COLOR_PRIMARY}
+                outlineColor={COLOR_DISABLED}
+                activeOutlineColor={COLOR_PRIMARY}
+                editable={!isLoading}
+                error={errorEmail ? true : false}
+                theme={{ roundness: 50 }}
+                autoCapitalize='none'
+                style={{
+                  backgroundColor: COLOR_WHITE,
+                  marginBottom: iPad ? 20 : 10,
+                  paddingHorizontal: iPad ? 15 : 10,
+                }}
+                right={
+                  <TextInput.Icon
+                    icon={'email'}
+                    color={COLOR_DISABLED}
+                    size={iPad ? 30 : 24}
+                  />
+                }
                 onChangeText={(text) => {
                   setEmail(text)
                   setErrorEmail(null)
                 }}
-                autoCapitalize='none'
               />
-              <TextInputFloating
-                style={[{ marginBottom: 20 }]}
-                editable={isLoading ? false : true}
-                iconType={iconTools.MaterialCommunityIcons}
-                IconName={'phone'}
-                iconSize={24}
-                keyboardType="number-pad"
-                iconColor={COLOR_PRIMARY}
-                borderRadius={30}
-                errorText={errorPhoneNumber}
-                iconActive={true}
-                maxLength={15}
-                value={phoneNumber}
+              <TextInput
+                mode='outlined'
                 label={LocalizedString.registerScreen.phoneNumber}
+                value={phoneNumber}
+                cursorColor={COLOR_PRIMARY}
+                outlineColor={COLOR_DISABLED}
+                activeOutlineColor={COLOR_PRIMARY}
+                editable={!isLoading}
+                theme={{ roundness: 50 }}
+                error={errorPhoneNumber ? true : false}
+                autoCapitalize='none'
+                style={{
+                  backgroundColor: COLOR_WHITE,
+                  marginBottom: iPad ? 20 : 10,
+                  paddingHorizontal: iPad ? 15 : 10,
+                }}
+                right={
+                  <TextInput.Icon
+                    icon={'phone'}
+                    color={COLOR_DISABLED}
+                    size={iPad ? 30 : 24}
+                  />
+                }
                 onChangeText={(text) => {
                   if (isNaN(Number(text))) {
                     // do nothing when a non digit is pressed
@@ -188,44 +215,65 @@ const Register = ({ customers, message, isError, isLoading, isSuccess, onSubmitP
                   setErrorPhoneNumber(null)
                 }}
               />
-              <TextInputFloating
-                secureTextEntry={showPassword}
-                style={[{ marginBottom: 20 }]}
-                editable={isLoading ? false : true}
-                iconType={iconTools.MaterialCommunityIcons}
-                IconName={iconPasssword}
-                iconSize={24}
-                iconColor={COLOR_PRIMARY}
-                borderRadius={30}
-                errorText={errorPassword}
-                iconActive={true}
-                value={password}
+              <TextInput
+                mode='outlined'
                 label={LocalizedString.registerScreen.password}
-                onPressed={() => handlerVisiblePassword()}
+                value={password}
+                cursorColor={COLOR_PRIMARY}
+                outlineColor={COLOR_DISABLED}
+                activeOutlineColor={COLOR_PRIMARY}
+                editable={!isLoading}
+                theme={{ roundness: 50 }}
+                error={errorPassword ? true : false}
+                secureTextEntry={showPassword}
+                autoCapitalize='none'
+                style={{
+                  backgroundColor: COLOR_WHITE,
+                  marginBottom: iPad ? 20 : 10,
+                  paddingHorizontal: iPad ? 15 : 10,
+                }}
+                right={
+                  <TextInput.Icon
+                    icon={iconPasssword}
+                    color={COLOR_DISABLED}
+                    size={iPad ? 30 : 24}
+                    onPress={() => handlerVisiblePassword()}
+                  />
+                }
                 onChangeText={(text) => {
                   setPassword(text)
                   setErrorPassword(null)
                 }}
-                autoCapitalize='none'
               />
-              <TextInputFloating
-                secureTextEntry={showConfirmPassword}
-                style={[{ marginBottom: android ? '20%' : '15%' }]}
-                iconType={iconTools.MaterialCommunityIcons}
-                IconName={iconConfirmPasssword}
-                iconSize={24}
-                iconColor={COLOR_PRIMARY}
-                borderRadius={30}
-                iconActive={true}
-                errorText={errorConfirmPassword}
-                value={confirmPassword}
+              <TextInput
+                mode='outlined'
                 label={LocalizedString.registerScreen.confirmPassword}
-                onPressed={() => handlerVisibleConfirmPassword()}
+                value={confirmPassword}
+                cursorColor={COLOR_PRIMARY}
+                outlineColor={COLOR_DISABLED}
+                activeOutlineColor={COLOR_PRIMARY}
+                editable={!isLoading}
+                theme={{ roundness: 50 }}
+                error={errorConfirmPassword ? true : false}
+                secureTextEntry={showConfirmPassword}
+                autoCapitalize='none'
+                style={{
+                  backgroundColor: COLOR_WHITE,
+                  marginBottom: iPad ? 20 : 30,
+                  paddingHorizontal: iPad ? 15 : 10,
+                }}
+                right={
+                  <TextInput.Icon
+                    icon={iconConfirmPasssword}
+                    color={COLOR_DISABLED}
+                    size={iPad ? 30 : 24}
+                    onPress={() => handlerVisibleConfirmPassword()}
+                  />
+                }
                 onChangeText={(text) => {
                   setConfirmPassword(text)
                   setErrorConfirmPassword(null)
                 }}
-                autoCapitalize='none'
               />
             </View>
             <Button
@@ -274,7 +322,7 @@ const styles = StyleSheet.create({
   content: {
     position: 'relative',
     backgroundColor: 'white',
-    paddingHorizontal: 40,
+    paddingHorizontal: 30,
     borderTopStartRadius: 40,
     borderTopEndRadius: 40,
     paddingTop: 40,

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, Pressable, View, Image, ImageBackground } from 'react-native'
-import { TextInputFloating, Button, KeyboardView, BaseScreen, MyModalError, BodyExtraSmall, Body } from "../../components";
+import { Button, KeyboardView, BaseScreen, MyModalError, BodyExtraSmall, Body, BodySmall } from "../../components";
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_SECONDARY_MAIN_ANDROID, COLOR_WHITE, STATUS_TRANSPARENT } from '../../tools/constant';
-import { android, iconTools, getScreenDimension } from "../../tools/helper";
+import { android, getScreenDimension, iPad } from "../../tools/helper";
+import { TextInput } from 'react-native-paper';
 
 const Login = ({
     email, password, isError, isSuccess, isLoading, message, onChangeEmail,
@@ -46,34 +47,14 @@ const Login = ({
                         }}
                     >
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                            {/* <Image
-                                source={require('../../assets/images/poins.png')}
-                                style={{
-                                    height: '70%',
-                                    width: '70%',
-                                }}
-                            /> */}
                             <Image
                                 source={require('../../assets/images/titlePoins.png')}
                                 style={{
-                                    height: '20%',
-                                    width: '70%',
+                                    height: iPad ? '30%' : '20%',
+                                    width: iPad ? '40%' : '60%',
                                 }}
                             />
-                            <View
-                                style={{
-                                    height: 60,
-                                    width: 60,
-                                    borderRadius: 60,
-                                    backgroundColor: COLOR_WHITE,
-                                    position: 'absolute',
-                                    bottom: 15,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderWidth: 1,
-                                    borderColor: COLOR_PRIMARY
-                                }}
-                            >
+                            <View style={styles.poins}>
                                 <Image
                                     source={require('../../assets/images/poins.png')}
                                     style={{
@@ -83,51 +64,73 @@ const Login = ({
                                 />
                             </View>
                         </View>
-
-                        <View style={{ flex: .8, paddingHorizontal: 40 }}>
-                            <TextInputFloating
-                                style={[{ marginBottom: 15 }]}
-                                iconType={iconTools.MaterialCommunityIcons}
-                                IconName={'email'}
-                                iconSize={24}
-                                iconColor={COLOR_PRIMARY}
-                                iconActive={true}
-                                errorText={errorEmail}
-                                borderRadius={30}
-                                value={email}
+                        <View style={{ flex: .8, paddingHorizontal: iPad ? 50 : 30 }}>
+                            <TextInput
+                                mode='outlined'
                                 label="Email"
-                                editable={!isLoading}
+                                value={email}
                                 onChangeText={(text) => {
                                     setErrorEmail(null)
                                     onChangeEmail(text)
                                 }}
+                                cursorColor={COLOR_PRIMARY}
+                                outlineColor={COLOR_DISABLED}
+                                activeOutlineColor={COLOR_PRIMARY}
+                                editable={!isLoading}
+                                error={errorEmail ? true : false}
+                                style={{
+                                    backgroundColor: COLOR_WHITE,
+                                    marginBottom: iPad ? 20 : 10,
+                                    paddingHorizontal: iPad ? 15 : 10,
+                                }}
+                                theme={{ roundness: 50 }}
+                                right={
+                                    <TextInput.Icon
+                                        icon={'email'}
+                                        color={COLOR_DISABLED}
+                                        size={iPad ? 30 : 24}
+                                    />
+                                }
                                 autoCapitalize='none'
                             />
-                            <TextInputFloating
-                                secureTextEntry={showPassword}
-                                style={[{ marginBottom: 10 }]}
-                                iconType={iconTools.MaterialCommunityIcons}
-                                IconName={iconPasssword}
-                                iconSize={24}
-                                iconColor={COLOR_PRIMARY}
-                                iconActive={true}
-                                errorText={errorPassword}
-                                borderRadius={30}
-                                value={password}
+                            <TextInput
+                                mode='outlined'
                                 label="Password"
-                                editable={!isLoading}
-                                onPressed={() => handlerVisiblePassword()}
+                                value={password}
                                 onChangeText={(text) => {
                                     setErrorPassword(null)
                                     onChangePassword(text)
                                 }}
+                                cursorColor={COLOR_PRIMARY}
+                                outlineColor={COLOR_DISABLED}
+                                activeOutlineColor={COLOR_PRIMARY}
+                                editable={!isLoading}
+                                error={errorPassword ? true : false}
+                                style={{
+                                    backgroundColor: COLOR_WHITE,
+                                    marginBottom: iPad ? 20 : 10,
+                                    paddingHorizontal: iPad ? 15 : 10,
+                                }}
+                                theme={{ roundness: 50 }}
+                                right={
+                                    <TextInput.Icon
+                                        icon={iconPasssword}
+                                        color={COLOR_DISABLED}
+                                        size={iPad ? 30 : 24}
+                                        onPress={() => handlerVisiblePassword()}
+                                    />
+                                }
+                                secureTextEntry={showPassword}
                                 autoCapitalize='none'
                             />
                             <Pressable
                                 onPress={onNavigationForgetPassword}
                                 style={{ alignSelf: 'flex-end' }}
                             >
-                                <Text style={styles.secondText(android)}>Forgot Password?</Text>
+                                {iPad ?
+                                    <Body style={styles.secondText(android)}>Forgot Password?</Body> :
+                                    <BodySmall style={styles.secondText(android)}>Forgot Password?</BodySmall>
+                                }
                             </Pressable>
                             <Button
                                 containerStyle={{ marginTop: -20, borderRadius: 30 }}
@@ -150,103 +153,30 @@ const Login = ({
                                 flexDirection: 'row',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                paddingTop: android ? 25 : 50
+                                paddingTop: iPad ? 100 : android ? 25 : 40
                             }}>
                                 <Image
                                     source={require('../../assets/images/kpp.png')}
                                     style={{
-                                        height: 50,
-                                        width: 50
+                                        height: iPad ? 80 : 50,
+                                        width: iPad ? 80 : 50
                                     }}
                                     resizeMode='contain'
                                 />
-                                <View style={styles.footerText} >
-                                    <BodyExtraSmall bold>PT. KALIMANTAN PRIMA PERSADA</BodyExtraSmall>
-                                    <BodyExtraSmall style={{ alignSelf: 'flex-start', fontStyle: 'italic' }}>Integrated Mining Service</BodyExtraSmall>
-                                </View>
+                                {iPad ?
+                                    <View style={styles.footerText} >
+                                        <Body bold>PT. KALIMANTAN PRIMA PERSADA</Body>
+                                        <Body style={{ alignSelf: 'flex-start', fontStyle: 'italic' }}>Integrated Mining Service</Body>
+                                    </View>
+                                    :
+                                    <View style={styles.footerText} >
+                                        <BodyExtraSmall bold>PT. KALIMANTAN PRIMA PERSADA</BodyExtraSmall>
+                                        <BodyExtraSmall style={{ alignSelf: 'flex-start', fontStyle: 'italic' }}>Integrated Mining Service</BodyExtraSmall>
+                                    </View>
+                                }
                             </View>
-
                         </View>
-
                     </ImageBackground>
-
-                    {/* <View style={styles.topContent(height)}>
-                        <Image
-                            source={require('../../assets/images/logo-white.png')}
-                            style={styles.imageSize(height, width)}
-                        />
-                    </View>
-                    <View style={styles.mainContent}>
-                        <View style={{}}>
-                            <TextInputFloating
-                                style={[{ marginBottom: 30 }]}
-                                iconType={iconTools.MaterialCommunityIcons}
-                                IconName={'email'}
-                                iconSize={24}
-                                iconColor={COLOR_PRIMARY}
-                                iconActive={true}
-                                errorText={errorEmail}
-                                value={email}
-                                label="Email"
-                                editable={!isLoading}
-                                onChangeText={(text) => {
-                                    setErrorEmail(null)
-                                    onChangeEmail(text)
-                                }}
-                                autoCapitalize='none'
-                            />
-                            <TextInputFloating
-                                secureTextEntry={showPassword}
-                                style={[{ marginBottom: 10 }]}
-                                iconType={iconTools.MaterialCommunityIcons}
-                                IconName={iconPasssword}
-                                iconSize={24}
-                                iconColor={COLOR_PRIMARY}
-                                iconActive={true}
-                                errorText={errorPassword}
-                                value={password}
-                                label="Password"
-                                editable={!isLoading}
-                                onPressed={() => handlerVisiblePassword()}
-                                onChangeText={(text) => {
-                                    setErrorPassword(null)
-                                    onChangePassword(text)
-                                }}
-                                autoCapitalize='none'
-                            />
-                            <Pressable
-                                onPress={onNavigationForgetPassword}
-                                style={{ alignSelf: 'flex-end' }}
-                            >
-                                <Text style={styles.secondText(android)}>Forgot Password?</Text>
-                            </Pressable>
-                            <Button
-                                caption='Login'
-                                disabled={isLoading}
-                                loading={isLoading}
-                                onPress={() => onSubmitPressed(email, password, setErrorPassword, setErrorEmail)}
-                            />
-                            <View style={styles.signup(android)}>
-                                <Text style={styles.thirdText} >Don't have an account? </Text>
-                                <Pressable
-                                    style={{}}
-                                    disabled={isLoading}
-                                    onPress={onNavigationRegister}
-                                >
-                                    <Text style={styles.fourthText}>Sign Up</Text>
-                                </Pressable>
-                            </View>
-                        </View>
-                        <View style={styles.footerText(height)} >
-                            <BodyExtraSmall bold>PT. Kalimantan Prima Persada</BodyExtraSmall>
-                            <BodyExtraSmall bold>Jobsite Port Sungai Puting</BodyExtraSmall>
-                        </View>
-                        <MyModalError
-                            isVisible={isError}
-                            closeModal={onCloseModalError}
-                            message={message}
-                        />
-                    </View> */}
                 </View>
             </KeyboardView>
             <MyModalError
@@ -286,6 +216,18 @@ const styles = StyleSheet.create({
         borderTopStartRadius: 30,
         borderTopEndRadius: 30,
         paddingTop: 60,
+    },
+    poins: {
+        height: 60,
+        width: 60,
+        borderRadius: 60,
+        backgroundColor: COLOR_WHITE,
+        position: 'absolute',
+        bottom: iPad ? 50 : 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLOR_PRIMARY
     },
     title: (height) => ({
         color: COLOR_WHITE,

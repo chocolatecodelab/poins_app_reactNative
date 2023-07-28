@@ -34,7 +34,6 @@ export const bargingScheduleSlice = createSlice({
         },
         onChangeData: (state, action) => {
             state.listHistory = action.payload;
-            console.log('action.payload',action.payload);
         },
     },
     extraReducers: (builder) => {

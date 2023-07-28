@@ -4,11 +4,13 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
 
-production = ENV["PRODUCTION"] == "1"
-ENV['USE_HERMES'] = '0'
+production = ENV["PRODUCTION"] == "1" #firebase
+ENV['USE_HERMES'] = '0' #firebase
 
 target 'poins' do
   config = use_native_modules!
+  use_frameworks! :linkage => :static #firebase
+  $RNFirebaseAsStaticFramework = true #firebase
 
   # Flags change depending on the env values.
   flags = get_default_flags()
@@ -19,9 +21,10 @@ target 'poins' do
     :production => production,
     :hermes_enabled => false,
     :fabric_enabled => flags[:fabric_enabled],
-    :flipper_configuration => FlipperConfiguration.enabled,
+    # :flipper_configuration => FlipperConfiguration.enabled,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
+
   )
 
   target 'poinsTests' do
@@ -29,7 +32,6 @@ target 'poins' do
     config = use_native_modules!
     use_react_native!(:path => config["reactNativePath"])
     # Pods for testing
-    pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   end
 
   post_install do |installer|

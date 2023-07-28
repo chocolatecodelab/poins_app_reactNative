@@ -66,6 +66,16 @@ export const authSlice = createSlice({
         tempDataTester: (state, action) => {
             state.loginInfo = action.payload
         },
+        resetAllDataAuth: (state) => {
+            state.loginInfo = null;
+            state.email = '';
+            state.password = '';
+            state.isError = false;
+            state.isSuccess = false;
+            state.isLoading = false;
+            state.forgetPasswordInfo = null;
+            state.message = '';
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -97,5 +107,5 @@ export const authSlice = createSlice({
     },
 })
 
-export const { resetAuth, resetLogin, resetOtpLogin, setEmail, setPassword, logout, tempDataTester } = authSlice.actions
+export const { resetAuth, resetLogin, resetOtpLogin, setEmail, setPassword, logout, tempDataTester, resetAllDataAuth } = authSlice.actions
 export default authSlice.reducer

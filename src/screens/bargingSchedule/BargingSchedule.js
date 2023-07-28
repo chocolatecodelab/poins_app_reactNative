@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native'
 import { BaseScreen, Button, BodyLarge, Body, BodySmall, BodyExtraSmall, MyHeader, DatePicker, MyModal } from "../../components";
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant';
 import moment from 'moment';
-import { ios, iconTools } from '../../tools/helper';
+import { ios, iconTools, iPad } from '../../tools/helper';
 
 const renderEmptyComponent = () => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: '70%' }}>
@@ -16,15 +16,13 @@ const BargingSchedule = ({ userId, listHistory, onAppear, isLoading, onExpandPre
   const [finishDate, setFinishDate] = useState(new Date())
   const [modalStartDate, setModalStartDate] = useState(false)
   const [modalFinishDate, setModalFinishDate] = useState(false)
-  const [detail, setDetail] = useState(false)
   useEffect(() => { onAppear(userId, startDate, finishDate) }, [startDate, finishDate])
-  console.log('HISTORY', listHistory);
   return (
     <BaseScreen
       barBackgroundColor={COLOR_PRIMARY}
       statusBarColor={COLOR_WHITE}
       translucent
-      containerStyle={{ paddingTop: ios ? 30 : 20, paddingBottom: 0, backgroundColor: COLOR_PRIMARY }}
+      containerStyle={{ paddingTop: iPad ? 10 : ios ? 30 : 20, paddingBottom: 0, backgroundColor: COLOR_PRIMARY }}
     >
       <MyHeader
         pageTitle='Barging Schedule'

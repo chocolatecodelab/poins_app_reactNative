@@ -12,4 +12,7 @@ export { default as HistoryDetailScreen } from './historyDetail';
 export { default as ForgetPasswordScreen } from './forgetPassword';
 export { default as OtpForgetPasswordScreen } from './otpForgetPassword';
 export { default as ChangePasswordScreen } from './changePassword';
+export { default as NotificationScreen } from './notification';
+export { default as CCTVScreen } from './cctv';
+export { default as DetailCCTVScreen } from './cctv/detail';
 

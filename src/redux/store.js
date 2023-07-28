@@ -13,6 +13,7 @@ import BarginOnlineSlice from './features/barginOnline/barginOnlineSlice';
 import BargingRecapitulationSlice from './features/bargingRecapitulation/bargingRecapitulattionSlice';
 import BargingScheduleSlice from './features/bargingSchedule/bargingScheduleSlice';
 import ActiveBargingSlice from './features/activeBarging/activeBargingSlice';
+import RealtimeCCTVSlice from './features/realtimeCCTV/realtimeCCTVSlice';
 
 
 const reducers = combineReducers({
@@ -24,19 +25,21 @@ const reducers = combineReducers({
     barginOnline: BarginOnlineSlice,
     bargingRecapitulation: BargingRecapitulationSlice,
     bargingSchedule: BargingScheduleSlice,
-    activeBarging: ActiveBargingSlice
+    activeBarging: ActiveBargingSlice,
+    realtimeCCTV: RealtimeCCTVSlice
 });
 
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
     whitelist: [
-        'profile', 
+        'profile',
         'home',
         'auth',
         'register',
         'barginOnline',
-        'bargingRecapitulation'
+        'bargingRecapitulation',
+        'realtimeCCTV'
     ],
 };
 
