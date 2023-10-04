@@ -18,23 +18,28 @@ const Carousel = ({ item }) => {
                     style={styles.bgBanner}
                 >
                     <View style={styles.transparentBanner} />
-                    {iPad ?
-                        <>
-                            <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
-                            <BodyLarge bold style={{ color: COLOR_BLACK }}>{item.nodeDesc}</BodyLarge>
-                            <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
-                        </>
-                        :
-                        <>
-                            <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
-                            <BodyLarge bold style={{ color: COLOR_BLACK }}>{item.nodeDesc}</BodyLarge>
-                            <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
-                        </>
-                    }
-
+                    <View style={{
+                        padding: 10,
+                        borderTopLeftRadius: 8,
+                        borderTopRightRadius: 8,
+                    }}>
+                        {iPad ?
+                            <>
+                                <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
+                                <BodyLarge bold style={{ color: COLOR_BLACK }}>{item.nodeDesc}</BodyLarge>
+                                <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
+                            </>
+                            :
+                            <>
+                                <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
+                                <BodyLarge bold style={{ color: COLOR_BLACK }}>{item.nodeDesc}</BodyLarge>
+                                <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
+                            </>
+                        }
+                    </View>
                 </ImageBackground>
             </View>
-            <View style={{ paddingHorizontal: 10, justifyContent: 'center' }}>
+            <View style={{ paddingHorizontal: 10, justifyContent: 'center', paddingBottom: 10 }}>
                 <View style={{ marginVertical: 10 }}>
                     {iPad ?
                         <View style={styles.company}>
@@ -148,16 +153,14 @@ export default Carousel
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        marginTop: 10,
-        marginBottom: 10,
         backgroundColor: COLOR_WHITE,
         borderWidth: 1,
         borderColor: COLOR_TRANSPARENT_DARK,
         borderRadius: 8,
+        marginBottom: 15
     },
     bannerContainer: {
-        height: '30%',
+        flex: 1,
         borderTopLeftRadius: 8,
         borderTopRightRadius: 8,
         overflow: 'hidden'
@@ -168,6 +171,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
     },
     transparentBanner: {
         backgroundColor: COLOR_TRANSPARENT_DARK,
@@ -175,6 +179,7 @@ const styles = StyleSheet.create({
         height: '100%',
         position: 'absolute',
         zIndex: 1,
+        borderTopLeftRadius: 8,
         borderTopRightRadius: 8,
     },
     company: {

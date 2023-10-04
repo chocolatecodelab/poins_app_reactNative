@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import Header from "./Header";
 import Apps from "./Apps";
 import Card from "./Carousel";
@@ -38,7 +38,7 @@ const Home = ({
                     <ActivityIndicator size='large' color={COLOR_PRIMARY} />
                 </View>
             }
-            <Carousel
+            {/* <Carousel
                 layout='default'
                 ref={carouselRef}
                 data={listHistory}
@@ -48,6 +48,12 @@ const Home = ({
                 containerCustomStyle={styles.carouselContainer}
                 inactiveSlideShift={0}
                 useScrollView={true}
+            /> */}
+            <FlatList
+                data={listHistory}
+                renderItem={(item) => Card(item)}
+                contentContainerStyle={{ paddingBottom: 50 }}
+                style={styles.carouselContainer}
             />
             <MyModalError
                 isVisible={isError}
@@ -66,6 +72,8 @@ const Home = ({
 export default Home
 const styles = StyleSheet.create({
     carouselContainer: {
-        marginTop: 10,
+        // marginTop: 10,
+        flex: 1,
+        paddingHorizontal: 25,
     }
 });
