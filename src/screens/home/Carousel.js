@@ -26,13 +26,13 @@ const Carousel = ({ item }) => {
                         {iPad ?
                             <>
                                 <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
-                                <BodyLarge bold style={{ color: COLOR_BLACK }}>{item.nodeDesc}</BodyLarge>
+                                <BodyLarge bold style={{ color: COLOR_BLACK, textAlign: 'center' }}>{item.nodeDesc}</BodyLarge>
                                 <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
                             </>
                             :
                             <>
                                 <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
-                                <BodyLarge bold style={{ color: COLOR_BLACK }}>{item.nodeDesc}</BodyLarge>
+                                <BodyLarge bold style={{ color: COLOR_BLACK, textAlign: 'center' }}>{item.nodeDesc}</BodyLarge>
                                 <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
                             </>
                         }

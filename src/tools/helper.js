@@ -118,10 +118,11 @@ export const sendDeleteRequest = async (apiPath, authenticationToken, customBase
 
 const processResponse = async (response, url) => {
   const responseJSON = await response.json();
-  console.log('responseJSON', responseJSON, url);
+  console.log(responseJSON);
   if (response.status >= 200 && response.status <= 299) {
     return responseJSON;
   }
+  
   const errorMessage = responseJSON ? responseJSON.Message ? responseJSON.Message : responseJSON.message : '';
   throw new Error(errorMessage);
 };
