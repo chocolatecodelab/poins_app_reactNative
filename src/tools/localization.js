@@ -141,6 +141,8 @@ const LocalizedString = new LocalizedStrings({
     },
     loginScreen: {
       title: 'Masuk',
+      otpTitleNotification: "OTP User",
+      otpDescriptionNotification: ". Ini OTP untuk Login. Jangan berikan kepada pihak manapun.",
       buttonCaptionLogin: 'Masuk',
       buttonCaptionForgetPassword: 'Lupa Sandi',
       buttonCaptionRegister: 'Daftar',
@@ -164,6 +166,10 @@ const LocalizedString = new LocalizedStrings({
     profileScreen: {
       updateSuccess: 'Update Success'
     },
+    BargingScreen: {
+      titleBargingRequestNotification: 'Barging Request',
+      descriptionBargingRequestNotification: "Barging Request berhasil. Mohon tunggu Admin untuk memproses pesanannya"
+    }
   },
 });
 

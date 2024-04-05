@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ImageBackground } from 'react-native'
+import { StyleSheet, View, ImageBackground, Text } from 'react-native'
 import { COLOR_BLACK, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant'
 import { Body, BodySmall, BodyExtraSmall, BodyLarge } from '../../components'
 import moment from 'moment'
@@ -157,7 +157,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: COLOR_TRANSPARENT_DARK,
         borderRadius: 8,
-        marginBottom: 15
+        marginRight: 15,
+        height: 250,
+        width: 350,
     },
     bannerContainer: {
         flex: 1,

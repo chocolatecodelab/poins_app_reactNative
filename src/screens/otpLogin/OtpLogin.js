@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native'
 import { BaseScreen, BodyLarge, MyModalError } from "../../components";
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_PRIMARY, COLOR_TRANSPARENT_PRIMARY, COLOR_WHITE } from '../../tools/constant';
-import { getScreenDimension, iconTools } from '../../tools/helper';
+import { getScreenDimension, iconTools, onDisplayNotification, sendFCMToken } from '../../tools/helper';
 import NavigationService from '../../tools/navigationService';
+import LocalizedString from '../../tools/localization';
 
 const OtpLogin = ({
-  email, isError, isSuccess, isLoading, message,
+  email, isError, isSuccess, isLoading, message, otpUser,
   validateOtpLogin, onNavigationHome, onCloseModalError
 }) => {
   const [otpArray, setOtpArray] = useState([]);
@@ -14,6 +15,11 @@ const OtpLogin = ({
   const [seconds, setSeconds] = useState(60);
   const { height } = getScreenDimension()
   const [checkPin, setCheckPin] = useState(false)
+  
+  //localization
+  const otpTitleNotification = LocalizedString.loginScreen.otpTitleNotification;
+  const otpDescriptionNotification = LocalizedString.loginScreen.otpDescriptionNotification;
+
 
   const numpad = [
     { id: 1, value: 1 },
@@ -101,9 +107,19 @@ const OtpLogin = ({
 
   useEffect(() => {
     if (isSuccess === true) {
+      //pengiriman token
+      sendFCMToken(email);
+      //redirect Home
       onNavigationHome()
     }
   }, [isSuccess])
+
+  //pengiriman notifikasi OTP
+  useEffect(() => {
+    console.log(otpUser)
+    onDisplayNotification(otpTitleNotification, otpDescriptionNotification, otpUser)
+  }, [])
+
 
   return (
     <BaseScreen barBackgroundColor={COLOR_WHITE} contentStyle={{ paddingHorizontal: 20 }}>

@@ -5,6 +5,7 @@ import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_SECONDARY_MAIN_ANDROI
 import { android, getScreenDimension, iPad } from "../../tools/helper";
 import { TextInput } from 'react-native-paper';
 
+
 const Login = ({
     email, password, isError, isSuccess, isLoading, message, onChangeEmail,
     onChangePassword, onSubmitPressed, onNavigationOtp, onCloseModalError,
@@ -153,7 +154,7 @@ const Login = ({
                                 flexDirection: 'row',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                paddingTop: iPad ? 100 : android ? 25 : 40
+                                paddingTop: iPad ? 100 : android ? 5 : 40
                             }}>
                                 <Image
                                     source={require('../../assets/images/kpp.png')}

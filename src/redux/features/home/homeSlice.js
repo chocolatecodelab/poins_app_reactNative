@@ -67,6 +67,7 @@ export const homeSlice = createSlice({
             state.isDownloadingNotification = false;
             state.isDownloadingVersion = false;
             state.message = '';
+            // state.notification = [];
         },
         showInfo: (state, action) => { state.isInfo = action.payload },
         addMessage: (state, action) => { state.message = action.payload }

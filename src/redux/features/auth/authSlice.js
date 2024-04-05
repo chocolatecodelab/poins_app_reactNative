@@ -42,6 +42,7 @@ export const authSlice = createSlice({
         isLoading: false,
         forgetPasswordInfo: null,
         message: '',
+        otpUser: ''
     },
     reducers: {
         resetAuth: (state) => {
@@ -82,9 +83,10 @@ export const authSlice = createSlice({
             .addCase(uploadLoginAsync.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(uploadLoginAsync.fulfilled, (state) => {
+            .addCase(uploadLoginAsync.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
+                state.otpUser = action.payload.Message
             })
             .addCase(uploadLoginAsync.rejected, (state, action) => {
                 state.isLoading = false

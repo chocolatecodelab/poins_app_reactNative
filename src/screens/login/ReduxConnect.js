@@ -3,7 +3,6 @@ import { resetAuth, resetLogin, setEmail, setPassword, tempDataTester, uploadLog
 import { NAV_NAME_FORGET_PASSWORD, NAV_NAME_HOME_MENU, NAV_NAME_OTP_LOGIN, NAV_NAME_REGISTER } from '../../tools/constant';
 import NavigationService from '../../tools/navigationService';
 import LoginScreen from './Login';
-import { downlodingProfileAsync } from '../../redux/features/profile/profileSlice';
 
 const mapStateToProps = state => {
     return ({
@@ -39,6 +38,7 @@ const mapDispatchToProps = (dispatch) => ({
                     EMAIL: email,
                     PASSWORD: password
                 }
+                //if isSuccess is true, direct ke halaman onNavigationOTP
                 dispatch(uploadLoginAsync(data));
             }
 

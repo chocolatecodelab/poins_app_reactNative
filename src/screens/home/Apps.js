@@ -28,8 +28,8 @@ const MenuHorizontal = ({ data, onItemPressed }) => {
                             }
                         </View>
                         {iPad ?
-                            <Body style={{ textAlign: 'center' }}>{item.NAMA}</Body> :
-                            <BodyExtraSmall style={{ textAlign: 'center' }}>{item.NAMA}</BodyExtraSmall>
+                            <Text style={styles.textIcon}>{item.NAMA}</Text> :
+                            <BodyExtraSmall style={styles.textIcon}>{item.NAMA}</BodyExtraSmall>
                         }
                     </TouchableOpacity>
                 )
@@ -72,6 +72,11 @@ const styles = StyleSheet.create({
         height: '90%',
         resizeMode: 'contain',
     },
+    textIcon: {
+        fontFamily: 'Poppins-Regular',
+        textAlign: 'center',
+        fontSize: 10
+    }
     // container: {
     //     flex: 0.4,
     //     paddingTop: 20

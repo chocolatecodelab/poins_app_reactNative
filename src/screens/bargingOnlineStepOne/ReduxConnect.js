@@ -19,6 +19,12 @@ const mapDispatchToProps = (dispatch) => ({
     },
     onCloseModalError: () => {
         dispatch(resetStatuBarginOnline())
+    },
+    onSubmitAddTugBoat: (data) => {
+        // dispatch(uploadingAddTugBoatAsync(data))
+    },
+    onSubmitAddBarge: (data) => {
+        // dispatch(uploadingAddBargeAsync(data))
     }
 });
 

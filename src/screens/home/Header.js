@@ -63,13 +63,13 @@ const Header = ({
                             </View>
                         }
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ marginRight: 7 }} onPress={onProfilePressed}>
+                    {/* <TouchableOpacity style={{ marginRight: 7 }} onPress={onProfilePressed}>
                         <iconTools.MaterialCommunityIcons
                             name={'account-circle'}
                             size={iPad ? 45 : 30}
                             color={COLOR_WHITE}
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
         </View >

@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant';
-import { iconTools } from '../../tools/helper';
+import { FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant';
+import { iPad, iconTools } from '../../tools/helper';
 import { Body, BodyLarge, HorizontalLine, MyModal, SearchBar } from '../../components';
+import MyModalConfirm from '../modalConfirm/ModalConfirm';
 
 const renderEmptyComponent = () => (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: 200 }}>
         <BodyLarge>No items to display</BodyLarge>
+        
     </View>
 );
 
 
 const DropdownSearch = ({
-    selected, data, placeholder, containerStyle, value, dropdownActive, dropdownPressed,
-    headerActive, headerTitle, borderColor, borderRadius
+    selected, add, data, placeholder, containerStyle, value, dropdownActive, dropdownPressed,
+    headerActive, headerTitle, borderColor, borderRadius, messageModalConfirm
 }) => {
     const [number, setNumber] = useState(25)
     const [selectedOption, setSelectedOption] = useState(value)
     const [filteredData, setFilteredData] = useState(data)
     const [searchBarText, setSearchBarText] = useState('');
+    const [modalConfirm, setModalConfirm] = useState(false);
 
     const onSearch = (e) => {
         let text = e.toLowerCase()
@@ -57,17 +60,31 @@ const DropdownSearch = ({
                     closeModal={() => [setNumber(25), dropdownPressed()]}
                 >
                     <View style={{ maxHeight: '100%' }}>
-                        <View style={{ paddingHorizontal: 10, paddingVertical: 15 }}>
+                        <View style={[{ paddingHorizontal: 10, paddingVertical: 15, justifyContent: "center" }, styles.contentItem]}>
                             <SearchBar
                                 placeholder={placeholder}
                                 activeIcon={false}
                                 iconSearch='right'
                                 value={searchBarText}
-                                containerStyle={[styles.menuButton, { backgroundColor: COLOR_TRANSPARENT_DISABLED }]}
+                                containerStyle={[styles.menuButton, { backgroundColor: COLOR_TRANSPARENT_DISABLED, width: filteredData.length <= 0 ? "82%" : "100%" }]}
                                 onTextChanged={(e) => onSearch(e)}
                                 onDeletePressed={() => setSearchBarText('')}
                             />
+                            {filteredData.length <= 0 && 
+                            <TouchableOpacity onPress={() => setModalConfirm(true)}>
+                                <iconTools.MaterialCommunityIcons
+                                    name={"pencil-plus-outline"}
+                                    size={iPad ? 45 : 30}
+                                    style={{ borderRadius: 24, padding: 8, backgroundColor: COLOR_TRANSPARENT_DARK, color: COLOR_PRIMARY, borderColor: COLOR_PRIMARY }}
+                                />
+                            </TouchableOpacity>}
                         </View>
+                        <MyModalConfirm
+                            isVisible={modalConfirm}
+                            closeModal={() => setModalConfirm(false)}
+                            onSubmit={() => [add(searchBarText), setModalConfirm(false)]}
+                            message={messageModalConfirm + searchBarText + " ?"}
+                        />
                         <FlatList
                             style={{ maxHeight: '90%', marginBottom: '20%' }}
                             showsVerticalScrollIndicator={false}
@@ -109,6 +126,13 @@ export default DropdownSearch
 const styles = StyleSheet.create({
     dropdownContainer: {
         marginVertical: 5
+    },
+    contentItem: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        // paddingTop: 10
     },
     menuButton: {
         height: 50,

@@ -1,11 +1,6 @@
 import { connect } from 'react-redux';
-import { downlodingCheckVersionAsync, downlodingMenuAppsAsync, resetHome, showInfo, addMessage, downlodingListNotificationAsync } from '../../redux/features/home/homeSlice';
-import { downlodingProfileAsync, resetProfile } from '../../redux/features/profile/profileSlice';
+import { resetHome, downlodingListNotificationAsync } from '../../redux/features/home/homeSlice';
 import NotificationScreen from './Notification';
-import NavigationService from '../../tools/navigationService';
-import { NAV_NAME_PROFILE } from '../../tools/constant';
-import { Linking } from 'react-native';
-import { downloadingActiveBargingAsync } from '../../redux/features/activeBarging/activeBargingSlice';
 
 const transformDataBarging = (state) => {
     const dummyData = [
@@ -52,6 +47,7 @@ const transformDataBarging = (state) => {
 };
 
 const mapStateToProps = state => {
+    console.log(state.auth.loginInfo.ID)
     return ({
         isError: state.home.isError,
         isInfo: state.home.isInfo,
@@ -67,38 +63,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
     onAppear: (userId) => {
         dispatch(resetHome())
-        dispatch(resetProfile())
-        dispatch(downlodingProfileAsync(userId))
-        dispatch(downlodingMenuAppsAsync(userId))
-        dispatch(downlodingCheckVersionAsync())
-    },
-    onAppearFocus: (userId) => {
-        dispatch(resetHome())
         dispatch(downlodingListNotificationAsync(userId))
-        dispatch(downloadingActiveBargingAsync())
-    },
-    onCloseModal: () => {
-        dispatch(resetHome())
-    },
-    onProfilePressed: () => {
-        NavigationService.navigate(NAV_NAME_PROFILE)
-    },
-    onItemPressed: async (url) => {
-        if (url === null) {
-            dispatch(showInfo(true))
-            dispatch(addMessage("Tahap Development"))
-        } else {
-            await Linking.canOpenURL(url).then(supported => {
-                if (supported) {
-                    Linking.openURL(url)
-                        .then(aa => console.log('openURL resp.:', aa))
-                        .catch(err => console.log('openURL error:', err));
-                } else {
-                    console.log('url not valid');
-                }
-            });
-
-        }
     },
 });
 

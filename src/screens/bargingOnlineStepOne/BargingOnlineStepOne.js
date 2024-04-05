@@ -9,7 +9,7 @@ import {
 import navigationService from '../../tools/navigationService';
 
 const BargingOnlineStepOne = ({
-    customers, isSuccess, isLoading, isError, message, onAppear, onCloseModalError
+    customers, isSuccess, isLoading, isError, message, onAppear, onCloseModalError, onSubmitAddTugBoat, onSubmitAddTugBarge
 }) => {
     const [showTugBoatMenu, setShowTugBoatMenu] = useState(false);
     const [showCompanyMenu, setShowCompanyMenu] = useState(false);
@@ -19,6 +19,8 @@ const BargingOnlineStepOne = ({
     const [selectTugBoat, setSelectTugBoat] = useState('');
     const [selectBarge, setSelectBarge] = useState('');
     const [selectCapacity, setSelectCapacity] = useState('');
+    const [addTugBoat, setAddTugBoat] = useState('');
+    const [addBarge, setAddBarge] = useState('');
     const [jetty, setJetty] = useState('');
     const [duration, setDuration] = useState('');
     const [vessel, setVessel] = useState('')
@@ -26,6 +28,12 @@ const BargingOnlineStepOne = ({
     const [messageInfo, setMessageInfo] = useState('');
 
     useEffect(() => onAppear(), [])
+
+    useEffect(() => onSubmitAddTugBarge, [addBarge])
+
+    useEffect(() => onSubmitAddTugBoat(addTugBoat),
+     [addBarge])
+
     useEffect(() => {
         if (isSuccess === true) {
             onCloseModalError()
@@ -92,6 +100,7 @@ const BargingOnlineStepOne = ({
                     <View style={{ marginBottom: 20 }}>
                         <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Tug Boat <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <DropdownSearch
+                            add={setAddTugBoat}
                             selected={setSelectTugBoat}
                             value={selectTugBoat}
                             data={customers?.tugBoat}
@@ -107,6 +116,7 @@ const BargingOnlineStepOne = ({
                             headerActive={true}
                             headerTitle={'LIST TUG BOAT'}
                             placeholder={'Select Tug Boat'}
+                            messageModalConfirm={"Apakah anda yakin ingin menambahkan Tug Boat "}
                             heightContent={155}
                             containerStyle={{ marginVertical: 0 }}
                             borderColor={COLOR_MEDIUM_BLACK}
@@ -116,6 +126,7 @@ const BargingOnlineStepOne = ({
                     <View style={{ marginBottom: 20 }}>
                         <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Barge Ship <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <DropdownSearch
+                            add={setAddBarge}
                             selected={setSelectBarge}
                             value={selectBarge}
                             data={customers?.barge}
@@ -131,6 +142,8 @@ const BargingOnlineStepOne = ({
                             headerActive={true}
                             headerTitle={'LIST BARGE'}
                             placeholder={'Select Barge'}
+                            title={'Barge'}
+                            messageModalConfirm={"Apakah anda yakin ingin menambahkan Barge "}
                             heightContent={155}
                             containerStyle={{ marginVertical: 0 }}
                             borderColor={COLOR_MEDIUM_BLACK}
@@ -138,7 +151,7 @@ const BargingOnlineStepOne = ({
                         />
                     </View>
                     <View style={{ marginBottom: 20 }}>
-                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Capacity (ton) <Body style={{ color: 'red' }}>*</Body> : </Body>
+                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Storage Plant (ton) <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <Dropdown
                             custom={true}
                             value={selectCapacity && duration ? `${selectCapacity} (${duration} jam)` : ''}
@@ -152,7 +165,7 @@ const BargingOnlineStepOne = ({
                                 }
                             }}
                             data={customers?.capacity}
-                            placeholder={'Select Capacity'}
+                            placeholder={'Select Storage Plant'}
                             containerStyle={{ marginVertical: 0 }}
                             borderColor={COLOR_MEDIUM_BLACK}
                             borderRadius={8}
@@ -160,7 +173,7 @@ const BargingOnlineStepOne = ({
                             <MyModal
                                 isVisible={showCapacityMenu}
                                 headerActive={true}
-                                headerTitle={'LIST CAPACITY'}
+                                headerTitle={'LIST STORAGE PLANT'}
                                 closeModal={() => setShowCapacityMenu(!showCapacityMenu)}
                             >
                                 <FlatList
@@ -253,6 +266,7 @@ const styles = StyleSheet.create({
         paddingBottom: 100,
         marginBottom: 80
     }),
+    
     cardColumn: {
         flexDirection: 'row',
         flexWrap: 'wrap',

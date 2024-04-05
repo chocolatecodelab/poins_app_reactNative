@@ -1,4 +1,4 @@
-import { NAV_NAME_BARGING_ONLINE_STEP_ONE, NAV_NAME_BARGING_RECAPITULATION, NAV_NAME_BARGING_SCHEDULE, NAV_NAME_CCTV } from "./constant"
+import { NAV_NAME_BARGING_ONLINE_STEP_ONE, NAV_NAME_BARGING_RECAPITULATION, NAV_NAME_BARGING_SCHEDULE, NAV_NAME_CCTV, NAV_NAME_HISTORY_BARGING } from "./constant"
 
 const config = {
     screens: {
@@ -13,6 +13,9 @@ const config = {
         },
         [NAV_NAME_CCTV]: {
             path: 'realtime-cctv'
+        },
+        [NAV_NAME_HISTORY_BARGING]: {
+            path: 'history-barging'
         },
     }
 }

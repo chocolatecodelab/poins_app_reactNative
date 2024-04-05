@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, ActivityIndicator, } from 'react-native'
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_HORIZONTAL_LINE, COLOR_MAIN_SECONDARY, COLOR_MEDIUM_BLACK, COLOR_PRIMARY, COLOR_WHITE, } from '../../tools/constant';
-import { ios, } from '../../tools/helper';
+import { ios, onDisplayNotification, } from '../../tools/helper';
 import { Button, BaseScreen, Body, H4, MyModal, ProgressBar, BodyLarge, BodySmall, BodyExtraSmall, MyModalError, MyModalSuccess } from '../../components';
+import LocalizedString from '../../tools/localization';
 
 const BargingOnllineStepTwo = ({
     isUploadingSuccess, isUploading, isError, message, onSubmitPressed, props, userId, onCloseModalError,
@@ -14,6 +15,10 @@ const BargingOnllineStepTwo = ({
     const [isBooked, setIsBooked] = useState(false)
     const [isOrder, setIsOrder] = useState(false)
     const [indexDate, setIndexDate] = useState(null)
+
+    //localization
+    const titleBargingRequestNotification = LocalizedString.BargingScreen.titleBargingRequestNotification;
+    const descriptionBargingRequestNotification = LocalizedString.BargingScreen.descriptionBargingRequestNotification;
 
     const handlerNextDay = () => {
         let maxTime = 24
@@ -50,6 +55,7 @@ const BargingOnllineStepTwo = ({
     useEffect(() => {
         if (isUploadingSuccess === true) {
             setIsOrder(false)
+            onDisplayNotification(titleBargingRequestNotification, descriptionBargingRequestNotification)
         }
     }, [isUploadingSuccess])
 

@@ -1,21 +1,24 @@
 import React, { useEffect, useRef } from 'react'
-import { View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, FlatList, Platform, Text } from 'react-native';
 import Header from "./Header";
 import Apps from "./Apps";
 import Card from "./Carousel";
 import { getScreenDimension } from '../../tools/helper';
 import { COLOR_PRIMARY, COLOR_WHITE } from '../../tools/constant';
-import { BaseScreen, MyModalError, MyModalInfo } from '../../components';
+import { BaseScreen, Button, MyModalError, MyModalInfo } from '../../components';
 import Carousel, { Pagination } from 'react-native-snap-carousel-v4';
 
 const Home = ({
-    apps, notification, userId, listHistory, isError, isInfo, message, onAppear, onCloseModal,
+    email, apps, notification, userId, listHistory, isError, isInfo, message, onAppear, onCloseModal,
     onProfilePressed, onItemPressed, onFiturDevelopmentPressed, isDownloadingApps, onNotificationPressed
 }) => {
+
+
     const carouselRef = useRef(null);
-    const SLIDER_WIDTH = getScreenDimension().width;
+    const SLIDER_WIDTH = getScreenDimension().width + 100;
     const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.8);
-    useEffect(() => { onAppear(userId) }, [])
+    useEffect(() => { onAppear(userId) }, 
+    [])
     return (
         <BaseScreen
             barBackgroundColor={COLOR_PRIMARY}
@@ -52,8 +55,9 @@ const Home = ({
             <FlatList
                 data={listHistory}
                 renderItem={(item) => Card(item)}
-                contentContainerStyle={{ paddingBottom: 50 }}
+                contentContainerStyle={{ paddingRight: 30 }}
                 style={styles.carouselContainer}
+                horizontal={true}
             />
             <MyModalError
                 isVisible={isError}

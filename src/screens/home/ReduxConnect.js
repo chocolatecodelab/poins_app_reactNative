@@ -8,7 +8,7 @@ import { Linking } from 'react-native';
 import { downloadingActiveBargingAsync } from '../../redux/features/activeBarging/activeBargingSlice';
 
 const transformDataBarging = (state) => {
-    console.log('test',state.activeBarging.listHistory);
+    console.log('test', state.activeBarging.listHistory);
     const dummyData = [
         {
             EndDate: "2023-07-13T08:42:00",
@@ -47,13 +47,14 @@ const transformDataBarging = (state) => {
     if (state.activeBarging.listHistory.length === 0) {
         return dummyData
     } else {
-        console.log('test',state.activeBarging.listHistory);
+        console.log('test', state.activeBarging.listHistory);
         return state.activeBarging.listHistory
     }
 };
 
 const mapStateToProps = state => {
     return ({
+        email: state.auth.email,
         isError: state.home.isError,
         isInfo: state.home.isInfo,
         message: state.home.message,

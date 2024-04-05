@@ -14,10 +14,12 @@ export const NAV_NAME_HOME_MENU = 'NAV_NAME_HOME_MENU';
 export const NAV_NAME_BARGING_RECAPITULATION_DETAIL = 'NAV_NAME_BARGING_RECAPITULATION_DETAIL';
 export const NAV_NAME_BARGING_SCHEDULE = 'NAV_NAME_BARGING_SCHEDULE';
 export const NAV_NAME_NOTIFICATION = 'NAV_NAME_NOTIFICATION';
+export const NAV_NAME_HISTORY_BARGING = 'NAV_NAME_HISTORY_BARGING';
 export const NAV_NAME_CCTV = 'NAV_NAME_CCTV';
 export const NAV_NAME_DETAIL_CCTV = 'NAV_NAME_DETAIL_CCTV';
 
 export const REST_BASE_URL = 'https://ap.kppmining.com:12201/api';
+// export const REST_BASE_URL = 'http://10.90.32.32/api';
 export const REST_URL_LOGIN = '/login/Login';
 export const REST_URL_OTP_LOGIN = '/login/ValidateOtp';
 export const REST_URL_LOGOUT = 'login/Logout'
@@ -34,6 +36,7 @@ export const REST_URL_FORGET_PASSWORD_STEP_ONE = '/login/ForgetPassword';
 export const REST_URL_FORGET_PASSWORD_STEP_TWO = '/login/ValidateOtp_ForgetPassword';
 export const REST_URL_FORGET_PASSWORD_STEP_THREE = '/login/ChangePassword';
 export const REST_URL_BARGING_RECAPITULATION = '/barging_online/Get_BargingOnlineByFilter/{id}?startDate={startDate}&endDate={finishDate}';
+export const REST_URL_HISTORY_BARGING = '/barging_online/Get_BargininOnlineByUserId/{id}';
 export const REST_URL_TIME_BARGIN_ONLINE = '/barging_online/Get_ValidasiBookingTime?filterDate={date}&jetty={jetty}';
 export const REST_URL_BARGING_SCHEDULE = '/barging_online/Get_BargingSchedule/{id}?startDate={startDate}&endDate={finishDate}';
 export const REST_URL_ACTIVE_BARGING = '/barging_online/Get_ActiveBarging';
@@ -59,6 +62,7 @@ export const COLOR_BLACK = '#000000';
 export const COLOR_MEDIUM_BLACK = '#2C3333';
 export const COLOR_DISABLED = '#A4A4A4';
 export const COLOR_GRAY_1 = '#D8D8E0'
+export const COLOR_GRAY_2 = '#636363'
 export const COLOR_TRANSPARENT_DARK = 'rgba(0, 0, 0, 0.15)';
 export const COLOR_HORIZONTAL_LINE = '#E5E5E5';
 export const COLOR_TRANSPARENT_DISABLED = '#F5F4F7';
@@ -71,6 +75,7 @@ export const FONT_NUNITO_REGULAR = 'Nunito-Regular';
 export const FONT_NUNITO_BOLD = 'Nunito-Bold';
 export const FONT_NUNITO_SEMI_BOLD = 'Nunito-SemiBold';
 export const FONT_NUNITO_EXTRA_BOLD = 'Nunito-ExtraBold';
+export const FONT_POPPINS_REGULAR = 'Poppins-Regular';
 
 export const FONT_SIZE_PAGE_TITLE = 24;
 export const FONT_SIZE_BUTTON = 14;

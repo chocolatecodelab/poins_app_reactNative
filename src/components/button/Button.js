@@ -3,7 +3,7 @@ import {
     TouchableOpacity, Text, View, ActivityIndicator,
 } from 'react-native';
 import {
-    COLOR_DISABLED, COLOR_SECONDARY_MAIN_ANDROID, COLOR_SECONDARY_MAIN_IOS, COLOR_WHITE,
+    COLOR_DISABLED, COLOR_SECONDARY_MAIN_ANDROID, COLOR_SECONDARY_MAIN_IOS, COLOR_WHITE, FONT_POPPINS_REGULAR,
 } from '../../tools/constant';
 import { ios } from '../../tools/helper';
 
