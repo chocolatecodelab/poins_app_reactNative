@@ -178,7 +178,6 @@ const HistoryBarging = ({
                     <Text style={{ fontSize: 10, color: COLOR_GRAY_2, textAlign: 'right' }}>Barge Ship</Text>
                     <View style={{ flexDirection: "row" }}>
                       <Text style={{ marginLeft: 5, fontSize: 11 }}>{item.BARGE}</Text>
-                      <Text style={{ marginRight: 5 }}>{item.DATE_FINISH}</Text>
                       <MaterialCommunityIcons name={"sail-boat"} size={18} color={COLOR_PRIMARY} />
                     </View>
                   </View>

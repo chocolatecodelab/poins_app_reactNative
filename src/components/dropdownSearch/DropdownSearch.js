@@ -1,14 +1,33 @@
 import React, { useState, useEffect } from 'react'
 import { FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant';
+import { COLOR_BLACK, COLOR_DISABLED, COLOR_GRAY_1, COLOR_GRAY_2, COLOR_HORIZONTAL_LINE, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant';
 import { iPad, iconTools } from '../../tools/helper';
 import { Body, BodyLarge, HorizontalLine, MyModal, SearchBar } from '../../components';
 import MyModalConfirm from '../modalConfirm/ModalConfirm';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const renderEmptyComponent = () => (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: 200 }}>
-        <BodyLarge>No items to display</BodyLarge>
-        
+
+const renderEmptyComponent = (waitingListData) => (
+    <View style={{ flex: 1, justifyContent: 'space-around', paddingHorizontal: 20 }}>
+        <View style={{ alignItems: 'center' }}>
+            <BodyLarge>No items to display</BodyLarge>
+        </View>
+        <View style={{ flex: 1 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 5 }}>Waiting List</Text>
+                <MaterialCommunityIcons name={"file-clock-outline"} style={{ paddingTop: 4 }} size={20} color={COLOR_PRIMARY} />
+            </View>
+            <FlatList
+                data={waitingListData}
+                keyExtractor={(_, index) => index.toString()}
+                renderItem={({ item, index }) => (
+                    <View style={[styles.card, { alignItems: "center", flexDirection: "row", backgroundColor: COLOR_TRANSPARENT_DISABLED, width: "100%" }]}>
+                        <Text style={{ textAlign: "center" }}>{item.code}</Text>
+                    </View>
+                )}
+                contentContainerStyle={{ flexGrow: 1 }}
+            />
+        </View>
     </View>
 );
 
@@ -22,6 +41,17 @@ const DropdownSearch = ({
     const [filteredData, setFilteredData] = useState(data)
     const [searchBarText, setSearchBarText] = useState('');
     const [modalConfirm, setModalConfirm] = useState(false);
+
+    const waitingListData = [
+        { id: '1', code: 'AHHA 5312' },
+        { id: '2', code: 'AHHA 1234' },
+        { id: '3', code: 'AHHA 5678' },
+        { id: '3', code: 'AHHA 5678' },
+        { id: '3', code: 'AHHA 5678' },
+        { id: '3', code: 'AHHA 5678' },
+        { id: '3', code: 'AHHA 5678' },
+        // Tambahkan data dummy lainnya di sini jika diperlukan
+    ];
 
     const onSearch = (e) => {
         let text = e.toLowerCase()
@@ -70,14 +100,14 @@ const DropdownSearch = ({
                                 onTextChanged={(e) => onSearch(e)}
                                 onDeletePressed={() => setSearchBarText('')}
                             />
-                            {filteredData.length <= 0 && 
-                            <TouchableOpacity onPress={() => setModalConfirm(true)}>
-                                <iconTools.MaterialCommunityIcons
-                                    name={"pencil-plus-outline"}
-                                    size={iPad ? 45 : 30}
-                                    style={{ borderRadius: 24, padding: 8, backgroundColor: COLOR_TRANSPARENT_DARK, color: COLOR_PRIMARY, borderColor: COLOR_PRIMARY }}
-                                />
-                            </TouchableOpacity>}
+                            {filteredData.length <= 0 &&
+                                <TouchableOpacity onPress={() => setModalConfirm(true)}>
+                                    <iconTools.MaterialCommunityIcons
+                                        name={"pencil-plus-outline"}
+                                        size={iPad ? 45 : 30}
+                                        style={{ borderRadius: 24, padding: 8, backgroundColor: COLOR_TRANSPARENT_DARK, color: COLOR_PRIMARY, borderColor: COLOR_PRIMARY }}
+                                    />
+                                </TouchableOpacity>}
                         </View>
                         <MyModalConfirm
                             isVisible={modalConfirm}
@@ -112,7 +142,7 @@ const DropdownSearch = ({
                                 }
                             }}
                             onEndReachedThreshold={0.5}
-                            ListEmptyComponent={renderEmptyComponent}
+                            ListEmptyComponent={renderEmptyComponent(waitingListData)}
                         />
                     </View>
                 </MyModal> : null
@@ -148,6 +178,25 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 12,
         top: 12
+    },
+    card: {
+        width: "100%",
+        borderWidth: 1,
+        borderColor: COLOR_HORIZONTAL_LINE,
+        marginVertical: 4,
+        padding: 10,
+        borderRadius: 10,
+        backgroundColor: COLOR_WHITE,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        shadowColor: COLOR_BLACK,
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 2,
     },
     menuContainer: (heightContent) => ({
         backgroundColor: COLOR_WHITE,

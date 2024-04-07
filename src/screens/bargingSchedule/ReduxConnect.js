@@ -16,6 +16,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
     onAppear: (id, startDate, finishDate) => {
         dispatch(resetBargingSchedule())
+        const today = new Date();
         const transfromStartDate = startDate ? `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}` : `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
         const transfromFinishDate = finishDate ? `${finishDate.getFullYear()}-${finishDate.getMonth() + 1}-${finishDate.getDate()}` : `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
         const params = { id, startDate: transfromStartDate, finishDate: transfromFinishDate }
