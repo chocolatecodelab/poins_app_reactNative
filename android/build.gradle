@@ -67,7 +67,7 @@ allprojects {
             versions: [
             // Overriding Build/Android SDK Versions
             android : [
-                minSdk    : 19,
+                minSdk    : 21,
                 targetSdk : 33,
                 compileSdk: 33,
             ],

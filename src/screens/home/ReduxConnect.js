@@ -7,50 +7,43 @@ import { NAV_NAME_NOTIFICATION, NAV_NAME_PROFILE } from '../../tools/constant';
 import { Linking } from 'react-native';
 import { downloadingActiveBargingAsync } from '../../redux/features/activeBarging/activeBargingSlice';
 
-const transformDataBarging = (state) => {
-    console.log('test', state.activeBarging.listHistory);
-    const dummyData = [
-        {
-            EndDate: "2023-07-13T08:42:00",
-            Company: "Not Order",
-            Barge: "Not Order",
-            Boat: "Not Order",
-            Weight: 0,
-            Planload: 0,
-            WeightPercentage: 0,
-            nodeDesc: "JETTY-J",
-            Kode: "STAND BY"
-        },
-        {
-            EndDate: "2023-07-13T08:42:00",
-            Company: "Not Order",
-            Barge: "Not Order",
-            Boat: "Not Order",
-            Weight: 0,
-            Planload: 0,
-            WeightPercentage: 0,
-            nodeDesc: "JETTY-U",
-            Kode: "STAND BY"
-        },
-        {
-            EndDate: null,
-            Company: "Not Order",
-            Barge: "Not Order",
-            Boat: "Not Order",
-            Weight: 0,
-            Planload: 0,
-            WeightPercentage: 0,
-            nodeDesc: "JETTY-K",
-            Kode: "STAND BY"
-        }
-    ];
-    if (state.activeBarging.listHistory.length === 0) {
-        return dummyData
-    } else {
-        console.log('test', state.activeBarging.listHistory);
-        return state.activeBarging.listHistory
-    }
-};
+// const transformDataBarging = (state) => {
+//     const dummyData = [
+//         {
+//             EndDate: "2023-07-13T08:42:00",
+//             Company: "PT. BRE - KPP",
+//             Barge: "PATRIA 3212",
+//             Boat: "PATRIA 3212",
+//             Weight: 2010,
+//             Planload: 10000,
+//             WeightPercentage: 43,
+//             nodeDesc: "JETTY-J",
+//             Kode: "LOADING"
+//         },
+//         {
+//             EndDate: "2023-07-13T08:42:00",
+//             Company: "Not Order",
+//             Barge: "Not Order",
+//             Boat: "Not Order",
+//             Weight: 2010,
+//             Planload: 10000,
+//             WeightPercentage: 33,
+//             nodeDesc: "JETTY-U",
+//             Kode: "STAND BY"
+//         },
+//         {
+//             EndDate: null,
+//             Company: "Not Order",
+//             Barge: "Not Order",
+//             Boat: "Not Order",
+//             Weight: 2100,
+//             Planload: 10000,
+//             WeightPercentage: 27,
+//             nodeDesc: "JETTY-K",
+//             Kode: "STAND BY"
+//         }
+//     ];
+// };
 
 const mapStateToProps = state => {
     return ({
@@ -60,7 +53,7 @@ const mapStateToProps = state => {
         message: state.home.message,
         apps: state.home?.apps,
         notification: state.home?.notification,
-        listHistory: transformDataBarging(state),
+        listHistory: state.activeBarging?.listHistory,
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
         isDownloadingApps: state.home.isDownloadingApps
     })

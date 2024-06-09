@@ -7,7 +7,7 @@ import LocalizedString from '../../tools/localization';
 
 const BargingOnllineStepTwo = ({
     isUploadingSuccess, isUploading, isError, message, onSubmitPressed, props, userId, onCloseModalError,
-    onCloseModalSuccess, onAppear, listDate, listTime, onSelectedDatePressed, isLoadingTimeBooking,
+    onCloseModalSuccess, onAppear, listDate, listTime, onSelectedDatePressed, isLoadingTimeBooking, companyUserId
 }) => {
     const [selectedDay, setSelectedDay] = useState(null)
     const [selectTime, setSelectTime] = useState(null)
@@ -38,7 +38,6 @@ const BargingOnllineStepTwo = ({
             return totalTime
         }
     }
-
     const handlePickerTime = (item) => {
         if (item.BookingUserId === null) {
             setSelectTime(item.time)

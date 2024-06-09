@@ -108,7 +108,7 @@ const OtpLogin = ({
   useEffect(() => {
     if (isSuccess === true) {
       //pengiriman token
-      sendFCMToken(email);
+      // sendFCMToken(email);
       //redirect Home
       onNavigationHome()
     }

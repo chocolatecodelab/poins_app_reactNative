@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
-import { downloadingBargingRecapitulationAsync, resetBargingRecapitulation } from '../../redux/features/bargingRecapitulation/bargingRecapitulattionSlice';
+import { downloadingBargingRecapitulationAsync, resetBargingRecapitulation, downloadingExportAsync } from '../../redux/features/bargingRecapitulation/bargingRecapitulattionSlice';
 import BargingRecapitulationScreen from './BargingRecapitulation';
-import NavigationService from '../../tools/navigationService';
-import { NAV_NAME_BARGING_RECAPITULATION_DETAIL } from '../../tools/constant';
 
 const mapStateToProps = state => {
     return ({
@@ -12,16 +10,26 @@ const mapStateToProps = state => {
         isError: state.bargingRecapitulation.isError,
         message: state.bargingRecapitulation.message,
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
+        companyUserId: state.profile.data.companyId,
     })
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    onAppear: (id, startDate, finishDate) => {
+    onAppear: (companyUserId, startDate, finishDate) => {
         const today = new Date()
         const transfromStartDate = startDate ? `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}` : `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
         const transfromFinishDate = finishDate ? `${finishDate.getFullYear()}-${finishDate.getMonth() + 1}-${finishDate.getDate()}` : `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
-        const params = { id, startDate: transfromStartDate, finishDate: transfromFinishDate }
+        const params = { compUserId: companyUserId, startDate: transfromStartDate, finishDate: transfromFinishDate }
         dispatch(downloadingBargingRecapitulationAsync(params))
+    },
+    exportData: (companyUserId, startDate, finishDate, exportType) => {
+        const today = new Date()
+        const transfromStartDate = startDate ? `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}` : `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
+        const transfromFinishDate = finishDate ? `${finishDate.getFullYear()}-${finishDate.getMonth() + 1}-${finishDate.getDate()}` : `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
+        const params = {
+            companyId: companyUserId, start: transfromStartDate, finish: transfromFinishDate, type: exportType
+        }
+        dispatch(downloadingExportAsync(params));
     },
     onCloseModalError: () => {
         dispatch(resetBargingRecapitulation())

@@ -4,16 +4,18 @@ import { COLOR_BLACK, COLOR_MEDIUM_BLACK, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK,
 import { ios, getScreenDimension } from '../../tools/helper';
 import {
     Button, BaseScreen, Body, H4, Dropdown, DropdownSearch, ProgressBar, MyModalInfo, MyModalError,
-    MyModal, HorizontalLine, KeyboardView
+    MyModal, HorizontalLine, KeyboardView,
+    MyModalSuccess
 } from '../../components';
 import navigationService from '../../tools/navigationService';
 
 const BargingOnlineStepOne = ({
-    customers, isSuccess, isLoading, isError, message, onAppear, onCloseModalError, onSubmitAddTugBoat, onSubmitAddTugBarge
+    customers, companyUserId, isUploadingSuccess, isUploadingSuccessBargeTugboat, isSuccess, isLoading, isError, message, onAppear, onCloseModalError, onSubmitAddTugBoat, onSubmitAddBarge,
 }) => {
     const [showTugBoatMenu, setShowTugBoatMenu] = useState(false);
     const [showCompanyMenu, setShowCompanyMenu] = useState(false);
     const [showCapacityMenu, setShowCapacityMenu] = useState(false);
+    const [showDurationMenu, setShowDurationMenu] = useState(false);
     const [showBargeMenu, setShowBargeMenu] = useState(false);
     const [selectCompany, setSelectCompany] = useState('');
     const [selectTugBoat, setSelectTugBoat] = useState('');
@@ -27,18 +29,49 @@ const BargingOnlineStepOne = ({
     const [showModalInfo, setShowModalInfo] = useState(false);
     const [messageInfo, setMessageInfo] = useState('');
 
+    const selectedCompany = customers?.company?.find(company => company.id === companyUserId);
+
+    // Filter data berdasarkan jetty
+    const filteredData = customers?.capacity?.filter(item => item.name === jetty) || [];
+
+    const removeDuplicatesStoragePlan = (data) => {
+        return data.filter((item, index, self) =>
+            index === self.findIndex((t) => t.name === item.name && t.capacity === item.capacity)
+        );
+    };
+
+    // Hapus duplikasi dari data yang sudah difilter
+    const capacityData = removeDuplicatesStoragePlan(filteredData);
+
     useEffect(() => onAppear(), [])
 
-    useEffect(() => onSubmitAddTugBarge, [addBarge])
+    useEffect(() => {
+        setSelectCompany(selectedCompany.name);
+    }, [])
 
-    useEffect(() => onSubmitAddTugBoat(addTugBoat),
-     [addBarge])
+    useEffect(() => {
+        if (addBarge != "") {
+            onSubmitAddBarge(addBarge)
+        }
+    }, [addBarge])
+
+    useEffect(() => {
+        if (addTugBoat != "") {
+            onSubmitAddTugBoat(addTugBoat)
+        }
+    }, [addTugBoat])
 
     useEffect(() => {
         if (isSuccess === true) {
             onCloseModalError()
         }
     }, [isSuccess])
+
+    useEffect(() => {
+        if (isUploadingSuccessBargeTugboat === true) {
+            onAppear()
+        }
+    }, [isUploadingSuccessBargeTugboat])
 
     return (
         <BaseScreen
@@ -151,10 +184,10 @@ const BargingOnlineStepOne = ({
                         />
                     </View>
                     <View style={{ marginBottom: 20 }}>
-                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Storage Plant (ton) <Body style={{ color: 'red' }}>*</Body> : </Body>
+                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Storage Plan (ton) <Body style={{ color: 'red' }}>*</Body> : </Body>
                         <Dropdown
                             custom={true}
-                            value={selectCapacity && duration ? `${selectCapacity} (${duration} jam)` : ''}
+                            value={selectCapacity ? `${selectCapacity}` : ''}
                             dropdownActive={showCapacityMenu}
                             dropdownPressed={() => {
                                 if (jetty === '') {
@@ -165,7 +198,7 @@ const BargingOnlineStepOne = ({
                                 }
                             }}
                             data={customers?.capacity}
-                            placeholder={'Select Storage Plant'}
+                            placeholder={'Select Storage Plan'}
                             containerStyle={{ marginVertical: 0 }}
                             borderColor={COLOR_MEDIUM_BLACK}
                             borderRadius={8}
@@ -173,28 +206,85 @@ const BargingOnlineStepOne = ({
                             <MyModal
                                 isVisible={showCapacityMenu}
                                 headerActive={true}
-                                headerTitle={'LIST STORAGE PLANT'}
+                                headerTitle={'LIST STORAGE PLAN'}
                                 closeModal={() => setShowCapacityMenu(!showCapacityMenu)}
                             >
                                 <FlatList
                                     showsVerticalScrollIndicator={false}
                                     style={{ width: '100%' }}
-                                    data={customers?.capacity}
+                                    data={capacityData}
                                     keyExtractor={(_, index) => index}
                                     renderItem={({ item, index }) => {
-                                        if (item.name === jetty) {
-                                            const lastIndex = customers?.capacity?.length - 1;
+                                        const lastIndex = capacityData.length - 1;
+                                        return (
+                                            <>
+                                                <TouchableOpacity
+                                                    style={{ marginVertical: 5 }}
+                                                    onPress={() => {
+                                                        setSelectCapacity(item.capacity)
+                                                        setShowCapacityMenu(!showCapacityMenu)
+                                                    }}>
+                                                    <Body style={{ color: COLOR_BLACK, textAlign: 'center' }}>
+                                                        {`${item.capacity} ton`}
+                                                    </Body>
+                                                </TouchableOpacity>
+                                                {index !== lastIndex && <HorizontalLine width={'100%'} />}
+                                            </>
+                                        )
+                                    }}
+                                />
+                            </MyModal>
+                        </Dropdown>
+                    </View>
+                    <View style={{ marginBottom: 20 }}>
+                        <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}>Duration Time <Body style={{ color: 'red' }}>*</Body> : </Body>
+                        <Dropdown
+                            custom={true}
+                            value={duration ? `${duration} jam` : ''}
+                            dropdownActive={showDurationMenu}
+                            dropdownPressed={() => {
+                                if (jetty === '') {
+                                    setShowModalInfo(!showModalInfo)
+                                    setMessageInfo('Harap pilih jetty terlebih dahulu')
+                                } else if(selectCapacity === '') {
+                                    setShowModalInfo(!showModalInfo);
+                                    setMessageInfo('Harap pilih Storage Plan terlebih dahulu')
+                                }else {
+                                    setShowDurationMenu(!showDurationMenu)
+                                }
+                            }}
+                            data={customers?.capacity}
+                            placeholder={'Select Duration Time'}
+                            containerStyle={{ marginVertical: 0 }}
+                            borderColor={COLOR_MEDIUM_BLACK}
+                            borderRadius={8}
+                        >
+                            <MyModal
+                                isVisible={showDurationMenu}
+                                headerActive={true}
+                                headerTitle={'List Duration Time'}
+                                closeModal={() => setShowDurationMenu(!showDurationMenu)}
+                            >
+                                <FlatList
+                                    showsVerticalScrollIndicator={false}
+                                    style={{ width: '100%' }}
+                                    data={filteredData}
+                                    keyExtractor={(_, index) => index}
+                                    renderItem={({ item, index }) => {
+
+                                        if (item.name === jetty && item.capacity === selectCapacity) {
+                                            const lastIndex = filteredData.length - 1;
+
                                             return (
                                                 <>
                                                     <TouchableOpacity
                                                         style={{ marginVertical: 5 }}
                                                         onPress={() => {
                                                             setDuration(item.duration)
-                                                            setSelectCapacity(item.capacity)
-                                                            setShowCapacityMenu(!showCapacityMenu)
+                                                            setShowDurationMenu(!showDurationMenu)
                                                         }}>
                                                         <Body style={{ color: COLOR_BLACK, textAlign: 'center' }}>
-                                                            {`${item.capacity} (${item.duration} jam)`}
+                                                            {`${item.duration} jam`}
                                                         </Body>
                                                     </TouchableOpacity>
                                                     {index !== lastIndex && <HorizontalLine width={'100%'} />}
@@ -235,9 +325,9 @@ const BargingOnlineStepOne = ({
                 />
                 <Button
                     caption='Next'
-                    disabled={jetty && selectCapacity && selectBarge && selectTugBoat ? false : true}
-                    containerStyle={[styles.next, { backgroundColor: jetty && selectCapacity && selectBarge && selectTugBoat ? COLOR_PRIMARY : COLOR_TRANSPARENT_DARK }]}
-                    onPress={() => navigationService.navigate(NAV_NAME_BARGING_ONLINE_STEP_TWO, { jetty, duration, selectBarge, selectTugBoat, selectCapacity, vessel })}
+                    disabled={jetty && selectCapacity && selectBarge && selectTugBoat && duration && vessel ? false : true}
+                    containerStyle={[styles.next, { backgroundColor: jetty && selectCapacity && selectBarge && selectTugBoat && duration && vessel ? COLOR_PRIMARY : COLOR_TRANSPARENT_DARK }]}
+                    onPress={() => navigationService.navigate(NAV_NAME_BARGING_ONLINE_STEP_TWO, { jetty, duration, selectBarge, selectTugBoat, selectCapacity, vessel, selectCompany })}
                 />
             </View>
             <MyModalError
@@ -253,6 +343,12 @@ const BargingOnlineStepOne = ({
                 }}
                 message={messageInfo}
             />
+            <MyModalSuccess
+                isVisible={isUploadingSuccessBargeTugboat}
+                closeModal={onCloseModalError}
+                message={'Upload Success'}
+                transparent={0.7}
+            />
         </BaseScreen>
     )
 }
@@ -266,7 +362,7 @@ const styles = StyleSheet.create({
         paddingBottom: 100,
         marginBottom: 80
     }),
-    
+
     cardColumn: {
         flexDirection: 'row',
         flexWrap: 'wrap',

@@ -7,6 +7,14 @@ import { Body, BodySmall } from '../../components';
 const Header = ({
     onProfilePressed, notification, onFiturDevelopmentPressed, onNotificationPressed
 }) => {
+    const statusCount = notification.reduce((acc, item) => {
+        const status = item.isHasBeenRead;
+        if(status == false) {
+        acc[status] = (acc[status] || 0) + 1;
+        }
+        return acc;
+      }, {});
+
     const { height, width } = getScreenDimension()
     return (
         <View style={styles.container}>
@@ -49,15 +57,15 @@ const Header = ({
                             size={iPad ? 45 : 30}
                             color={COLOR_WHITE}
                         />
-                        {notification?.length !== 0 &&
+                        {statusCount.false != 0 &&
                             <View style={[styles.badge, {
                                 borderRadius: iPad ? 23 : 16,
                                 width: iPad ? 23 : 16,
                                 height: iPad ? 23 : 16,
                             }]}>
                                 {iPad ?
-                                    <Body bold style={{ color: COLOR_WHITE }}>{notification?.length}</Body> :
-                                    <BodySmall bold style={{ color: COLOR_WHITE }}>{notification?.length}</BodySmall>
+                                    <Body bold style={{ color: COLOR_WHITE }}>{statusCount.false}</Body> :
+                                    <BodySmall bold style={{ color: COLOR_WHITE }}>{statusCount.false}</BodySmall>
                                 }
 
                             </View>

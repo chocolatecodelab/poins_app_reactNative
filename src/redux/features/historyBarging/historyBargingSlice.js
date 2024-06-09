@@ -2,9 +2,9 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import { downloadingHistoryBarging } from './historyBargingService'
 
 export const downloadingHistoryBargingAsync = createAsyncThunk(
-    'downloadingHistoryBargingAsync', async (id, thunkAPI) => {
+    'downloadingHistoryBargingAsync', async (companyUserId, thunkAPI) => {
         try {
-            return await downloadingHistoryBarging(id)
+            return await downloadingHistoryBarging(companyUserId)
         } catch (error) {
             const message = 
             (JSON.stringify(error.response) && error.response.data && error.response.data.message) || error.message || error.toString() 
@@ -28,6 +28,7 @@ export const historyBargingSlice = createSlice({
             state.isSuccess = false
             state.isError = false
             state.message = ''
+            state.listHistoryBarging = [] //percobaan
         },
     },
     extraReducers: (builder) => {

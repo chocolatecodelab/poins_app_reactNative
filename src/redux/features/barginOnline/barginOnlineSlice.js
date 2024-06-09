@@ -1,10 +1,40 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { downloadCustomer, downloadListBooking, downloadTimeBooking, uploadBargin } from './barginOnlineService'
+import { downloadCustomer, downloadListBooking, downloadTimeBooking, uploadAddBarge, uploadAddTugboat, uploadBargin } from './barginOnlineService'
 
 export const downloadingCustomerAsync = createAsyncThunk(
     'barginOnline/customer', async (_, thunkAPI) => {
         try {
             return await downloadCustomer()
+        } catch (error) {
+            const message =
+                (JSON.stringify(error.response) &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    })
+
+export const uploadingAddBargeAsync = createAsyncThunk(
+    'barginOnline/addBarge', async (params, thunkAPI) => {
+        try {
+            return await uploadAddBarge(params)
+        } catch (error) {
+            const message =
+                (JSON.stringify(error.response) &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    })
+
+export const uploadingAddTugBoatAsync = createAsyncThunk(
+    'barginOnline/addTugboat', async (params, thunkAPI) => {
+        try {
+            return await uploadAddTugboat(params)
         } catch (error) {
             const message =
                 (JSON.stringify(error.response) &&
@@ -73,6 +103,7 @@ export const barginOnlineSlice = createSlice({
         isUploading: false,
         isUploadingSuccess: false,
         isLoadingTimeBooking: false,
+        isUploadingSuccessBargeTugboat: false,
         message: '',
     },
     reducers: {
@@ -82,6 +113,7 @@ export const barginOnlineSlice = createSlice({
             state.isError = false
             state.isUploading = false
             state.isUploadingSuccess = false
+            state.isUploadingSuccessBargeTugboat = false;
             state.isLoadingTimeBooking = false
             state.message = ''
         },
@@ -106,10 +138,34 @@ export const barginOnlineSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
+            .addCase(uploadingAddBargeAsync.pending, (state) => {
+                state.isUploading = true;
+            })
+            .addCase(uploadingAddBargeAsync.fulfilled, (state) => {
+                state.isUploading = false;
+                state.isUploadingSuccessBargeTugboat = true;
+            })
+            .addCase(uploadingAddBargeAsync.rejected, (state, action) => {
+                state.isUploading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(uploadingAddTugBoatAsync.pending, (state) => {
+                state.isUploading = true;
+            })
+            .addCase(uploadingAddTugBoatAsync.fulfilled, (state) => {
+                state.isUploading = false;
+                state.isUploadingSuccessBargeTugboat = true;
+            })
+            .addCase(uploadingAddTugBoatAsync.rejected, (state, action) => {
+                state.isUploading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
             .addCase(uploadingBarginAsync.pending, (state) => {
                 state.isUploading = true
             })
-            .addCase(uploadingBarginAsync.fulfilled, (state, action) => {
+            .addCase(uploadingBarginAsync.fulfilled, (state) => {
                 state.isUploading = false
                 state.isUploadingSuccess = true
             })

@@ -12,7 +12,8 @@ const mapStateToProps = state => {
         isSuccess: state.auth.isSuccess,
         isLoading: state.auth.isLoading,
         message: state.auth.message,
-        otpUser: state.auth.otpUser
+        otpUser: state.auth.otpUser,
+        companyUserId: state.auth?.loginInfo?.ID_COMPANY ? state.auth?.loginInfo?.ID_COMPANY : '',
     })
 };
 

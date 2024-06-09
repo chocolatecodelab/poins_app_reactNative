@@ -5,26 +5,26 @@
 import { AppRegistry } from 'react-native';
 import App from './src/App';
 import { name as appName } from './app.json';
-import messaging from '@react-native-firebase/messaging';
+// import messaging from '@react-native-firebase/messaging';
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 import navigationService from './src/tools/navigationService';
 import { NAV_NAME_NOTIFICATION } from './src/tools/constant';
 
 
 // notification
-const onMessageReceived = async (message) => {
-    if (message) {
-        await notifee.requestPermission();
-        await notifee.createChannel({
-            id: 'default9',
-            name: 'Default Channel 9',
-            sound: 'cute_sound',
-            badge: true,
-            importance: AndroidImportance.HIGH,
-        });
-        await notifee.displayNotification(JSON.parse(message.data.notifee));
-    }
-}
+// const onMessageReceived = async (message) => {
+//     if (message) {
+//         await notifee.requestPermission();
+//         await notifee.createChannel({
+//             id: 'default9',
+//             name: 'Default Channel 9',
+//             sound: 'cute_sound',
+//             badge: true,
+//             importance: AndroidImportance.HIGH,
+//         });
+//         await notifee.displayNotification(JSON.parse(message.data.notifee));
+//     }
+// }
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
     const {notification, pressAction} = detail;
@@ -41,7 +41,7 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
 });
 
 
-messaging().setBackgroundMessageHandler(onMessageReceived);
+// messaging().setBackgroundMessageHandler(onMessageReceived);
 
 
 

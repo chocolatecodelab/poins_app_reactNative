@@ -1,40 +1,56 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, RefreshControl } from 'react-native';
 import { Body, BodyExtraSmall } from '../../components';
 import { getScreenDimension, iPad, ios } from '../../tools/helper';
 import { COLOR_GRAY_1, COLOR_WHITE } from '../../tools/constant';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useState } from 'react';
 
-const MenuHorizontal = ({ data, onItemPressed }) => {
+const MenuHorizontal = ({ data, onItemPressed, refresh }) => {
     const { height, width } = getScreenDimension()
     return (
-        <View style={styles.cardColumn}>
-            {data?.map((item, index) => {
-                return (
-                    <TouchableOpacity
-                        key={item.ID}
-                        style={styles.appCard(width, height)}
-                        onPress={() => { onItemPressed(ios ? item.URL_IOS : item.URL_ANDROID) }}
-                    >
-                        <View style={styles.appIconSize}>
-                            {item.ICON ?
-                                <Image
-                                    source={{ uri: item.ICON }}
-                                    style={styles.appImageSize}
-                                /> :
-                                <Image
-                                    source={require('../../assets/images/defaultApp.png')}
-                                    style={styles.appImageSize}
-                                />
+        <ScrollView
+        refreshControl={
+            <RefreshControl
+                refreshing={false}
+                onRefresh={() => {
+                    refresh(true);
+                    // Panggil fungsi refresh data di sini
+                    setTimeout(() => refresh(false), 1000); // Atur status refreshing kembali ke false setelah 1 detik
+                }}
+            />
+        }
+        >
+            <View style={styles.cardColumn}>
+                {data?.map((item, index) => {
+                    return (
+                        <TouchableOpacity
+                            key={item.ID}
+                            style={styles.appCard(width, height)}
+                            onPress={() => { onItemPressed(ios ? item.URL_IOS : item.URL_ANDROID) }}
+                        >
+                            <View style={styles.appIconSize}>
+                                {item.ICON ?
+                                    <Image
+                                        source={{ uri: item.ICON }}
+                                        style={styles.appImageSize}
+                                    /> :
+                                    <Image
+                                        source={require('../../assets/images/defaultApp.png')}
+                                        style={styles.appImageSize}
+                                    />
+                                }
+                            </View>
+                            {iPad ?
+                                <Text style={styles.textIcon}>{item.NAMA}</Text> :
+                                <BodyExtraSmall style={styles.textIcon}>{item.NAMA}</BodyExtraSmall>
                             }
-                        </View>
-                        {iPad ?
-                            <Text style={styles.textIcon}>{item.NAMA}</Text> :
-                            <BodyExtraSmall style={styles.textIcon}>{item.NAMA}</BodyExtraSmall>
-                        }
-                    </TouchableOpacity>
-                )
-            })}
-        </View>
+                        </TouchableOpacity>
+                    )
+                })}
+            </View>
+        </ScrollView>
+
     );
 };
 
@@ -50,7 +66,7 @@ const styles = StyleSheet.create({
     },
     appCard: (width, height) => ({
         width: width / 3.2,
-        height: height * 0.12,
+        height: height * 0.11,
         paddingHorizontal: 10,
         alignItems: 'center',
         backgroundColor: COLOR_WHITE,

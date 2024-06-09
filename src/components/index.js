@@ -17,6 +17,8 @@ import MyHeader from "./header/Header";
 import ProgressBar from "./progressBar/ProgressBar";
 import HorizontalLine from "./horizontalLine/HorizontalLine";
 import DatePicker from "./calender/Calender";
+import CalendarYear from "./calendarYear/CalendarYear";
+import CalendarMonth from "./calendarMonth/calendarMonth";
 import DividerLine from "./dividerLine/DividerLine";
 export * from "./labels/Labels";
 
@@ -40,5 +42,7 @@ export {
     ProgressBar,
     HorizontalLine,
     DatePicker,
+    CalendarMonth,
+    CalendarYear,
     DividerLine
 };

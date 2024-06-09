@@ -69,6 +69,7 @@ const mapDispatchToProps = (dispatch) => ({
             Id_User: userId,
             Vessel: props?.vessel
         }
+        console.log(data);
         dispatch(uploadingBarginAsync(data))
         setIsOrder(false)
     },

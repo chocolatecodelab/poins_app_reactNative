@@ -1,4 +1,4 @@
-import { REST_URL_BARGIN_ONLINE_BOOKING_DATE, REST_URL_BARGIN_ONLINE_CUSTOMER, REST_URL_CREATE_BARGIN_ONLINE, REST_URL_TIME_BARGIN_ONLINE } from "../../../tools/constant";
+import { REST_URL_BARGIN_ONLINE_BARGE, REST_URL_BARGIN_ONLINE_BOOKING_DATE, REST_URL_BARGIN_ONLINE_CUSTOMER, REST_URL_BARGIN_ONLINE_TUGBOAT, REST_URL_CREATE_BARGIN_ONLINE, REST_URL_TIME_BARGIN_ONLINE } from "../../../tools/constant";
 import { sendGetRequest, sendPostRequest, sortAsc } from "../../../tools/helper";
 
 export const downloadCustomer = async () => {
@@ -12,6 +12,18 @@ export const downloadCustomer = async () => {
         capacity: respon.Data.capacity,
     }
     return result
+}
+
+export const uploadAddBarge = async (params) => {
+    const url = REST_URL_BARGIN_ONLINE_BARGE.replace(/\{name\}/, params);
+    const respon = await sendPostRequest(url)
+    return respon
+}
+
+export const uploadAddTugboat = async (params) => {
+    const url = REST_URL_BARGIN_ONLINE_TUGBOAT.replace(/\{name\}/, params);
+    const respon = await sendPostRequest(url)
+    return respon
 }
 
 export const uploadBargin = async (data) => {

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Body, BodyLarge } from '../labels/Labels';
-import { COLOR_PRIMARY, COLOR_TRANSPARENT_DISABLED, COLOR_WHITE } from '../../tools/constant';
+import { COLOR_PRIMARY, COLOR_TRANSPARENT_DISABLED, COLOR_TRANSPARENT_PRIMARY, COLOR_WHITE } from '../../tools/constant';
 import { iconTools } from '../../tools/helper';
 import Button from '../button/Button';
 
 const Calendar = ({ value, onChangeDate, closeDate }) => {
     const [date, setDate] = useState(value);
     const [selectedDate, setSelectedDate] = useState(null)
+    const [buttonSubmit, setButtonSubmit] = useState(true) 
 ;
     const days = [];
     const months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER',];
@@ -94,7 +95,7 @@ const Calendar = ({ value, onChangeDate, closeDate }) => {
                                         day === null && styles.empty,
                                         day === selectedDate.getDate() && styles.selected,
                                     ]}
-                                    onPress={() => setSelectedDate(new Date(date.getFullYear(), date.getMonth(), day))}
+                                    onPress={() => [setButtonSubmit(false), setSelectedDate(new Date(date.getFullYear(), date.getMonth(), day ))]}
                                 >
                                     <Body style={[
                                         day === null && styles.emptyText,
@@ -114,7 +115,7 @@ const Calendar = ({ value, onChangeDate, closeDate }) => {
                                         styles.day,
                                         day === null && styles.empty,
                                     ]}
-                                    onPress={() => setSelectedDate(new Date(date.getFullYear(), date.getMonth(), day))}
+                                    onPress={() =>  [setButtonSubmit(false), setSelectedDate(new Date(date.getFullYear(), date.getMonth(), day ))]}
                                 >
                                     <Body style={[
                                         day === null && styles.emptyText,
@@ -136,9 +137,10 @@ const Calendar = ({ value, onChangeDate, closeDate }) => {
                 />
                 <Button
                     caption={'Ok'}
-                    textStyle={{ color: COLOR_PRIMARY }}
+                    textStyle={{ color: buttonSubmit == false ? COLOR_PRIMARY : COLOR_TRANSPARENT_PRIMARY }}
                     containerStyle={{ paddingHorizontal: 0, marginTop: 20, backgroundColor: COLOR_WHITE, alignItems: 'flex-end' }}
                     onPress={handlerSubmit}
+                    disabled={buttonSubmit}
                 />
             </View>
         </View>

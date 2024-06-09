@@ -26,36 +26,36 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { LogBox } from 'react-native';
-import { useEffect } from 'react';
-import messaging from '@react-native-firebase/messaging';
-import notifee, { AndroidImportance } from '@notifee/react-native';
-import { requestPermission } from './tools/helper';
+// import { useEffect } from 'react';
+// import messaging from '@react-native-firebase/messaging';
+// import notifee, { AndroidImportance } from '@notifee/react-native';
+// import { requestPermission } from './tools/helper';
 
 const Stack = createStackNavigator();
 
 function MainNavigation() {
   LogBox.ignoreLogs(['Remote debugger']);
 
-  useEffect(() => {
-    requestPermission();
-    notifee.requestPermission();
-    const onMessageReceived = async (message) => {
-      console.log(message);
-      if (message) {
-          await notifee.createChannel({
-              id: 'default9',
-              name: 'Default Channel 9',
-              importance: AndroidImportance.HIGH,
-              sound: "cute_sound",
-              badge: true,
-            });
-          await notifee.displayNotification(JSON.parse(message.data.notifee));
-      }
-  }
+  // useEffect(() => {
+  //   requestPermission();
+  //   notifee.requestPermission();
+  //   const onMessageReceived = async (message) => {
+  //     console.log(message);
+  //     if (message) {
+  //         await notifee.createChannel({
+  //             id: 'default9',
+  //             name: 'Default Channel 9',
+  //             importance: AndroidImportance.HIGH,
+  //             sound: "cute_sound",
+  //             badge: true,
+  //           });
+  //         await notifee.displayNotification(JSON.parse(message.data.notifee));
+  //     }
+  // }
   
-  messaging().onMessage(onMessageReceived);
+  // messaging().onMessage(onMessageReceived);
     
-  }, []);
+  // }, []);
 
   return (
     <Provider store={store}>

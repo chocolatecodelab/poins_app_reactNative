@@ -1,149 +1,67 @@
 import React from 'react';
 import { StyleSheet, View, ImageBackground, Text } from 'react-native'
-import { COLOR_BLACK, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant'
-import { Body, BodySmall, BodyExtraSmall, BodyLarge } from '../../components'
-import moment from 'moment'
-import { getScreenDimension, iPad, iconTools } from '../../tools/helper'
+import { COLOR_BLACK, COLOR_BLUE, COLOR_ERROR, COLOR_GRAY_2, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE, FONT_POPPINS_REGULAR } from '../../tools/constant'
+import { Body, BodyExtraSmall } from '../../components'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { getScreenDimension, iPad, } from '../../tools/helper'
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { ProgressBar } from 'react-native-paper';
 
 const Carousel = ({ item }) => {
-    const today = new Date()
+    console.log(item);
     const { width } = getScreenDimension();
     return (
-        <View style={styles.container}>
-            <View style={styles.bannerContainer}>
-                <ImageBackground
-                    source={require('../../assets/images/banner.jpeg')}
-                    style={styles.bgBanner}
-                >
-                    <View style={styles.transparentBanner} />
-                    <View style={{
-                        padding: 10,
-                        borderTopLeftRadius: 8,
-                        borderTopRightRadius: 8,
-                    }}>
-                        {iPad ?
-                            <>
-                                <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
-                                <BodyLarge bold style={{ color: COLOR_BLACK, textAlign: 'center' }}>{item.nodeDesc}</BodyLarge>
-                                <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
-                            </>
-                            :
-                            <>
-                                <BodyLarge bold style={{ color: COLOR_BLACK }}>UPDATE BARGING PROGRESS</BodyLarge>
-                                <BodyLarge bold style={{ color: COLOR_BLACK, textAlign: 'center' }}>{item.nodeDesc}</BodyLarge>
-                                <Body style={{ color: COLOR_BLACK }}>Date: {moment(today).format('DD MMMM YYYY - hh:mm:ss')}</Body>
-                            </>
-                        }
-                    </View>
-                </ImageBackground>
+        <View style={styles.capacityProgress}>
+            <View style={{ alignItems: 'center', marginBottom: 30, marginTop: 5, width: "100%" }}>
+                <Text style={{ marginBottom: 5, paddingBottom: 5, marginTop: 5, fontWeight: 'bold', fontSize: 8, borderBottomWidth: 1, borderBottomColor: COLOR_GRAY_2, width: "100%", textAlign: "center", }}> JETTY {item.JETTY}</Text>
+                <CircularProgress
+                    value={item.Percentage}
+                    progressValueColor={COLOR_PRIMARY}
+                    activeStrokeColor={COLOR_PRIMARY}
+                    inActiveStrokeColor={COLOR_PRIMARY}
+                    inActiveStrokeOpacity={0.2}
+                    valueSuffix={'%'}
+                    radius={iPad ? width / 30 : width / 18}
+                />
             </View>
-            <View style={{ paddingHorizontal: 10, justifyContent: 'center', paddingBottom: 10 }}>
-                <View style={{ marginVertical: 10 }}>
-                    {iPad ?
-                        <View style={styles.company}>
-                            <iconTools.MaterialIcons
-                                name={'apartment'}
-                                size={24}
-                                color={COLOR_PRIMARY}
-                                style={{ marginRight: 3 }}
-                            />
-                            <BodyLarge>{item.Company}</BodyLarge>
-                        </View> :
-                        <View style={styles.company}>
-                            <iconTools.MaterialIcons
-                                name={'apartment'}
-                                size={16}
-                                color={COLOR_PRIMARY}
-                                style={{ marginRight: 3 }}
-                            />
-                            <Body>{item.Company}</Body>
-                        </View>
-                    }
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                        {iPad ?
-                            <View style={styles.boat}>
-                                <iconTools.MaterialIcons
-                                    name={'directions-boat'}
-                                    size={20}
-                                    color={COLOR_PRIMARY}
-                                    style={{ marginRight: 3 }}
-                                />
-                                <Body>{item.Barge}</Body>
-                            </View> :
-                            <View style={styles.boat}>
-                                <iconTools.MaterialIcons
-                                    name={'directions-boat'}
-                                    size={14}
-                                    color={COLOR_PRIMARY}
-                                    style={{ marginRight: 3 }}
-                                />
-                                <BodyExtraSmall>{item.Barge}</BodyExtraSmall>
-                            </View>
-                        }
-                        {iPad ?
-                            <View style={styles.boat}>
-                                <iconTools.MaterialIcons
-                                    name={'directions-boat'}
-                                    size={20}
-                                    color={COLOR_PRIMARY}
-                                    style={{ marginRight: 3 }}
-                                />
-                                <Body>{item.Boat}</Body>
-                            </View> :
-                            <View style={styles.boat}>
-                                <iconTools.MaterialIcons
-                                    name={'directions-boat'}
-                                    size={14}
-                                    color={COLOR_PRIMARY}
-                                    style={{ marginRight: 3 }}
-                                />
-                                <BodyExtraSmall>{item.Boat}</BodyExtraSmall>
-                            </View>
-                        }
+            <View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: 20, width: "100%" }}>
+                {iPad ?
+                    <View style={{ alignItems: 'center', marginLeft: 5, marginBottom: 15 }}>
+                        <Text style={{ fontSize: 8 }}>Plan Load</Text>
+                        <Text style={{ fontSize: 8 }}>{item.PLAN_LOAD} MT</Text>
+                    </View> :
+                    <View style={{ alignItems: 'center', marginLeft: 5, marginBottom: 15 }}>
+                        <Text style={{ fontSize: 8 }}>Plan Load</Text>
+                        <Text style={{ fontSize: 8 }}>{item.PLAN_LOAD} MT</Text>
                     </View>
+                }
+                <ProgressBar progress={item.Percentage/100} color={COLOR_PRIMARY} style={{ width: iPad ? 120 : 60, height: 20, marginBottom: 20, marginTop: 10, transform: [{ rotate: '-90deg' }] }} indeterminate={false} />
+                {iPad ?
+                    <View style={{ alignItems: 'center', marginRight: 5, marginBottom:2 }}>
+                        <Text style={{ fontSize: 8 }}>Current</Text>
+                        <Text style={{ fontSize: 8 }}>{item.ACTUAL_LOAD} MT</Text>
+                    </View> :
+                    <View style={{ alignItems: 'center', marginRight: 5, marginBottom:2 }}>
+                        <Text style={{ fontSize: 8 }}>Current</Text>
+                        <Text style={{ fontSize: 8 }}>{item.ACTUAL_LOAD} MT</Text>
+                    </View>
+                }
+                <View style={{ flexDirection: "row", alignItems: "center", width: "95%", borderTopWidth: 1, borderTopColor: COLOR_GRAY_2, }}>
+                    <MaterialCommunityIcons name={"ferry"} size={9} color={COLOR_PRIMARY} style={{ marginTop: 3 }} />
+                    <Text style={{ marginLeft:2, marginBottom: 2, marginTop: 3, fontFamily: FONT_POPPINS_REGULAR, fontSize: 7, fontWeight: 'bold', paddingTop: 5, width: "100%", textAlign: "left", }}>{item.TUG_BOAT}</Text>
                 </View>
-                <View style={styles.capacityProgress}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {iPad ?
-                            <View style={{ alignItems: 'center', marginRight: 5 }}>
-                                <Body>Current</Body>
-                                <Body>{item.Weight} MT</Body>
-                            </View> :
-                            <View style={{ alignItems: 'center', marginRight: 5 }}>
-                                <BodyExtraSmall>Current</BodyExtraSmall>
-                                <BodyExtraSmall>{item.Weight} MT</BodyExtraSmall>
-                            </View>
-                        }
-                        <ProgressBar progress={0.5} color={COLOR_PRIMARY} style={{ width: iPad ? 120 : 60 }} indeterminate={true} />
-                        {iPad ?
-                            <View style={{ alignItems: 'center', marginLeft: 5 }}>
-                                <Body>Plan Load</Body>
-                                <Body>{item.Planload} MT</Body>
-                            </View> :
-                            <View style={{ alignItems: 'center', marginLeft: 5 }}>
-                                <BodyExtraSmall>Plan Load</BodyExtraSmall>
-                                <BodyExtraSmall>{item.Planload} MT</BodyExtraSmall>
-                            </View>
-                        }
-                    </View>
-                    <View style={{ alignItems: 'center' }}>
-                        <CircularProgress
-                            value={item.WeightPercentage}
-                            progressValueColor={COLOR_PRIMARY}
-                            activeStrokeColor={COLOR_PRIMARY}
-                            inActiveStrokeColor={COLOR_PRIMARY}
-                            inActiveStrokeOpacity={0.2}
-                            valueSuffix={'%'}
-                            radius={iPad ? width / 30 : width / 18}
-                        />
-                        {iPad ?
-                            <Body style={{ textAlign: 'center', color: COLOR_PRIMARY }}>{item.Kode}</Body> :
-                            <BodyExtraSmall style={{ textAlign: 'center', color: COLOR_PRIMARY, fontSize: 10 }}>{item.Kode}</BodyExtraSmall>
-                        }
-                    </View>
+                <View style={{ flexDirection: "row", alignItems: "center", width: "95%" }}>
+                    <MaterialCommunityIcons name={"sail-boat"} size={9} color={COLOR_PRIMARY} />
+                    <Text style={{ marginLeft:2, marginBottom: 2, fontFamily: FONT_POPPINS_REGULAR, fontSize: 7, fontWeight: 'bold', textAlign: "left" }}>{item.BARGE}</Text>
                 </View>
+                <View style={{ flexDirection: "row", alignItems: "center", width: "95%" }}>
+                    <MaterialCommunityIcons name={"domain"} size={9} color={COLOR_PRIMARY} />
+                    <Text style={{marginLeft:2, marginBottom: 2, fontFamily: FONT_POPPINS_REGULAR, fontSize: 7, fontWeight: 'bold', textAlign: "left" }}>{item.Company_Alias}</Text>
+                </View>
+                {iPad ?
+                    <Text style={{ textAlign: 'center', color: COLOR_WHITE, backgroundColor: COLOR_PRIMARY, fontWeight:"bold", paddingHorizontal:7, paddingVertical:2, borderRadius:3, marginTop:3 }}>{item.STATUS}</Text> :
+                    <Text style={{ textAlign: 'center', borderRadius:5, color: COLOR_WHITE, fontWeight:"bold", backgroundColor: item.STATUS == "Breakdown" ? COLOR_ERROR: item.STATUS == "Loading" ? COLOR_BLUE : COLOR_GRAY_2, fontSize: 10, marginTop:3, paddingHorizontal:7, paddingVertical:2 }}>{item.STATUS}</Text>
+                }
             </View>
         </View>
     )
@@ -152,56 +70,17 @@ const Carousel = ({ item }) => {
 export default Carousel
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: COLOR_WHITE,
-        borderWidth: 1,
-        borderColor: COLOR_TRANSPARENT_DARK,
-        borderRadius: 8,
-        marginRight: 15,
-        height: 250,
-        width: 350,
-    },
-    bannerContainer: {
-        flex: 1,
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-        overflow: 'hidden'
-    },
-    bgBanner: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-    },
-    transparentBanner: {
-        backgroundColor: COLOR_TRANSPARENT_DARK,
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        zIndex: 1,
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-    },
-    company: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 2,
-    },
-    boat: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     capacityProgress: {
-        flexDirection: 'row',
+        width: 100,
+        height:280,
+        marginLeft: 5,
+        flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
         borderWidth: 1,
         borderRadius: 10,
         borderColor: COLOR_TRANSPARENT_DARK,
         padding: 5,
+        marginHorizontal: 3
     },
 });

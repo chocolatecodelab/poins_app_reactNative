@@ -11,13 +11,14 @@ const mapStateToProps = state => {
         isError: state.historyBarging.isError,
         message: state.historyBarging.message,
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
+        companyUserId: state.profile.data.companyId,
     })
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    onAppear: (userId) => {
+    onAppear: (companyUserId) => {
         dispatch(resetHistoryBarging())
-        dispatch(downloadingHistoryBargingAsync(userId))
+        dispatch(downloadingHistoryBargingAsync(companyUserId))
     },
 });
 

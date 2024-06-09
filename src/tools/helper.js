@@ -9,9 +9,9 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { HTTP_HEADER_VALUE_JSON, REST_BASE_URL, REST_METHOD_DELETE, REST_METHOD_GET, REST_METHOD_POST, REST_METHOD_PUT } from "./constant";
 import DeviceInfo from 'react-native-device-info';
-import messaging from '@react-native-firebase/messaging';
+// import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import firestore from '@react-native-firebase/firestore';
+// import firestore from '@react-native-firebase/firestore';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 
 export const iconTools = {
@@ -122,7 +122,6 @@ export const sendDeleteRequest = async (apiPath, authenticationToken, customBase
 
 const processResponse = async (response, url) => {
   const responseJSON = await response.json();
-  console.log(responseJSON);
   if (response.status >= 200 && response.status <= 299) {
     return responseJSON;
   }
@@ -132,120 +131,120 @@ const processResponse = async (response, url) => {
 };
 
 // notification helper
-export const requestPermission = async () => {
-  const authStatus = await messaging().requestPermission();
-  const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL
-  if (enabled) {
-    console.log("Authorization status", authStatus)
-  }
-}
+// export const requestPermission = async () => {
+//   const authStatus = await messaging().requestPermission();
+//   const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL
+//   if (enabled) {
+//     console.log("Authorization status", authStatus)
+//   }
+// }
 
-export const getFCMToken = async () => {
-  let fcmToken = await AsyncStorage.getItem("fcmtoken");
-  console.log(fcmToken, "old token");
-  if (!fcmToken) {
-    try {
-      const fcmToken = await messaging().getToken();
-      if (fcmToken) {
-        console.log(fcmToken, "new token");
-        await AsyncStorage.setItem("fcmtoken", fcmToken);
-      }
-    } catch (error) {
-      console.log(error, "error in fcmtoken")
-    }
-  }
-};
+// export const getFCMToken = async () => {
+//   let fcmToken = await AsyncStorage.getItem("fcmtoken");
+//   console.log(fcmToken, "old token");
+//   if (!fcmToken) {
+//     try {
+//       const fcmToken = await messaging().getToken();
+//       if (fcmToken) {
+//         console.log(fcmToken, "new token");
+//         await AsyncStorage.setItem("fcmtoken", fcmToken);
+//       }
+//     } catch (error) {
+//       console.log(error, "error in fcmtoken")
+//     }
+//   }
+// };
 
-export const sendFCMToken = async (email) => {
-  let fcmToken = await AsyncStorage.getItem("fcmtoken");
-  console.log(fcmToken, "old token");
-  if (!fcmToken) {
-    try {
-      fcmToken = await messaging().getToken();
-      if (fcmToken) {
-        console.log(fcmToken, "new token");
-        await AsyncStorage.setItem("fcmtoken", fcmToken);
-      }
-    } catch (error) {
-      console.log(error, "error in fcmtoken")
-    }
-  }
-  console.log("mencek token" + fcmToken);
-  // Mengecek apakah email sudah ada dalam koleksi 'Users'
-  if (email) {
-    firestore()
-      .collection('tokenUsers')
-      .where('email', '==', email)
-      .get()
-      .then((querySnapshot) => {
-        if (querySnapshot.size > 0) {
-          // Email sudah ada, periksa apakah token juga sudah ada
-          const userDoc = querySnapshot.docs[0];
-          const userData = userDoc.data();
-          const existingTokens = userData.token || [];
-          let arrayTokens = [];
-          // Mengecek apakah token sudah ada
-          const newTokens = !existingTokens.includes(fcmToken);
-          if (newTokens) {
-            if (!Array.isArray(existingTokens)) {
-              arrayTokens = [existingTokens];
-            } else {
-              // Menambahkan token baru ke dalam daftar token yang terkait dengan email tersebut
-              userDoc.ref.update({
-                token: [...existingTokens, fcmToken]
-              })
-                .then(() => {
-                  console.log('New token(s) added for existing user!');
-                })
-                .catch((error) => {
-                  console.error('Error updating user document:', error);
-                });
-            }
-          } else {
-            console.log('Token already exists for this user. No new token added.');
-          }
-        } else {
-          // Email belum ada, tambahkan email dan token baru sebagai dokumen baru dalam koleksi
-          firestore()
-            .collection('tokenUsers')
-            .add({
-              email: email,
-              token: [fcmToken]
-            })
-            .then(() => {
-              console.log('New user added!');
-            })
-            .catch((error) => {
-              console.error('Error adding new user:', error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.error('Error getting user document:', error);
-      });
-  } else {
-    console.log('Email is empty. Operation aborted.');
-  }
-
-
-}
+// export const sendFCMToken = async (email) => {
+//   let fcmToken = await AsyncStorage.getItem("fcmtoken");
+//   console.log(fcmToken, "old token");
+//   if (!fcmToken) {
+//     try {
+//       fcmToken = await messaging().getToken();
+//       if (fcmToken) {
+//         console.log(fcmToken, "new token");
+//         await AsyncStorage.setItem("fcmtoken", fcmToken);
+//       }
+//     } catch (error) {
+//       console.log(error, "error in fcmtoken")
+//     }
+//   }
+//   console.log("mencek token" + fcmToken);
+//   // Mengecek apakah email sudah ada dalam koleksi 'Users'
+//   if (email) {
+//     firestore()
+//       .collection('tokenUsers')
+//       .where('email', '==', email)
+//       .get()
+//       .then((querySnapshot) => {
+//         if (querySnapshot.size > 0) {
+//           // Email sudah ada, periksa apakah token juga sudah ada
+//           const userDoc = querySnapshot.docs[0];
+//           const userData = userDoc.data();
+//           const existingTokens = userData.token || [];
+//           let arrayTokens = [];
+//           // Mengecek apakah token sudah ada
+//           const newTokens = !existingTokens.includes(fcmToken);
+//           if (newTokens) {
+//             if (!Array.isArray(existingTokens)) {
+//               arrayTokens = [existingTokens];
+//             } else {
+//               // Menambahkan token baru ke dalam daftar token yang terkait dengan email tersebut
+//               userDoc.ref.update({
+//                 token: [...existingTokens, fcmToken]
+//               })
+//                 .then(() => {
+//                   console.log('New token(s) added for existing user!');
+//                 })
+//                 .catch((error) => {
+//                   console.error('Error updating user document:', error);
+//                 });
+//             }
+//           } else {
+//             console.log('Token already exists for this user. No new token added.');
+//           }
+//         } else {
+//           // Email belum ada, tambahkan email dan token baru sebagai dokumen baru dalam koleksi
+//           firestore()
+//             .collection('tokenUsers')
+//             .add({
+//               email: email,
+//               token: [fcmToken]
+//             })
+//             .then(() => {
+//               console.log('New user added!');
+//             })
+//             .catch((error) => {
+//               console.error('Error adding new user:', error);
+//             });
+//         }
+//       })
+//       .catch((error) => {
+//         console.error('Error getting user document:', error);
+//       });
+//   } else {
+//     console.log('Email is empty. Operation aborted.');
+//   }
 
 
-export const NotificationListener = () => {
+// }
 
-  messaging().onNotificationOpenedApp(remoteMessage => {
-    console.log("Notification caused app to open from background state:", remoteMessage.notification)
-  });
 
-  //check whether in initial notification is available
-  messaging().getInitialNotification().then(remoteMessage => {
-    console.log("Notification caused app to open from quit state:", remoteMessage.notification)
-  });
+// export const NotificationListener = () => {
 
-  messaging().onMessage(async remoteMessage => {
-    console.log("notification on foreground state....", remoteMessage.notification);
-  })
-}
+//   messaging().onNotificationOpenedApp(remoteMessage => {
+//     console.log("Notification caused app to open from background state:", remoteMessage.notification)
+//   });
+
+//   //check whether in initial notification is available
+//   messaging().getInitialNotification().then(remoteMessage => {
+//     console.log("Notification caused app to open from quit state:", remoteMessage.notification)
+//   });
+
+//   messaging().onMessage(async remoteMessage => {
+//     console.log("notification on foreground state....", remoteMessage.notification);
+//   })
+// }
 
 
 //push notification display

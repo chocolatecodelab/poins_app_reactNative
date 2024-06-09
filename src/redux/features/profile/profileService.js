@@ -8,6 +8,7 @@ export const downlodingProfile = async (id) => {
         email: respon.Data.EMAIL,
         photo: respon.Data.FOTO,
         id: respon.Data.ID,
+        companyId: respon.Data.ID_COMPANY,
         name: respon.Data.NAMA,
         phoneNumber: respon.Data.TELEPON,
     }

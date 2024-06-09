@@ -22,7 +22,7 @@ const renderEmptyComponent = (waitingListData) => (
                 keyExtractor={(_, index) => index.toString()}
                 renderItem={({ item, index }) => (
                     <View style={[styles.card, { alignItems: "center", flexDirection: "row", backgroundColor: COLOR_TRANSPARENT_DISABLED, width: "100%" }]}>
-                        <Text style={{ textAlign: "center" }}>{item.code}</Text>
+                        <Text style={{ textAlign: "center" }}>{item.name}</Text>
                     </View>
                 )}
                 contentContainerStyle={{ flexGrow: 1 }}
@@ -42,16 +42,7 @@ const DropdownSearch = ({
     const [searchBarText, setSearchBarText] = useState('');
     const [modalConfirm, setModalConfirm] = useState(false);
 
-    const waitingListData = [
-        { id: '1', code: 'AHHA 5312' },
-        { id: '2', code: 'AHHA 1234' },
-        { id: '3', code: 'AHHA 5678' },
-        { id: '3', code: 'AHHA 5678' },
-        { id: '3', code: 'AHHA 5678' },
-        { id: '3', code: 'AHHA 5678' },
-        { id: '3', code: 'AHHA 5678' },
-        // Tambahkan data dummy lainnya di sini jika diperlukan
-    ];
+    const filteredDataWaitingList = data?.filter(item => item.verif === null);
 
     const onSearch = (e) => {
         let text = e.toLowerCase()
@@ -59,6 +50,9 @@ const DropdownSearch = ({
         let filteredData = data?.filter((item) => {
             return item.name.toLowerCase().includes(text);
         });
+        filteredDataWaitingList?.filter((item) => {
+            return item.name.toLowerCase().includes(text);
+        })
         if (!searchBarText || searchBarText === '') {
             setFilteredData(data);
         } else if (Array.isArray(filteredData))
@@ -142,7 +136,7 @@ const DropdownSearch = ({
                                 }
                             }}
                             onEndReachedThreshold={0.5}
-                            ListEmptyComponent={renderEmptyComponent(waitingListData)}
+                            ListEmptyComponent={renderEmptyComponent(filteredDataWaitingList)}
                         />
                     </View>
                 </MyModal> : null

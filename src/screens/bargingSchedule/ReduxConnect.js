@@ -10,6 +10,7 @@ const mapStateToProps = state => {
         isError: state.bargingSchedule.isError,
         message: state.bargingSchedule.message,
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
+        companyUserId: state.profile.data.companyId,
     })
 };
 
@@ -27,7 +28,7 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(resetBargingSchedule())
     },
     onDetailPressed: () => {
-        // NavigationService.navigate(NAV_NAME_BARGING_RECAPITULATION_DETAIL)
+        NavigationService.navigate(NAV_NAME_BARGING_RECAPITULATION_DETAIL)
     },
     onExpandPressed: (id, data) => {
         let updatedData
