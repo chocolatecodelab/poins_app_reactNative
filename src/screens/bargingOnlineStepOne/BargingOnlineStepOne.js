@@ -10,7 +10,7 @@ import {
 import navigationService from '../../tools/navigationService';
 
 const BargingOnlineStepOne = ({
-    customers, companyUserId, isUploadingSuccess, isUploadingSuccessBargeTugboat, isSuccess, isLoading, isError, message, onAppear, onCloseModalError, onSubmitAddTugBoat, onSubmitAddBarge,
+    customers, companyUserId, isUploadingSuccessBargeTugboat, isSuccess, isLoading, isError, message, onAppear, onCloseModalError, onSubmitAddTugBoat, onSubmitAddBarge,
 }) => {
     const [showTugBoatMenu, setShowTugBoatMenu] = useState(false);
     const [showCompanyMenu, setShowCompanyMenu] = useState(false);
@@ -29,8 +29,10 @@ const BargingOnlineStepOne = ({
     const [showModalInfo, setShowModalInfo] = useState(false);
     const [messageInfo, setMessageInfo] = useState('');
 
-    const selectedCompany = customers?.company?.find(company => company.id === companyUserId);
-
+    let selectedCompany;
+    if (companyUserId) {
+        selectedCompany = customers?.company?.find(company => company.id === companyUserId);
+    }
     // Filter data berdasarkan jetty
     const filteredData = customers?.capacity?.filter(item => item.name === jetty) || [];
 
@@ -46,8 +48,10 @@ const BargingOnlineStepOne = ({
     useEffect(() => onAppear(), [])
 
     useEffect(() => {
-        setSelectCompany(selectedCompany.name);
-    }, [])
+        if (selectedCompany) {
+            setSelectCompany(selectedCompany.name);
+        }
+    }, [selectedCompany !== null])
 
     useEffect(() => {
         if (addBarge != "") {
@@ -246,10 +250,10 @@ const BargingOnlineStepOne = ({
                                 if (jetty === '') {
                                     setShowModalInfo(!showModalInfo)
                                     setMessageInfo('Harap pilih jetty terlebih dahulu')
-                                } else if(selectCapacity === '') {
+                                } else if (selectCapacity === '') {
                                     setShowModalInfo(!showModalInfo);
                                     setMessageInfo('Harap pilih Storage Plan terlebih dahulu')
-                                }else {
+                                } else {
                                     setShowDurationMenu(!showDurationMenu)
                                 }
                             }}
