@@ -16,4 +16,6 @@ export { default as ChangePasswordScreen } from './changePassword';
 export { default as NotificationScreen } from './notification';
 export { default as CCTVScreen } from './cctv';
 export { default as DetailCCTVScreen } from './cctv/detail';
+export { default as WeatherScreen } from './weather';
+export {default as  SenslogScreen } from './senslog';
 

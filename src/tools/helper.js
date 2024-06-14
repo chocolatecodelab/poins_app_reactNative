@@ -7,7 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import { HTTP_HEADER_VALUE_JSON, REST_BASE_URL, REST_METHOD_DELETE, REST_METHOD_GET, REST_METHOD_POST, REST_METHOD_PUT } from "./constant";
+import { HTTP_HEADER_VALUE_JSON, HTTP_HEADER_X_API_SECRET_WEATHER, REST_BASE_URL, REST_METHOD_DELETE, REST_METHOD_GET, REST_METHOD_POST, REST_METHOD_PUT } from "./constant";
 import DeviceInfo from 'react-native-device-info';
 // import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -67,6 +67,18 @@ const getHttpHeaders = async (authenticationToken) => {
   return headers;
 };
 
+const getHttpHeadersWeather = async (authenticationToken) => {
+  let headers = {
+    'Content-Type': HTTP_HEADER_VALUE_JSON,
+    'x-Api-Secret': HTTP_HEADER_X_API_SECRET_WEATHER
+  };
+
+  if (authenticationToken) {
+    headers = { ...headers, Authorization: authenticationToken };
+  }
+  return headers;
+};
+
 const getHttpHeadersFormData = async (authenticationToken) => {
   let headers = {
     'Content-Type': 'multipart/form-data',
@@ -91,6 +103,14 @@ export const sendGetRequest = async (apiPath, authenticationToken, customBaseUrl
   const method = REST_METHOD_GET;
   const headers = await getHttpHeaders(authenticationToken);
   const response = await fetch(url, { method, headers });
+  return processResponse(response, url);
+};
+
+export const sendGetRequestWeather = async (apiPath, authenticationToken, customBaseUrl) => {
+  const url = apiPath;
+  const method = REST_METHOD_GET;
+  const headers = await getHttpHeadersWeather(authenticationToken);
+  const response = await fetch(url, { method, headers,  });
   return processResponse(response, url);
 };
 

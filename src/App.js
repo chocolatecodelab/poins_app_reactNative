@@ -12,12 +12,16 @@ import {
   CCTVScreen,
   DetailCCTVScreen,
   HistoryBargingScreen,
+  WeatherScreen,
+  SenslogScreen,
 } from "./screens";
 import BottomTab from "./components/bottomTab/BottomTab";
 import {
   NAV_NAME_HOME_MENU, NAV_NAME_LOGIN, NAV_NAME_REGISTER, NAV_NAME_OTP_LOGIN, NAV_NAME_BARGING_ONLINE_STEP_ONE,
   NAV_NAME_BARGING_ONLINE_STEP_TWO, NAV_NAME_OTP_FORGET_PASSWORD, NAV_NAME_SPLASH, NAV_NAME_FORGET_PASSWORD,
-  NAV_NAME_CHANGE_NEW_PASSWORD, NAV_NAME_BARGING_RECAPITULATION_DETAIL, NAV_NAME_PROFILE, NAV_NAME_BARGING_RECAPITULATION, NAV_NAME_BARGING_SCHEDULE, NAV_NAME_NOTIFICATION, NAV_NAME_CCTV, NAV_NAME_DETAIL_CCTV, NAV_NAME_HISTORY_BARGING
+  NAV_NAME_CHANGE_NEW_PASSWORD, NAV_NAME_BARGING_RECAPITULATION_DETAIL, NAV_NAME_PROFILE, NAV_NAME_BARGING_RECAPITULATION, NAV_NAME_BARGING_SCHEDULE, NAV_NAME_NOTIFICATION, NAV_NAME_CCTV, NAV_NAME_DETAIL_CCTV, NAV_NAME_HISTORY_BARGING,
+  NAV_NAME_WEATHER,
+  NAV_NAME_SENSLOG
 } from "./tools/constant";
 import { NavigationContainer, } from '@react-navigation/native';
 import NavigationService from './tools/navigationService';
@@ -199,8 +203,24 @@ function MainNavigation() {
               }}
             />
             <Stack.Screen
+            name={NAV_NAME_WEATHER}
+            component={WeatherScreen}
+            options={{ 
+              cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+              headerShown: false,
+             }}
+            />
+            <Stack.Screen
               name={NAV_NAME_DETAIL_CCTV}
               component={DetailCCTVScreen}
+              options={{
+                cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={NAV_NAME_SENSLOG}
+              component={SenslogScreen}
               options={{
                 cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
                 headerShown: false,

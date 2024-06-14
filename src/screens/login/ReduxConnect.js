@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { resetAuth, resetLogin, setEmail, setPassword, tempDataTester, uploadLoginAsync } from '../../redux/features/auth/authSlice';
-import { NAV_NAME_FORGET_PASSWORD, NAV_NAME_HOME_MENU, NAV_NAME_OTP_LOGIN, NAV_NAME_REGISTER } from '../../tools/constant';
+import { NAV_NAME_FORGET_PASSWORD, NAV_NAME_HOME_MENU, NAV_NAME_OTP_LOGIN, NAV_NAME_REGISTER, NAV_NAME_WEATHER } from '../../tools/constant';
 import NavigationService from '../../tools/navigationService';
 import LoginScreen from './Login';
 
@@ -47,6 +47,7 @@ const mapDispatchToProps = (dispatch) => ({
     onNavigationOtp: () => {
         dispatch(resetAuth())
         NavigationService.navigate(NAV_NAME_OTP_LOGIN)
+        // NavigationService.navigate(NAV_NAME_WEATHER);
     },
     onNavigationRegister: () => {
         dispatch(resetLogin())

@@ -15,6 +15,8 @@ import BargingScheduleSlice from './features/bargingSchedule/bargingScheduleSlic
 import ActiveBargingSlice from './features/activeBarging/activeBargingSlice';
 import RealtimeCCTVSlice from './features/realtimeCCTV/realtimeCCTVSlice';
 import HistoryBargingSlice from './features/historyBarging/historyBargingSlice';
+import weatherSlice from './features/weather/weatherSlice';
+import senslogSlice from './features/senslog/senslogSlice';
 
 
 const reducers = combineReducers({
@@ -28,7 +30,9 @@ const reducers = combineReducers({
     bargingSchedule: BargingScheduleSlice,
     activeBarging: ActiveBargingSlice,
     realtimeCCTV: RealtimeCCTVSlice,
-    historyBarging: HistoryBargingSlice
+    historyBarging: HistoryBargingSlice,
+    weather: weatherSlice,
+    senslog: senslogSlice,
 });
 
 const persistConfig = {
@@ -42,7 +46,9 @@ const persistConfig = {
         'barginOnline',
         'bargingRecapitulation',
         'realtimeCCTV',
-        'historyBarging'
+        'historyBarging',
+        'weather',
+        'senslog'
     ],
 };
 

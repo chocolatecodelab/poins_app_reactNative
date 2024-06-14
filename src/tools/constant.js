@@ -17,6 +17,8 @@ export const NAV_NAME_NOTIFICATION = 'NAV_NAME_NOTIFICATION';
 export const NAV_NAME_HISTORY_BARGING = 'NAV_NAME_HISTORY_BARGING';
 export const NAV_NAME_CCTV = 'NAV_NAME_CCTV';
 export const NAV_NAME_DETAIL_CCTV = 'NAV_NAME_DETAIL_CCTV';
+export const NAV_NAME_WEATHER = 'NAV_NAME_WEATHER';
+export const NAV_NAME_SENSLOG = 'NAV_NAME_SENSLOG';
 
 export const REST_BASE_URL = 'https://opr-poins-mobile-01-kpd.azurewebsites.net/api';
 // export const REST_BASE_URL = 'https://ap.kppmining.com:12201/api';
@@ -49,6 +51,11 @@ export const REST_URL_LIST_NOTIFICATION = '/notifikasi/Get_Notifikasi/{id}';
 export const REST_URL_CHANGE_NOTIFICATION = '/notifikasi/Change_Notifikasi_Status?id_notifikasi={id_notifikasi}';
 export const REST_URL_DELETE_ACCOUNT = '/login/update_verification_user/{id}';
 export const REST_URL_LIST_CCTV = '/cctv/Get_Cctv';
+export const REST_URL_WEATHER = "https://api.weatherlink.com/v2/current/173608?api-key=pz8qlxocm2avjyicc0mcri4uzo1uhyo6";
+export const REST_URL_GET_LAST_SENSELOG_WATER_BENDER = '/senselog/Get_Last_Senselog';
+export const REST_URL_GET_AVG_SENSELOG_WATER_BENDER = '/senselog/Get_Avg_Senselog?startDate={startDate}&endDate={endDate}';
+export const REST_URL_GET_MONTHLY_SENSELOG_WATER_BENDER = '/senselog/Get_MonthlyTrans_WaterBender?year={year}';
+export const REST_URL_GET_DAILY_SENSELOG_WATER_BENDER = '/senselog/Get_TodayTrans_WaterBender';
 
 export const REST_METHOD_GET = 'Get';
 export const REST_METHOD_POST = 'Post';
@@ -56,6 +63,8 @@ export const REST_METHOD_PUT = 'Put';
 export const REST_METHOD_DELETE = 'Delete';
 
 export const HTTP_HEADER_VALUE_JSON = 'application/json';
+export const HTTP_HEADER_X_API_SECRET_WEATHER = "bomzyccksqcnooo2vfqokuc7t2p2pemi";
+
 
 export const COLOR_PRIMARY = '#009C4E';
 export const COLOR_BLUE = '#03AED2';

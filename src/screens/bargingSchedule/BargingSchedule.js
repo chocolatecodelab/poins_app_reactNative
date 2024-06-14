@@ -19,7 +19,9 @@ const BargingSchedule = ({ companyUserId, listHistory, onAppear, isLoading, onEx
   const [modalStartDate, setModalStartDate] = useState(false)
   const [modalFinishDate, setModalFinishDate] = useState(false)
 
-  useEffect(() => { onAppear(companyUserId, startDate, finishDate) }, [startDate, finishDate])
+  useEffect(() => { 
+  onAppear(companyUserId, startDate, finishDate) 
+}, [startDate, finishDate])
   return (
     <BaseScreen
       barBackgroundColor={COLOR_PRIMARY}

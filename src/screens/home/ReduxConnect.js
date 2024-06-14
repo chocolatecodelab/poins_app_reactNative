@@ -7,45 +7,8 @@ import { NAV_NAME_NOTIFICATION, NAV_NAME_PROFILE } from '../../tools/constant';
 import { Linking } from 'react-native';
 import { downloadingActiveBargingAsync } from '../../redux/features/activeBarging/activeBargingSlice';
 
-// const transformDataBarging = (state) => {
-//     const dummyData = [
-//         {
-//             EndDate: "2023-07-13T08:42:00",
-//             Company: "PT. BRE - KPP",
-//             Barge: "PATRIA 3212",
-//             Boat: "PATRIA 3212",
-//             Weight: 2010,
-//             Planload: 10000,
-//             WeightPercentage: 43,
-//             nodeDesc: "JETTY-J",
-//             Kode: "LOADING"
-//         },
-//         {
-//             EndDate: "2023-07-13T08:42:00",
-//             Company: "Not Order",
-//             Barge: "Not Order",
-//             Boat: "Not Order",
-//             Weight: 2010,
-//             Planload: 10000,
-//             WeightPercentage: 33,
-//             nodeDesc: "JETTY-U",
-//             Kode: "STAND BY"
-//         },
-//         {
-//             EndDate: null,
-//             Company: "Not Order",
-//             Barge: "Not Order",
-//             Boat: "Not Order",
-//             Weight: 2100,
-//             Planload: 10000,
-//             WeightPercentage: 27,
-//             nodeDesc: "JETTY-K",
-//             Kode: "STAND BY"
-//         }
-//     ];
-// };
-
 const mapStateToProps = state => {
+    console.log(state.home?.apps);
     return ({
         email: state.auth.email,
         isError: state.home.isError,

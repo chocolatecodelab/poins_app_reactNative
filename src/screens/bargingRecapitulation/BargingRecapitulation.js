@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { StyleSheet, View, FlatList, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
-import { BaseScreen, BodyLarge, Body, BodySmall, BodyExtraSmall, MyHeader, MyModal, H2, CalendarMonth, CalendarYear, MyModalInfo, DatePicker } from "../../components";
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_GRAY_1, COLOR_GRAY_2, COLOR_MAIN_SECONDARY, COLOR_PRIMARY, COLOR_RED, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
+import { StyleSheet, View, FlatList, TouchableOpacity, ScrollView } from 'react-native'
+import { BaseScreen, BodyLarge, Body, BodySmall, MyHeader, MyModal, H2, MyModalInfo, DatePicker } from "../../components";
+import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_GRAY_1, COLOR_GRAY_2, COLOR_PRIMARY, COLOR_RED, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
 import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getScreenDimension, iPad, ios, iconTools } from '../../tools/helper';
@@ -144,16 +144,6 @@ const BargingRecapitulation = ({ userId, listHistory, onAppear, isLoading, onDet
                 </View>
               </View>
             </View>
-            {/* <View>
-              <View style={{ width: "40%" }}>
-                <Text style={{ bottom: -20, right: -10, padding: 5, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 13, backgroundColor: COLOR_MAIN_SECONDARY, color: COLOR_WHITE }}>Total Tonnase</Text>
-                <Text style={{ bottom: -20, right: -10, padding: 5, textAlign: "center", fontWeight: "bold", fontSize: 12, color: COLOR_BLACK }}>{totalTon}</Text>
-              </View>
-              <View style={{ width: "40%" }}>
-                <Text style={{ bottom: 34, right: -200, padding: 5, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 13, backgroundColor: COLOR_MAIN_SECONDARY, color: COLOR_WHITE }}>Total Barging</Text>
-                <Text style={{ bottom: 33, right: -200, padding: 5, textAlign: "center", fontWeight: "bold", fontSize: 12, color: COLOR_BLACK }}>{listHistory.length}</Text>
-              </View>
-            </View> */}
             <View style={styles.card} >
               <View style={{ width: "100%", marginTop: 20, marginBottom: -20 }}>
                 <Text style={{ bottom: 34, padding: 7, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 15, backgroundColor: COLOR_PRIMARY, color: COLOR_WHITE }}>Total Tonnase By Period</Text>

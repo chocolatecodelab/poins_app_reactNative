@@ -6,7 +6,6 @@ import Card from "./Carousel";
 import { getScreenDimension, iPad } from '../../tools/helper';
 import { COLOR_BLACK, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
 import { BaseScreen, Button, MyModalError, MyModalInfo } from '../../components';
-import Carousel, { Pagination } from 'react-native-snap-carousel-v4';
 import moment from 'moment';
 import { useState } from 'react';
 
