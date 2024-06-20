@@ -8,7 +8,6 @@ import { Linking } from 'react-native';
 import { downloadingActiveBargingAsync } from '../../redux/features/activeBarging/activeBargingSlice';
 
 const mapStateToProps = state => {
-    console.log(state.home?.apps);
     return ({
         email: state.auth.email,
         isError: state.home.isError,

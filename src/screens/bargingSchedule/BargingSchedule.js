@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { BaseScreen, BodyLarge, Body, MyHeader, DatePicker, MyModal } from "../../components";
 import { COLOR_BLACK, COLOR_DISABLED, COLOR_GRAY_1, COLOR_GRAY_2, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
@@ -19,9 +19,9 @@ const BargingSchedule = ({ companyUserId, listHistory, onAppear, isLoading, onEx
   const [modalStartDate, setModalStartDate] = useState(false)
   const [modalFinishDate, setModalFinishDate] = useState(false)
 
-  useEffect(() => { 
-  onAppear(companyUserId, startDate, finishDate) 
-}, [startDate, finishDate])
+  useEffect(() => {
+    onAppear(companyUserId, startDate, finishDate)
+  }, [startDate, finishDate])
   return (
     <BaseScreen
       barBackgroundColor={COLOR_PRIMARY}
@@ -64,6 +64,7 @@ const BargingSchedule = ({ companyUserId, listHistory, onAppear, isLoading, onEx
             </View>
           </View>
         </View>
+        {!isLoading ? 
         <FlatList
           contentContainerStyle={{ justifyContent: 'center', paddingBottom: 250, paddingTop: 20 }}
           showsVerticalScrollIndicator={false}
@@ -247,6 +248,11 @@ const BargingSchedule = ({ companyUserId, listHistory, onAppear, isLoading, onEx
           }}
           ListEmptyComponent={renderEmptyComponent}
         />
+          :
+          <View style={{ height: '40%', justifyContent: 'center' }} >
+            <ActivityIndicator size='large' color={COLOR_PRIMARY} />
+          </View>
+        }
       </View>
       <MyModal isVisible={modalStartDate} closeModal={() => setModalStartDate(!modalStartDate)}>
         <View style={{ maxHeight: '100%', paddingVertical: 20, paddingHorizontal: 25 }}>

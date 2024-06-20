@@ -22,6 +22,8 @@ const mapDispatchToProps = (dispatch) => ({
         const transfromFinishDate = finishDate ? `${finishDate.getFullYear()}-${finishDate.getMonth() + 1}-${finishDate.getDate()}` : `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
         const params = { id, startDate: transfromStartDate, finishDate: transfromFinishDate }
         // const transfromFinishDate = `2023-7-31`
+        console.log(params.startDate, params.finishDate);
+        dispatch(onChangeData())
         dispatch(downloadingBargingScheduleAsync(params))
     },
     onCloseModalError: () => {

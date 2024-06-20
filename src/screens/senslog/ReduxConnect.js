@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { downloadingWaterBenderAvgAsync, downloadingWaterBenderLastAsync, downloadingWaterBenderMonthlyAsync } from '../../redux/features/senslog/senslogSlice';
+import { downloadingWaterBenderAvgAsync, downloadingWaterBenderLastAsync, downloadingWaterBenderMonthlyAsync, resetSenslog } from '../../redux/features/senslog/senslogSlice';
 import moment from 'moment';
 import SenslogScreen from './Senslog';
 
@@ -18,8 +18,16 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    onAppear: ( startDate, finishDate) => {
+    onAppear: ( startDate) => {
         const today = new Date()
+        let finishDate;
+        if(startDate == new Date()){
+            finishDate = new Date();
+        }else if(startDate < new Date()) {
+        console.log("cek");
+        finishDate = new Date(startDate);
+        finishDate.setDate(finishDate.getDate() + 3);
+        }
         const transfromStartDate = startDate ? `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}` : `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
         const transfromFinishDate = finishDate ? `${finishDate.getFullYear()}-${finishDate.getMonth() + 1}-${finishDate.getDate()}` : `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
         const params = { startDate: transfromStartDate, endDate: transfromFinishDate }
@@ -27,10 +35,9 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(downloadingWaterBenderAvgAsync(params))
         dispatch(downloadingWaterBenderLastAsync())
         dispatch(downloadingWaterBenderMonthlyAsync(year))
-        // dispatch(downloadingWaterByMonth())
     },
     onCloseModalError: () => {
-        dispatch(resetWaterBender())
+        dispatch(resetSenslog())
     },
 });
 

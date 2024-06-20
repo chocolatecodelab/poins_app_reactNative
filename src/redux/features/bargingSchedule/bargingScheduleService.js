@@ -6,6 +6,7 @@ export const downloadBargingSchedule = async (params) => {
         .replace(/\{id\}/, params.id)
         .replace(/\{startDate\}/, params.startDate)
         .replace(/\{finishDate\}/, params.finishDate);
+        console.log(url);
     const respon = await sendGetRequest(url,)
     const result = respon.Data.map(item => ({
         ...item,

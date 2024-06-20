@@ -16,9 +16,8 @@ const renderEmptyComponent = () => (
   </View>
 );
 
-const Senslog = ({ waterBenderAvgDistance, waterBenderLast, waterBenderAvg, waterBenderMonthly, waterBenderPeriod, onAppear, isLoading, onLogoutPressed }) => {
+const Senslog = ({ waterBenderAvgDistance, waterBenderLast, waterBenderAvg, waterBenderMonthly, waterBenderPeriod, onAppear, isLoading, onCloseModalError }) => {
   const [startDate, setStartDate] = useState(new Date())
-  const [finishDate, setFinishDate] = useState(new Date())
   const [modalStartDate, setModalStartDate] = useState(false)
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [messageInfo, setMessageInfo] = useState('');
@@ -27,14 +26,17 @@ const Senslog = ({ waterBenderAvgDistance, waterBenderLast, waterBenderAvg, wate
 
   if (waterBenderAvgDistance && waterBenderLast && waterBenderAvg && waterBenderMonthly && waterBenderPeriod) {
     generateChartWaterBenderAvgDistance = generateChartData(waterBenderAvgDistance, 1);
-    generateChartWaterOverview = generateChartData(waterBenderPeriod, 2);
     generateChartWaterBenderPeriod = generateChartData(waterBenderPeriod, 4);
     generateChartWaterBenderMonthly = generateChartData(waterBenderMonthly, 3);
   }
 
   useEffect(() => {
-    onAppear(startDate, finishDate);
-  }, [startDate, finishDate])
+    if(startDate < new Date()) {
+    onAppear(startDate);
+    }else {
+      setShowModalInfo(!showModalInfo);
+    }
+  }, [startDate])
 
 
   return (
@@ -188,7 +190,6 @@ const Senslog = ({ waterBenderAvgDistance, waterBenderLast, waterBenderAvg, wate
           <DatePicker
             value={startDate}
             onChangeDate={setStartDate}
-            onChangeFinishDate={setFinishDate}
             closeDate={() => { setModalStartDate(!modalStartDate); }
             }
           />
@@ -207,7 +208,8 @@ const Senslog = ({ waterBenderAvgDistance, waterBenderLast, waterBenderAvg, wate
         isVisible={showModalInfo}
         closeModal={() => {
           setShowModalInfo(!showModalInfo)
-          setMessageInfo('')
+          setMessageInfo('Tanggal yang anda masukkan melebihi tanggal hari ini.')
+          onCloseModalError()
         }}
         message={messageInfo}
       />

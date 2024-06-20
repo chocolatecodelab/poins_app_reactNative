@@ -8,7 +8,6 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import { ProgressBar } from 'react-native-paper';
 
 const Carousel = ({ item }) => {
-    console.log(item);
     const { width } = getScreenDimension();
     return (
         <View style={styles.capacityProgress}>
