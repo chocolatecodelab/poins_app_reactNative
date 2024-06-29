@@ -13,7 +13,8 @@ import {
   DetailCCTVScreen,
   HistoryBargingScreen,
   WeatherScreen,
-  SenslogScreen,
+  SenslogScreen, DeliveryCargoScreen,
+  BalanceCargoScreen
 } from "./screens";
 import BottomTab from "./components/bottomTab/BottomTab";
 import {
@@ -21,7 +22,8 @@ import {
   NAV_NAME_BARGING_ONLINE_STEP_TWO, NAV_NAME_OTP_FORGET_PASSWORD, NAV_NAME_SPLASH, NAV_NAME_FORGET_PASSWORD,
   NAV_NAME_CHANGE_NEW_PASSWORD, NAV_NAME_BARGING_RECAPITULATION_DETAIL, NAV_NAME_PROFILE, NAV_NAME_BARGING_RECAPITULATION, NAV_NAME_BARGING_SCHEDULE, NAV_NAME_NOTIFICATION, NAV_NAME_CCTV, NAV_NAME_DETAIL_CCTV, NAV_NAME_HISTORY_BARGING,
   NAV_NAME_WEATHER,
-  NAV_NAME_SENSLOG
+  NAV_NAME_SENSLOG, NAV_NAME_DELIVERY_CARGO,
+  NAV_NAME_BALANCE_CARGO
 } from "./tools/constant";
 import { NavigationContainer, } from '@react-navigation/native';
 import NavigationService from './tools/navigationService';
@@ -30,36 +32,11 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { LogBox } from 'react-native';
-// import { useEffect } from 'react';
-// import messaging from '@react-native-firebase/messaging';
-// import notifee, { AndroidImportance } from '@notifee/react-native';
-// import { requestPermission } from './tools/helper';
 
 const Stack = createStackNavigator();
 
 function MainNavigation() {
   LogBox.ignoreLogs(['Remote debugger']);
-
-  // useEffect(() => {
-  //   requestPermission();
-  //   notifee.requestPermission();
-  //   const onMessageReceived = async (message) => {
-  //     console.log(message);
-  //     if (message) {
-  //         await notifee.createChannel({
-  //             id: 'default9',
-  //             name: 'Default Channel 9',
-  //             importance: AndroidImportance.HIGH,
-  //             sound: "cute_sound",
-  //             badge: true,
-  //           });
-  //         await notifee.displayNotification(JSON.parse(message.data.notifee));
-  //     }
-  // }
-  
-  // messaging().onMessage(onMessageReceived);
-    
-  // }, []);
 
   return (
     <Provider store={store}>
@@ -165,6 +142,22 @@ function MainNavigation() {
             <Stack.Screen
               name={NAV_NAME_BARGING_RECAPITULATION}
               component={BargingRecapitulationScreen}
+              options={{
+                cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={NAV_NAME_DELIVERY_CARGO}
+              component={DeliveryCargoScreen}
+              options={{
+                cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={NAV_NAME_BALANCE_CARGO}
+              component={BalanceCargoScreen}
               options={{
                 cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
                 headerShown: false,

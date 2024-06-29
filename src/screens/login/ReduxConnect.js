@@ -47,7 +47,6 @@ const mapDispatchToProps = (dispatch) => ({
     onNavigationOtp: () => {
         dispatch(resetAuth())
         NavigationService.navigate(NAV_NAME_OTP_LOGIN)
-        // NavigationService.navigate(NAV_NAME_WEATHER);
     },
     onNavigationRegister: () => {
         dispatch(resetLogin())

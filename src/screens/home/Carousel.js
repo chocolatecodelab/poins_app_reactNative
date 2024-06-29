@@ -11,7 +11,7 @@ const Carousel = ({ item }) => {
     const { width } = getScreenDimension();
     return (
         <View style={styles.capacityProgress}>
-            <View style={{ alignItems: 'center', marginBottom: 30, marginTop: 5, width: "100%" }}>
+            <View style={{ alignItems: 'center', marginBottom: 30, marginTop: 10, width: "100%" }}>
                 <Text style={{ marginBottom: 5, paddingBottom: 5, marginTop: 5, fontWeight: 'bold', fontSize: 8, borderBottomWidth: 1, borderBottomColor: COLOR_GRAY_2, width: "100%", textAlign: "center", }}> JETTY {item.JETTY}</Text>
                 <CircularProgress
                     value={item.Percentage}
@@ -23,7 +23,7 @@ const Carousel = ({ item }) => {
                     radius={iPad ? width / 30 : width / 18}
                 />
             </View>
-            <View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: 20, width: "100%" }}>
+            <View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: 20, padding:5, width: "100%" }}>
                 {iPad ?
                     <View style={{ alignItems: 'center', marginLeft: 5, marginBottom: 15 }}>
                         <Text style={{ fontSize: 8 }}>Plan Load</Text>
@@ -57,10 +57,12 @@ const Carousel = ({ item }) => {
                     <MaterialCommunityIcons name={"domain"} size={9} color={COLOR_PRIMARY} />
                     <Text style={{marginLeft:2, marginBottom: 2, fontFamily: FONT_POPPINS_REGULAR, fontSize: 7, fontWeight: 'bold', textAlign: "left" }}>{item.Company_Alias}</Text>
                 </View>
+                <View >
                 {iPad ?
                     <Text style={{ textAlign: 'center', color: COLOR_WHITE, backgroundColor: COLOR_PRIMARY, fontWeight:"bold", paddingHorizontal:7, paddingVertical:2, borderRadius:3, marginTop:3 }}>{item.STATUS}</Text> :
                     <Text style={{ textAlign: 'center', borderRadius:5, color: COLOR_WHITE, fontWeight:"bold", backgroundColor: item.STATUS == "Breakdown" ? COLOR_ERROR: item.STATUS == "Loading" ? COLOR_BLUE : COLOR_GRAY_2, fontSize: 10, marginTop:3, paddingHorizontal:7, paddingVertical:2 }}>{item.STATUS}</Text>
                 }
+                </View>
             </View>
         </View>
     )
@@ -79,7 +81,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         borderColor: COLOR_TRANSPARENT_DARK,
-        padding: 5,
+        paddingVertical: 10,
+        paddingHorizontal:7,
         marginHorizontal: 3
     },
 });

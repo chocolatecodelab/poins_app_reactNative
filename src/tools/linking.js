@@ -1,4 +1,4 @@
-import { NAV_NAME_BARGING_ONLINE_STEP_ONE, NAV_NAME_BARGING_RECAPITULATION, NAV_NAME_BARGING_SCHEDULE, NAV_NAME_CCTV, NAV_NAME_HISTORY_BARGING, NAV_NAME_SENSLOG, NAV_NAME_WEATHER } from "./constant"
+import { NAV_NAME_BALANCE_CARGO, NAV_NAME_BARGING_ONLINE_STEP_ONE, NAV_NAME_BARGING_RECAPITULATION, NAV_NAME_BARGING_SCHEDULE, NAV_NAME_CCTV, NAV_NAME_DELIVERY_CARGO, NAV_NAME_HISTORY_BARGING, NAV_NAME_SENSLOG, NAV_NAME_WEATHER } from "./constant"
 
 const config = {
     screens: {
@@ -22,6 +22,12 @@ const config = {
         },
         [NAV_NAME_SENSLOG]: {
             path: 'senslog'
+        },
+        [NAV_NAME_DELIVERY_CARGO]: {
+            path: 'delivery-cargo'
+        },
+        [NAV_NAME_BALANCE_CARGO]: {
+            path: 'balance-cargo'
         },
     }
 }

@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { StyleSheet, View, FlatList, TouchableOpacity, ScrollView } from 'react-native'
-import { BaseScreen, BodyLarge, Body, BodySmall, MyHeader, MyModal, H2, MyModalInfo, DatePicker } from "../../components";
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_GRAY_1, COLOR_GRAY_2, COLOR_PRIMARY, COLOR_RED, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
+import { StyleSheet, View, FlatList, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
+import { BaseScreen, BodyLarge, Body, BodySmall, MyHeader, MyModal, H2, MyModalInfo, DatePicker, Dropdown, HorizontalLine } from "../../components";
+import { COLOR_BLACK, COLOR_DISABLED, COLOR_ERROR, COLOR_GRAY_1, COLOR_GRAY_2, COLOR_MEDIUM_BLACK, COLOR_PRIMARY, COLOR_RED, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
 import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { getScreenDimension, iPad, ios, iconTools } from '../../tools/helper';
+import { getScreenDimension, iPad, ios, iconTools, formatTotal } from '../../tools/helper';
 import { BarChart, LineChart } from "react-native-gifted-charts";
 import { Text } from 'react-native';
 import { generateChartData } from './components/summary';
@@ -17,7 +17,7 @@ const renderEmptyComponent = () => (
   </View>
 );
 
-const BargingRecapitulation = ({ userId, listHistory, onAppear, isLoading, onDetailPressed, companyUserId, exportData }) => {
+const BargingRecapitulation = ({ userId, listHistory, onAppear, isLoading, onDetailPressed, companyUserId, exportData, customers }) => {
   const [startDate, setStartDate] = useState(new Date())
   const [modalHistory, setModalHistory] = useState(false)
   const [finishDate, setFinishDate] = useState(new Date())
@@ -27,11 +27,17 @@ const BargingRecapitulation = ({ userId, listHistory, onAppear, isLoading, onDet
   const [messageInfo, setMessageInfo] = useState('');
   const [modalConfirm, setModalConfirm] = useState(false);
   const [exportType, setExportType] = useState('');
+  const [company, setCompany] = useState('')
+  const [companyId, setCompanyId] = useState(0)
+  const [showCompanyMenu, setShowCompanyMenu] = useState(false);
+  const [customerCompany, setCustomersCompany] = useState(customers);
+
 
   // Gunakan fungsi filterByDateAndFilter untuk mengambil data 
   const filterMonthlyandPeriod = filterByDateAndFilter(listHistory, "Year", "Period", startDate, finishDate);
   const filterMonthlyandJetty = filterByDateAndFilter(listHistory, "Year", "Jetty", startDate, finishDate);
   const generateChartSummary = generateChartData(listHistory);
+
 
   const getMaxValue = (data) => {
     return Math.max(...data.map(item => item.value));
@@ -39,20 +45,35 @@ const BargingRecapitulation = ({ userId, listHistory, onAppear, isLoading, onDet
   // Hitung nilai maksimum dari data dan kalikan dengan 2 untuk mendapatkan maxValue
   const maxValue = getMaxValue(generateChartSummary) * 2;
 
-  
+
 
   const totalTon = listHistory.reduce((total, item) => {
     return total + item.ACTUAL_LOAD;
   }, 0);
 
+  const pushAddCustomer = () => {
+    const alreadyExists = customerCompany.company?.some(company => company.id === 5 || company.name === "All");
+
+    if (!alreadyExists) {
+      setCustomersCompany(prevCustomers => ({
+        ...prevCustomers,
+        company: [...prevCustomers.company, { id: 5, name: "All" }]
+      }));
+    }
+  };
 
   useEffect(() => {
     // console.log("cek monthDate yearDate");
-    onAppear(companyUserId, startDate, finishDate)
+    if (companyId === 0) {
+      onAppear(companyUserId, startDate, finishDate)
+    } else {
+      onAppear(companyId, startDate, finishDate)
+    }
+    pushAddCustomer()
     filterMonthlyandPeriod;
     filterMonthlyandJetty;
     generateChartData;
-  }, [startDate, finishDate])
+  }, [startDate, finishDate, companyId])
 
 
   return (
@@ -67,7 +88,58 @@ const BargingRecapitulation = ({ userId, listHistory, onAppear, isLoading, onDet
         backButton
       />
       <View style={{ paddingHorizontal: 20, }}>
-        <Text style={{ marginTop: 5, textAlign: "center", fontSize: 16, fontWeight: "bold" }}> Select 'start date or Finish date' first</Text>
+        <View style={{ width: "100%", borderBottomWidth: 1, borderBottomColor: COLOR_DISABLED, paddingVertical: 10, display: companyUserId === 5 ? "flex" : "none" }}>
+          <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}> Company <Body style={{ color: 'red' }}>*</Body> : </Body>
+          <Dropdown
+            custom={true}
+            value={company ? company : 'All'}
+            dropdownActive={showCompanyMenu}
+            dropdownPressed={() => {
+              setShowCompanyMenu(!showCompanyMenu)
+            }}
+            data={customerCompany?.company}
+            placeholder={'Select Company'}
+            containerStyle={{ marginVertical: 0 }}
+            borderColor={COLOR_MEDIUM_BLACK}
+            borderRadius={8}
+          >
+            <MyModal
+              isVisible={showCompanyMenu}
+              headerActive={true}
+              headerTitle={'List Company'}
+              closeModal={() => setShowCompanyMenu(!showCompanyMenu)}
+            >
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                style={{ width: '100%' }}
+                data={customerCompany?.company}
+                keyExtractor={(_, index) => index}
+                renderItem={({ item, index }) => {
+
+                  const lastIndex = customerCompany?.company.length - 1;
+
+                  return (
+                    <>
+                      <TouchableOpacity
+                        style={{ marginVertical: 5 }}
+                        onPress={() => {
+                          setCompany(item.name)
+                          setShowCompanyMenu(!showCompanyMenu)
+                          setCompanyId(item.id)
+                        }}>
+                        <Body style={{ color: COLOR_BLACK, textAlign: 'center' }}>
+                          {item.name}
+                        </Body>
+                      </TouchableOpacity>
+                      {index !== lastIndex && <HorizontalLine width={'100%'} />}
+                    </>
+                  )
+                }}
+              />
+            </MyModal>
+          </Dropdown>
+        </View>
+        <Text style={{ marginTop: 10, textAlign: "center", fontSize: 16, fontWeight: "bold" }}> Select 'start date or Finish date' first</Text>
         <View style={{ marginTop: 15, flexDirection: "row", justifyContent: "space-evenly", }}>
           <View style={{ width: "45%" }}>
             <Text style={{ color: COLOR_GRAY_2, fontSize: 16, marginBottom: -10, marginLeft: 10, zIndex: 1, backgroundColor: COLOR_WHITE, width: "50%" }}>Start date</Text>
@@ -100,128 +172,134 @@ const BargingRecapitulation = ({ userId, listHistory, onAppear, isLoading, onDet
         </View>
         <View style={{ width: "100%", flexDirection: "row", alignSelf: "center", justifyContent: "space-around", marginTop: 10, borderBottomWidth: 1, borderBottomColor: COLOR_DISABLED, paddingBottom: 15 }}>
           <TouchableOpacity
-            onPress={() => [ setModalConfirm(true), setExportType("excel")]}
+            onPress={() => [setModalConfirm(true), setExportType("excel")]}
             style={{ backgroundColor: COLOR_PRIMARY, borderRadius: 4, width: "45%" }}
           >
             <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", width: "100%" }}>
               <Text style={{ width: "70%", textAlign: "center", padding: 10, borderRadius: 3, fontWeight: "bold", fontSize: 12, color: COLOR_WHITE }}>Export to Excel
               </Text>
-              <MaterialCommunityIcons style={{ width: "20%", right:5 }} name={"microsoft-excel"} size={20} color={COLOR_WHITE} />
+              <MaterialCommunityIcons style={{ width: "20%", right: 5 }} name={"microsoft-excel"} size={20} color={COLOR_WHITE} />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => [ setModalConfirm(true), setExportType("PDF")]}
+            onPress={() => [setModalConfirm(true), setExportType("PDF")]}
             style={{ backgroundColor: COLOR_RED, borderRadius: 4, width: "45%" }}
           >
             <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", width: "100%" }}>
               <Text style={{ width: "70%", textAlign: "center", padding: 10, borderRadius: 3, fontWeight: "bold", fontSize: 12, color: COLOR_WHITE }}>Export to PDF
               </Text>
-              <MaterialCommunityIcons style={{ width: "20%", right:5 }} name={"file-pdf-box"} size={20} color={COLOR_WHITE} />
+              <MaterialCommunityIcons style={{ width: "20%", right: 5 }} name={"file-pdf-box"} size={20} color={COLOR_WHITE} />
             </View>
           </TouchableOpacity>
-          
         </View>
-        <ScrollView>
-          <View style={{ width: '100%', justifyContent: 'center' }}>
-          <View style={{ justifyContent: "space-evenly", flexDirection: "row", borderBottomColor: COLOR_TRANSPARENT_DARK, borderBottomWidth: 1, marginBottom: 20 }}>
-              <View style={[styles.card, { width: "45%", justifyContent: "space-evenly", flexDirection: "row", borderRadius: 7, alignItems: "center", marginTop: 10, paddingBottom: 0, paddingVertical: 5 }]}>
-                <View>
-                  <Text style={{ paddingLeft: 15, paddingTop: 10, textAlign: "left", fontWeight: "bold", fontSize: 12, color: COLOR_GRAY_2 }}>Total Tonnase
-                  </Text>
-                  <Text style={{ paddingLeft: 30, paddingBottom: 10, textAlign: "left", fontWeight: "bold", fontSize: 14, color: COLOR_BLACK }}>{totalTon}</Text>
+        {!isLoading ?
+          <ScrollView>
+            <View style={{ width: '100%', justifyContent: 'center' }}>
+              <View style={{ justifyContent: "space-evenly", flexDirection: "row", borderBottomColor: COLOR_TRANSPARENT_DARK, borderBottomWidth: 1, marginBottom: 20 }}>
+                <View style={[styles.card, { width: "45%", justifyContent: "space-evenly", flexDirection: "row", borderRadius: 7, alignItems: "center", marginTop: 10, paddingBottom: 0, paddingVertical: 5 }]}>
+                  <View>
+                    <Text style={{ paddingLeft: 15, paddingTop: 10, textAlign: "left", fontWeight: "bold", fontSize: 12, color: COLOR_GRAY_2 }}>Total Tonnase
+                    </Text>
+                    <Text style={{ paddingLeft: 30, paddingBottom: 10, textAlign: "left", fontWeight: "bold", fontSize: 14, color: COLOR_BLACK }}>{formatTotal(totalTon)}</Text>
+                  </View>
+                  <View>
+                    <MaterialCommunityIcons name={"weight"} size={25} color={COLOR_PRIMARY} style={{ marginHorizontal: 10 }} />
+                  </View>
                 </View>
-                <View>
-                  <MaterialCommunityIcons name={"weight"} size={25} color={COLOR_PRIMARY} style={{ marginHorizontal: 10 }} />
+                <View style={[styles.card, { width: "45%", justifyContent: "space-evenly", flexDirection: "row", borderRadius: 7, alignItems: "center", marginTop: 10, paddingBottom: 0, paddingVertical: 5 }]}>
+                  <View>
+                    <Text style={{ paddingLeft: 15, paddingTop: 10, textAlign: "left", fontWeight: "bold", fontSize: 12, color: COLOR_GRAY_2 }}>Total Barging</Text>
+                    <Text style={{ paddingLeft: 30, paddingBottom: 10, textAlign: "left", fontWeight: "bold", fontSize: 14, color: COLOR_BLACK }}>{listHistory.length === 0 ? '0.000' : listHistory.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                  </View>
+                  <View>
+                    <MaterialCommunityIcons name={"ferry"} size={25} color={COLOR_PRIMARY} style={{ marginHorizontal: 10 }} />
+                  </View>
                 </View>
               </View>
-              <View style={[styles.card, { width: "45%", justifyContent: "space-evenly", flexDirection: "row", borderRadius: 7, alignItems: "center", marginTop: 10, paddingBottom: 0, paddingVertical: 5 }]}>
-                <View>
-                  <Text style={{ paddingLeft: 15, paddingTop: 10, textAlign: "left", fontWeight: "bold", fontSize: 12, color: COLOR_GRAY_2 }}>Total Barging</Text>
-                  <Text style={{ paddingLeft: 30, paddingBottom: 10, textAlign: "left", fontWeight: "bold", fontSize: 14, color: COLOR_BLACK }}>{listHistory.length}</Text>
+              <View style={styles.card} >
+                <View style={{ width: "100%", marginTop: 20, marginBottom: -20 }}>
+                  <Text style={{ bottom: 34, padding: 7, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 15, backgroundColor: COLOR_PRIMARY, color: COLOR_WHITE }}>Total Tonnase By Period</Text>
                 </View>
+                <LineChart
+                  areaChart
+                  curved
+                  noOfSections={10}
+                  spacing={90}
+                  data={generateChartSummary}
+                  yAxisLabelWidth={50}
+                  maxValue={maxValue}
+                  xAxisThickness={1}
+                  yAxisThickness={1}
+                  yAxisTextStyle={{ color: 'gray', fontSize: 12 }}
+                  xAxisLabelTextStyle={{ color: 'gray', textAlign: 'center', fontSize: 12 }}
+                  width={getScreenDimension().width / 1.1} // Full width
+                  height={getScreenDimension().height / 1.9} // Adjust height as needed
+                  startFillColor="rgb(0, 156, 78)"
+                  startOpacity={0.8}
+                  endFillColor="rgb(0, 200, 100)"
+                  endOpacity={0.3}
+                  isAnimated
+                  animationDuration={1200}
+                />
+              </View>
+              <View style={[styles.card, { marginTop: 20 }]}>
+                <View style={{ width: "100%", marginTop: 10 }}>
+                  <Text style={{ bottom: 24, padding: 7, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 15, backgroundColor: COLOR_PRIMARY, color: COLOR_WHITE }}>Total Tonnase By Jetty</Text>
+                </View>
+                <BarChart
+                  height={getScreenDimension().height / 2.3}
+                  width={getScreenDimension().width / 1.3}
+                  data={filterMonthlyandJetty}
+                  // horizontal
+                  barWidth={getScreenDimension().height / 12}
+                  noOfSections={5}
+                  yAxisLabelWidth={55}
+                  xAxisThickness={1}
+                  yAxisThickness={1}
+                  yAxisTextStyle={{ color: 'gray', fontSize: 12 }}
+                  xAxisLabelTextStyle={{ color: 'gray', textAlign: 'center', fontSize: 12 }}
+                  onPress={(e) => setModalHistory(true)}
+                  showFractionalValue
+                  isAnimated
+                />
                 <View>
-                  <MaterialCommunityIcons name={"ferry"} size={25} color={COLOR_PRIMARY} style={{ marginHorizontal: 10 }} />
+                  <Text style={{ bottom: -30, right: -140, fontWeight: "bold", fontSize: 15 }}>Jetty</Text>
                 </View>
               </View>
-            </View>
-            <View style={styles.card} >
-              <View style={{ width: "100%", marginTop: 20, marginBottom: -20 }}>
-                <Text style={{ bottom: 34, padding: 7, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 15, backgroundColor: COLOR_PRIMARY, color: COLOR_WHITE }}>Total Tonnase By Period</Text>
-              </View>
-              <LineChart
-                areaChart
-                curved
-                noOfSections={10}
-                spacing={90}
-                data={generateChartSummary}
-                yAxisLabelWidth={50}
-                maxValue={maxValue}
-                xAxisThickness={1}
-                yAxisThickness={1}
-                yAxisTextStyle={{ color: 'gray', fontSize: 12 }}
-                xAxisLabelTextStyle={{ color: 'gray', textAlign: 'center', fontSize: 12 }}
-                width={getScreenDimension().width / 1.1} // Full width
-                height={getScreenDimension().height / 1.9} // Adjust height as needed
-                startFillColor="rgb(0, 156, 78)"
-                startOpacity={0.8}
-                endFillColor="rgb(0, 200, 100)"
-                endOpacity={0.3}
-                isAnimated
-                animationDuration={1200}
-              />
-            </View>
-            <View style={[styles.card, { marginTop: 20 }]}>
-              <View style={{ width: "100%", marginTop: 10 }}>
-                <Text style={{ bottom: 24, padding: 7, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 15, backgroundColor: COLOR_PRIMARY, color: COLOR_WHITE }}>Total Tonnase By Jetty</Text>
-              </View>
-              <BarChart
-                height={getScreenDimension().height / 2.3}
-                width={getScreenDimension().width / 1.3}
-                data={filterMonthlyandJetty}
-                // horizontal
-                barWidth={getScreenDimension().height / 12}
-                noOfSections={5}
-                yAxisLabelWidth={55}
-                xAxisThickness={1}
-                yAxisThickness={1}
-                yAxisTextStyle={{ color: 'gray', fontSize: 12 }}
-                xAxisLabelTextStyle={{ color: 'gray', textAlign: 'center', fontSize: 12 }}
-                onPress={(e) => setModalHistory(true)}
-                showFractionalValue
-                isAnimated
-              />
-              <View>
-                <Text style={{ bottom: -30, right: -140, fontWeight: "bold", fontSize: 15 }}>Jetty</Text>
-              </View>
-            </View>
 
-            <View style={[styles.card, { marginBottom: 200, marginTop: 20 }]}>
-              <View style={{ width: "100%", marginTop: 10 }}>
-                <Text style={{ bottom: 20, padding: 7, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 15, backgroundColor: COLOR_PRIMARY, color: COLOR_WHITE }}>Total Tonnase By Month</Text>
-              </View>
-              <BarChart
-                height={getScreenDimension().height / 2.3}
-                width={getScreenDimension().width / 1.3}
-                data={filterMonthlyandPeriod}
-                // horizontal
-                barWidth={getScreenDimension().height / 12}
-                noOfSections={5}
-                frontColor={COLOR_PRIMARY}
-                xAxisThickness={1}
-                yAxisThickness={1}
-                yAxisLabelWidth={55}
-                yAxisTextStyle={{ color: 'gray', fontSize: 12 }}
-                xAxisLabelTextStyle={{ color: 'gray', textAlign: 'center', fontSize: 12, }}
-                onPress={(e) => setModalHistory(true)}
-                showFractionalValue
-                isAnimated
-              />
-              <View>
-                <Text style={{ bottom: -30, right: -140, fontWeight: "bold", fontSize: 15 }}>Tonnase</Text>
+              <View style={[styles.card, { marginBottom: companyUserId === 5 ? 400: 200, marginTop: 20 }]}>
+                <View style={{ width: "100%", marginTop: 10 }}>
+                  <Text style={{ bottom: 20, padding: 7, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 15, backgroundColor: COLOR_PRIMARY, color: COLOR_WHITE }}>Total Tonnase By Month</Text>
+                </View>
+                <BarChart
+                  height={getScreenDimension().height / 2.3}
+                  width={getScreenDimension().width / 1.3}
+                  data={filterMonthlyandPeriod}
+                  // horizontal
+                  barWidth={getScreenDimension().height / 12}
+                  noOfSections={5}
+                  frontColor={COLOR_PRIMARY}
+                  xAxisThickness={1}
+                  yAxisThickness={1}
+                  yAxisLabelWidth={55}
+                  yAxisTextStyle={{ color: 'gray', fontSize: 12 }}
+                  xAxisLabelTextStyle={{ color: 'gray', textAlign: 'center', fontSize: 12, }}
+                  onPress={(e) => setModalHistory(true)}
+                  showFractionalValue
+                  isAnimated
+                />
+                <View>
+                  <Text style={{ bottom: -30, right: -140, fontWeight: "bold", fontSize: 15 }}>Tonnase</Text>
+                </View>
               </View>
             </View>
+          </ScrollView>
+          :
+          <View style={{ height: '40%', justifyContent: 'center' }} >
+            <ActivityIndicator size='large' color={COLOR_PRIMARY} />
           </View>
-        </ScrollView>
+        }
+
         <MyModal isVisible={modalHistory} closeModal={() => setModalHistory(!modalHistory)}>
           <View style={{ maxHeight: '100%', paddingBottom: 20, paddingTop: 30, paddingHorizontal: 25 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -246,7 +324,7 @@ const BargingRecapitulation = ({ userId, listHistory, onAppear, isLoading, onDet
               renderItem={({ item }) => {
                 return (
                   <Fragment>
-                    <TouchableOpacity style={[styles.card, {marginBottom: 10, marginTop: 5}]} onPress={onDetailPressed}>
+                    <TouchableOpacity style={[styles.card, { marginBottom: 10, marginTop: 5 }]} onPress={onDetailPressed}>
                       <Body bold style={{ color: COLOR_PRIMARY }}>{item.CUSTOMER}</Body>
                       <BodySmall style={{ color: COLOR_DISABLED }} >
                         {moment(item.DATE_BOOKING).format('DD MMMM YYYY')}

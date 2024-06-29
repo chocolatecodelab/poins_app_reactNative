@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { StyleSheet, View, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { BaseScreen, BodyLarge, Body, MyHeader, DatePicker, MyModal } from "../../components";
-import { COLOR_BLACK, COLOR_DISABLED, COLOR_GRAY_1, COLOR_GRAY_2, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
+import { BaseScreen, BodyLarge, Body, MyHeader, DatePicker, MyModal, Dropdown, HorizontalLine } from "../../components";
+import { COLOR_BLACK, COLOR_DISABLED, COLOR_GRAY_1, COLOR_GRAY_2, COLOR_MEDIUM_BLACK, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
 import moment from 'moment';
 import { ios, iconTools, iPad } from '../../tools/helper';
 import { Text } from 'react-native';
@@ -13,15 +13,35 @@ const renderEmptyComponent = () => (
   </View>
 );
 
-const BargingSchedule = ({ companyUserId, listHistory, onAppear, isLoading, onExpandPressed }) => {
+const BargingSchedule = ({ companyUserId, listHistory, onAppear, isLoading, onExpandPressed, customers }) => {
   const [startDate, setStartDate] = useState(new Date())
   const [finishDate, setFinishDate] = useState(new Date())
   const [modalStartDate, setModalStartDate] = useState(false)
   const [modalFinishDate, setModalFinishDate] = useState(false)
+  const [company, setCompany] = useState('')
+  const [companyId, setCompanyId] = useState(0)
+  const [showCompanyMenu, setShowCompanyMenu] = useState(false);
+  const [customerCompany, setCustomersCompany] = useState(customers);
+
+  const pushAddCustomer = () => {
+    const alreadyExists = customerCompany.company?.some(company => company.id === 5 || company.name === "All");
+
+    if (!alreadyExists) {
+      setCustomersCompany(prevCustomers => ({
+        ...prevCustomers,
+        company: [...prevCustomers.company, { id: 5, name: "All" }]
+      }));
+    }
+  };
 
   useEffect(() => {
-    onAppear(companyUserId, startDate, finishDate)
-  }, [startDate, finishDate])
+    pushAddCustomer()
+    if (companyId === 0) {
+      onAppear(companyUserId, startDate, finishDate)
+    } else {
+      onAppear(companyId, startDate, finishDate)
+    }
+  }, [startDate, finishDate, companyId])
   return (
     <BaseScreen
       barBackgroundColor={COLOR_PRIMARY}
@@ -34,7 +54,58 @@ const BargingSchedule = ({ companyUserId, listHistory, onAppear, isLoading, onEx
         backButton
       />
       <View style={{ paddingHorizontal: 25, }}>
-        <View style={{ marginTop: 15, flexDirection: "row", justifyContent: "space-evenly", borderBottomWidth: 1, borderBottomColor: COLOR_DISABLED, paddingBottom: 15 }}>
+        <View style={{ width: "100%", borderBottomWidth: 1, borderBottomColor: COLOR_DISABLED, paddingVertical: 10, display: companyUserId === 5 ? "flex" : "none" }}>
+          <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}> Company <Body style={{ color: 'red' }}>*</Body> : </Body>
+          <Dropdown
+            custom={true}
+            value={company ? company : 'All'}
+            dropdownActive={showCompanyMenu}
+            dropdownPressed={() => {
+              setShowCompanyMenu(!showCompanyMenu)
+            }}
+            data={customerCompany?.company}
+            placeholder={'Select Company'}
+            containerStyle={{ marginVertical: 0 }}
+            borderColor={COLOR_MEDIUM_BLACK}
+            borderRadius={8}
+          >
+            <MyModal
+              isVisible={showCompanyMenu}
+              headerActive={true}
+              headerTitle={'List Company'}
+              closeModal={() => setShowCompanyMenu(!showCompanyMenu)}
+            >
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                style={{ width: '100%' }}
+                data={customerCompany?.company}
+                keyExtractor={(_, index) => index}
+                renderItem={({ item, index }) => {
+
+                  const lastIndex = customerCompany?.company.length - 1;
+
+                  return (
+                    <>
+                      <TouchableOpacity
+                        style={{ marginVertical: 5 }}
+                        onPress={() => {
+                          setCompany(item.name)
+                          setShowCompanyMenu(!showCompanyMenu)
+                          setCompanyId(item.id)
+                        }}>
+                        <Body style={{ color: COLOR_BLACK, textAlign: 'center' }}>
+                          {item.name}
+                        </Body>
+                      </TouchableOpacity>
+                      {index !== lastIndex && <HorizontalLine width={'100%'} />}
+                    </>
+                  )
+                }}
+              />
+            </MyModal>
+          </Dropdown>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-evenly", borderBottomWidth: 1, borderBottomColor: COLOR_DISABLED, paddingBottom: 15, paddingTop: 10 }}>
           <View style={{ width: "45%" }}>
             <Text style={{ color: COLOR_GRAY_2, fontSize: 16, marginBottom: -10, marginLeft: 10, zIndex: 1, backgroundColor: COLOR_WHITE, width: "50%" }}>Start date</Text>
             <View style={{ flexDirection: "row", borderWidth: 1, alignItems: 'center', borderRadius: 8, borderColor: COLOR_GRAY_1, paddingTop: 5 }}>
@@ -64,190 +135,190 @@ const BargingSchedule = ({ companyUserId, listHistory, onAppear, isLoading, onEx
             </View>
           </View>
         </View>
-        {!isLoading ? 
-        <FlatList
-          contentContainerStyle={{ justifyContent: 'center', paddingBottom: 250, paddingTop: 20 }}
-          showsVerticalScrollIndicator={false}
-          style={{ width: '100%' }}
-          data={listHistory}
-          keyExtractor={(item, index) => item.Data.ID}
-          refreshing={isLoading}
-          // onRefresh={() => onAppear(companyUserId)}
-          renderItem={({ item, index }) => {
-            return (
-              <Fragment>
-                <View
-                  style={{
-                    backgroundColor: COLOR_WHITE,
-                    borderWidth: 1,
-                    borderColor: COLOR_TRANSPARENT_DARK,
-                    marginBottom: 15,
-                    borderTopLeftRadius: 8,
-                    borderTopRightRadius: 8
-                  }}
-                >
+        {!isLoading ?
+          <FlatList
+            contentContainerStyle={{ justifyContent: 'center', paddingBottom: 250, paddingTop: 20 }}
+            showsVerticalScrollIndicator={false}
+            style={{ width: '100%' }}
+            data={listHistory}
+            keyExtractor={(item, index) => item.Data.ID}
+            refreshing={isLoading}
+            // onRefresh={() => onAppear(companyUserId)}
+            renderItem={({ item, index }) => {
+              return (
+                <Fragment>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      // justifyContent: 'space-between',
-                      padding: 10,
-                      backgroundColor: COLOR_TRANSPARENT_DARK,
+                      backgroundColor: COLOR_WHITE,
+                      borderWidth: 1,
+                      borderColor: COLOR_TRANSPARENT_DARK,
+                      marginBottom: 15,
                       borderTopLeftRadius: 8,
                       borderTopRightRadius: 8
-                    }}>
-                    <MaterialCommunityIcons name={"clock-time-eight-outline"} size={18} color={COLOR_PRIMARY} style={{ marginHorizontal: 5 }} />
-                    <Text style={{ fontWeight: "500" }}>{moment(item.Date).format('DD MMMM YYYY')}</Text>
-                  </View>
-                  {item.Data.map((x) => {
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        // justifyContent: 'space-between',
+                        padding: 10,
+                        backgroundColor: COLOR_TRANSPARENT_DARK,
+                        borderTopLeftRadius: 8,
+                        borderTopRightRadius: 8
+                      }}>
+                      <MaterialCommunityIcons name={"clock-time-eight-outline"} size={18} color={COLOR_PRIMARY} style={{ marginHorizontal: 5 }} />
+                      <Text style={{ fontWeight: "500" }}>{moment(item.Date).format('DD MMMM YYYY')}</Text>
+                    </View>
+                    {item.Data.map((x) => {
 
-                    // Mengubah Finish Date jika invalid date
-                    let formattedDateFinish = moment(x.FINISH_BOOKING, moment.ISO_8601, true).isValid()
-                      ? moment(item.FINISH_BOOKING).format('MMMM D, YYYY')
-                      : ""; // Jika tanggal tidak valid, kembalikan nilai kosong
-                    if (formattedDateFinish == "") {
-                      x = { ...x, FINISH_BOOKING: x.DATE_BOOKING }
-                    }
-                    // PEMBUATAN WARNA
-                    const letters = '0123456789ABCDEF';
-                    let color = '#';
-                    for (let i = 0; i < 6; i++) {
-                      color += letters[Math.floor(Math.random() * 18)];
-                    }
-                    return (
-                      <>
-                        <TouchableOpacity
-                          key={x.ID}
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            padding: 10,
-                            borderBottomWidth: 1,
-                            borderColor: COLOR_TRANSPARENT_DARK
-                          }}
-                          onPress={() => { onExpandPressed(x.ID, listHistory) }}>
-                          <View style={{ backgroundColor: x.COLOR, borderRadius: 50, height: 10, width: 10, marginRight: 10 }} />
-                          <Body style={{ flex: 1, fontWeight: '400' }}>{x.CUSTOMER} - {x.NAMA}</Body>
-                          <iconTools.MaterialIcons
-                            name={!x.SHOW_DETAIL ? 'expand-more' : 'expand-less'}
-                            size={25}
-                            color={COLOR_DISABLED}
-                          />
-                        </TouchableOpacity>
-                        {x.SHOW_DETAIL &&
-                          <View
+                      // Mengubah Finish Date jika invalid date
+                      let formattedDateFinish = moment(x.FINISH_BOOKING, moment.ISO_8601, true).isValid()
+                        ? moment(item.FINISH_BOOKING).format('MMMM D, YYYY')
+                        : ""; // Jika tanggal tidak valid, kembalikan nilai kosong
+                      if (formattedDateFinish == "") {
+                        x = { ...x, FINISH_BOOKING: x.DATE_BOOKING }
+                      }
+                      // PEMBUATAN WARNA
+                      const letters = '0123456789ABCDEF';
+                      let color = '#';
+                      for (let i = 0; i < 6; i++) {
+                        color += letters[Math.floor(Math.random() * 18)];
+                      }
+                      return (
+                        <>
+                          <TouchableOpacity
+                            key={x.ID}
                             style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              padding: 10,
                               borderBottomWidth: 1,
-                              borderColor: COLOR_TRANSPARENT_DARK,
-                              // paddingVertical: 10,
-                              // paddingHorizontal: 13,
-                              // flexDirection: 'row',
-                              justifyContent: 'space-between'
-                            }}>
-                            <View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Jetty</Body>
+                              borderColor: COLOR_TRANSPARENT_DARK
+                            }}
+                            onPress={() => { onExpandPressed(x.ID, listHistory) }}>
+                            <View style={{ backgroundColor: x.COLOR, borderRadius: 50, height: 10, width: 10, marginRight: 10 }} />
+                            <Body style={{ flex: 1, fontWeight: '400' }}>{x.CUSTOMER} - {x.NAMA}</Body>
+                            <iconTools.MaterialIcons
+                              name={!x.SHOW_DETAIL ? 'expand-more' : 'expand-less'}
+                              size={25}
+                              color={COLOR_DISABLED}
+                            />
+                          </TouchableOpacity>
+                          {x.SHOW_DETAIL &&
+                            <View
+                              style={{
+                                borderBottomWidth: 1,
+                                borderColor: COLOR_TRANSPARENT_DARK,
+                                // paddingVertical: 10,
+                                // paddingHorizontal: 13,
+                                // flexDirection: 'row',
+                                justifyContent: 'space-between'
+                              }}>
+                              <View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Jetty</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{x.JETTY}</Body>
+                                  </View>
                                 </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{x.JETTY}</Body>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Tug Boat</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{x.TUG_BOAT}</Body>
+                                  </View>
                                 </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Tug Boat</Body>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Barge</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{x.BARGE}</Body>
+                                  </View>
                                 </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{x.TUG_BOAT}</Body>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Capacity</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{x.CAPACITY}</Body>
+                                  </View>
                                 </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Barge</Body>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Start Date</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{moment(x.DATE_BOOKING).format('DD MMMM YYYY')}</Body>
+                                  </View>
                                 </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{x.BARGE}</Body>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Start Time</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{x.START_TIME < 10 ? `0${x.START_TIME}:00` : `${x.START_TIME}:00`}</Body>
+                                  </View>
                                 </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Capacity</Body>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Finish Date</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{moment(x.FINISH_BOOKING).format('DD MMMM YYYY')}</Body>
+                                  </View>
                                 </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{x.CAPACITY}</Body>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Finish Time</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{x.FINISH_TIME < 10 ? `0${x.FINISH_TIME}:00` : `${x.FINISH_TIME}:00`}</Body>
+                                  </View>
                                 </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Start Date</Body>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Vessel</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{x.VESSEL}</Body>
+                                  </View>
                                 </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{moment(x.DATE_BOOKING).format('DD MMMM YYYY')}</Body>
-                                </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Start Time</Body>
-                                </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{x.START_TIME < 10 ? `0${x.START_TIME}:00` : `${x.START_TIME}:00`}</Body>
-                                </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Finish Date</Body>
-                                </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{moment(x.FINISH_BOOKING).format('DD MMMM YYYY')}</Body>
-                                </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Finish Time</Body>
-                                </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{x.FINISH_TIME < 10 ? `0${x.FINISH_TIME}:00` : `${x.FINISH_TIME}:00`}</Body>
-                                </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Vessel</Body>
-                                </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{x.VESSEL}</Body>
-                                </View>
-                              </View>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
-                                <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
-                                  <Body>Status</Body>
-                                </View>
-                                <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
-                                <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
-                                  <Body style={{ textAlign: 'right' }}>{x.STATUS}</Body>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, borderBottomWidth: 1, borderColor: COLOR_TRANSPARENT_DARK, }}>
+                                  <View style={{ flex: 0.35, borderColor: COLOR_TRANSPARENT_DARK, paddingVertical: 2 }}>
+                                    <Body>Status</Body>
+                                  </View>
+                                  <View style={{ borderWidth: 0.7, borderColor: COLOR_TRANSPARENT_DARK, height: '100%' }} />
+                                  <View style={{ flex: 0.63, alignItems: 'flex-end', paddingLeft: 10, paddingVertical: 2 }}>
+                                    <Body style={{ textAlign: 'right' }}>{x.STATUS}</Body>
+                                  </View>
                                 </View>
                               </View>
                             </View>
-                          </View>
-                        }
-                      </>
-                    )
-                  })}
+                          }
+                        </>
+                      )
+                    })}
 
-                </View>
+                  </View>
 
-              </Fragment>
-            )
-          }}
-          ListEmptyComponent={renderEmptyComponent}
-        />
+                </Fragment>
+              )
+            }}
+            ListEmptyComponent={renderEmptyComponent}
+          />
           :
           <View style={{ height: '40%', justifyContent: 'center' }} >
             <ActivityIndicator size='large' color={COLOR_PRIMARY} />

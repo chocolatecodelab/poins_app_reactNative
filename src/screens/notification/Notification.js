@@ -25,6 +25,8 @@ const Notification = ({
         (typeof item.date === 'string' && item.date.toLowerCase().includes(search.toLowerCase()))
     );
 
+    filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
     useEffect(() => {
         onAppear(userId)
     }, [])

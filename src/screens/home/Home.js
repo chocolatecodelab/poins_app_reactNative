@@ -10,7 +10,7 @@ import moment from 'moment';
 import { useState } from 'react';
 
 const Home = ({
-    email, apps, notification, userId, listHistory, isError, isInfo, message, onAppear, onCloseModal,
+    email, apps, notification, userId, companyUserId, listHistory, isError, isInfo, message, onAppear, onCloseModal,
     onProfilePressed, onItemPressed, onFiturDevelopmentPressed, isDownloadingApps, onNotificationPressed
 }) => {
 
@@ -93,12 +93,6 @@ const Home = ({
         }
     }, [refreshing == true]);
 
-    // const handleRefresh = () => {
-    //     setRefreshing(true);
-
-    //     setTimeout(() => setRefreshing(false), 1000); // Atur status refreshing kembali ke false setelah 1 detik
-    // };
-
     return (
         <BaseScreen
             barBackgroundColor={COLOR_PRIMARY}
@@ -126,9 +120,11 @@ const Home = ({
             >
                 {!isDownloadingApps ?
                     <Apps
-                        refresh={setRefreshing}
+                        // refresh={setRefreshing}
                         data={apps}
                         onItemPressed={onItemPressed}
+                        companyUserId={companyUserId}
+
                     />
                     :
                     <View style={{ height: '40%', justifyContent: 'center' }} >
@@ -174,7 +170,7 @@ const Home = ({
                             </View>
                         </ImageBackground>
                     </View>
-                    <View style={{ paddingHorizontal: 10, justifyContent: 'center', width: "100%", flexDirection: "row", marginBottom:-10, height: 300, marginTop: 10 }}>
+                    <View style={{ paddingHorizontal: 10, justifyContent: 'center', width: "100%", flexDirection: "row", marginBottom:15, height: 300, marginTop: 10 }}>
                         <FlatList
                             data={jettyPart1}
                             renderItem={(item) => Card(item)}
@@ -262,7 +258,6 @@ const styles = StyleSheet.create({
     },
     capacityProgress: {
         width: "33%",
-        height: 480,
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',

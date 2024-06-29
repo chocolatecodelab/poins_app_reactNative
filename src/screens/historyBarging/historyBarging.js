@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
-import { BaseScreen, Body, BodySmall, HorizontalLine, MyHeader, MyModal, SearchBar, DividerLine } from '../../components';
+import { BaseScreen, Body, BodySmall, HorizontalLine, MyHeader, MyModal, SearchBar, DividerLine, BodyLarge, Dropdown } from '../../components';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,58 +16,64 @@ const renderEmptyComponent = () => (
 );
 
 const HistoryBarging = ({
-  companyUserId, listHistoryBarging, onAppear, isLoading
+  companyUserId, listHistoryBarging, onAppear, isLoading, customers
 }) => {
   // State untuk filter dan pencarian
   const [search, setSearch] = useState('');
-  const [dropdownActive, setDropdownActive] = useState(false); // State untuk mengatur dropdown aktif atau tidak
-  const [selected, setSelectedOption] = useState('');
+  const [dropdownActive, setDropdownActive] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [companyId, setCompanyId] = useState(0);
+  const [company, setCompany] = useState('')
+  const [showCompanyMenu, setShowCompanyMenu] = useState(false);
+  const [customerCompany, setCustomersCompany] = useState(customers);
 
-  console.log(listHistoryBarging);
-
-  const toggleDropdown = () => {
-    setDropdownActive(!dropdownActive);
-  };
+  // Toggle dropdown
+  const toggleDropdown = () => setDropdownActive(prevState => !prevState);
 
   // Menghitung jumlah kemunculan setiap status
-  const statusCount = listHistoryBarging.reduce((acc, item) => {
-    const status = item.STATUS;
-    acc[status] = (acc[status] || 0) + 1;
+  const statusCount = listHistoryBarging.reduce((acc, { STATUS }) => {
+    acc[STATUS] = (acc[STATUS] || 0) + 1;
     return acc;
   }, {});
 
   // Mengubah objek hasil perhitungan menjadi array yang dapat digunakan untuk Dropdown
-  const dropdownData = Object.keys(statusCount).map(status => ({ name: status, count: statusCount[status] }));
+  const dropdownData = Object.entries(statusCount).map(([status, count]) => ({ name: status, count }));
 
   // Menghitung jumlah keseluruhan kemunculan status
   const totalStatusCount = Object.values(statusCount).reduce((total, count) => total + count, 0);
 
   // Memformat tanggal menggunakan moment.js
-  const formattedData = listHistoryBarging.map(item => {
-    let formattedDateBooking = moment(item.DATE_BOOKING_TIME).format('MMMM D, YYYY');
-    let formattedDateFinish = moment(item.FINISH_BOOKING_TIME, moment.ISO_8601, true).isValid()
+  const formattedData = listHistoryBarging.map(item => ({
+    ...item,
+    JETTY: `Jetty ${item.JETTY}`,
+    DATE_BOOKING_TIME: moment(item.DATE_BOOKING_TIME).format('MMMM D, YYYY'),
+    FINISH_BOOKING_TIME: moment(item.FINISH_BOOKING_TIME, moment.ISO_8601, true).isValid()
       ? moment(item.FINISH_BOOKING_TIME).format('MMMM D, YYYY')
-      : ""; // Jika tanggal tidak valid, kembalikan nilai kosong
-    return { ...item, DATE_BOOKING_TIME: formattedDateBooking, FINISH_BOOKING_TIME: formattedDateFinish };
-  });
+      : ""
+  }));
 
   // Fungsi untuk memfilter data berdasarkan pencarian (case insensitive)
   const filteredData = formattedData.filter(item =>
-    (typeof item.ID === 'string' && item.ID.toLowerCase().includes(search.toLowerCase())) ||
-    (typeof item.JETTY === 'string' && item.JETTY.toLowerCase().includes(search.toLowerCase())) ||
-    (typeof item.TUG_BOAT === 'string' && item.TUG_BOAT.toLowerCase().includes(search.toLowerCase())) ||
-    (typeof item.BARGE === 'string' && item.BARGE.toLowerCase().includes(search.toLowerCase())) ||
-    (typeof item.CAPACITY === 'string' && item.CAPACITY.toLowerCase().includes(search.toLowerCase())) ||
-    (typeof item.VESSEL === 'string' && item.VESSEL.toLowerCase().includes(search.toLowerCase())) ||
-    (typeof item.STATUS === 'string' && item.STATUS.toLowerCase().includes(search.toLowerCase())) ||
-    (typeof item.DATE_BOOKING_TIME === 'string' && item.DATE_BOOKING_TIME.toLowerCase().includes(search.toLowerCase())) ||
-    (typeof item.FINISH_BOOKING_TIME === 'string' && item.FINISH_BOOKING_TIME.toLowerCase().includes(search.toLowerCase()))
+    ['ID', 'JETTY', 'TUG_BOAT', 'BARGE', 'CAPACITY', 'VESSEL', 'STATUS', 'DATE_BOOKING_TIME', 'FINISH_BOOKING_TIME']
+      .some(key => item[key]?.toString().toLowerCase().includes(search.toLowerCase()))
   );
 
+  // Menambah customer "All" jika belum ada
+  const pushAddCustomer = () => {
+    const alreadyExists = customerCompany.company?.some(company => company.id === 5 || company.name === "All");
+
+    if (!alreadyExists) {
+      setCustomersCompany(prevCustomers => ({
+        ...prevCustomers,
+        company: [...prevCustomers.company, { id: 5, name: "All" }]
+      }));
+    }
+  };
+
   useEffect(() => {
-    onAppear(companyUserId)
-  }, [])
+    pushAddCustomer()
+    onAppear(companyId || companyUserId);
+  }, [companyUserId, companyId]);
 
   return (
     <BaseScreen
@@ -77,7 +83,57 @@ const HistoryBarging = ({
     >
       <MyHeader pageTitle='Barging History' backButton />
       <View style={styles.container}>
+        <View style={{ width: "100%", borderBottomWidth: 1, borderBottomColor: COLOR_DISABLED, paddingVertical: 10, display: companyUserId === 5 ? "flex" : "none" }}>
+          <Body style={{ color: COLOR_BLACK, marginBottom: 5 }}> Company <Body style={{ color: 'red' }}>*</Body> : </Body>
+          <Dropdown
+            custom={true}
+            value={company ? company : 'All'}
+            dropdownActive={showCompanyMenu}
+            dropdownPressed={() => {
+              setShowCompanyMenu(!showCompanyMenu)
+            }}
+            data={customerCompany?.company}
+            placeholder={'Select Company'}
+            containerStyle={{ marginVertical: 0 }}
+            borderColor={COLOR_MEDIUM_BLACK}
+            borderRadius={8}
+          >
+            <MyModal
+              isVisible={showCompanyMenu}
+              headerActive={true}
+              headerTitle={'List Company'}
+              closeModal={() => setShowCompanyMenu(!showCompanyMenu)}
+            >
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                style={{ width: '100%' }}
+                data={customerCompany?.company}
+                keyExtractor={(_, index) => index}
+                renderItem={({ item, index }) => {
 
+                  const lastIndex = customerCompany?.company.length - 1;
+
+                  return (
+                    <>
+                      <TouchableOpacity
+                        style={{ marginVertical: 5 }}
+                        onPress={() => {
+                          setCompany(item.name)
+                          setShowCompanyMenu(!showCompanyMenu)
+                          setCompanyId(item.id)
+                        }}>
+                        <Body style={{ color: COLOR_BLACK, textAlign: 'center' }}>
+                          {item.name}
+                        </Body>
+                      </TouchableOpacity>
+                      {index !== lastIndex && <HorizontalLine width={'100%'} />}
+                    </>
+                  )
+                }}
+              />
+            </MyModal>
+          </Dropdown>
+        </View>
         {/* Pencarian */}
         <View style={styles.contentItem}>
           <SearchBar
@@ -129,7 +185,7 @@ const HistoryBarging = ({
                 <View>
                   <TouchableOpacity
                     style={{ marginVertical: 10 }}
-                    onPress={() => [toggleDropdown(), setSelectedOption(item.name), setSearch(item.name)]}>
+                    onPress={() => [toggleDropdown(), setSearch(item.name)]}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
                       <Body style={{ color: COLOR_BLACK, textAlign: 'center' }}>
                         {item.name}
@@ -182,9 +238,8 @@ const HistoryBarging = ({
                       <Text style={{ fontSize: 10, color: COLOR_GRAY_2, textAlign: 'left' }}>Jenis</Text>
                       <View style={{ flexDirection: "row" }}>
                         <MaterialIcons name={"directions-boat"} size={18} color={COLOR_PRIMARY} />
-                        <Text style={{ marginLeft: 5, fontSize: 11 }}>Jetty {item.JETTY}</Text>
+                        <Text style={{ marginLeft: 5, fontSize: 11 }}>{item.JETTY}</Text>
                       </View>
-
                     </View>
                     <View>
                       <Text style={{ fontSize: 10, color: COLOR_GRAY_2, textAlign: 'right' }}>Start - Finish Loading </Text>
@@ -223,7 +278,7 @@ const HistoryBarging = ({
                     </View>
                     <View>
                       <Text style={{ fontSize: 10, color: COLOR_GRAY_2, textAlign: 'right' }}>Actual Load </Text>
-                      <View style={{ flexDirection: "row" , right:-6}}>
+                      <View style={{ flexDirection: "row", right: -6 }}>
                         <Text style={{ marginRight: 5, fontSize: 11 }}>{item.ACTUAL_LOAD}</Text>
                         <MaterialCommunityIcons name={"weight"} size={18} color={COLOR_PRIMARY} />
                       </View>
@@ -272,7 +327,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: '#fff',
-    paddingVertical: 30,
+    paddingVertical: 5,
     paddingHorizontal: 20
   },
   containerItem: {
@@ -319,7 +374,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   contentItem: {
-    marginBottom: 15,
+    marginVertical: 15,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',

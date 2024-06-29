@@ -18,4 +18,6 @@ export { default as CCTVScreen } from './cctv';
 export { default as DetailCCTVScreen } from './cctv/detail';
 export { default as WeatherScreen } from './weather';
 export {default as  SenslogScreen } from './senslog';
+export {default as DeliveryCargoScreen } from './deliveryCargo';
+export {default as BalanceCargoScreen } from './balanceCargo'; 
 

@@ -24,7 +24,6 @@ const mapDispatchToProps = (dispatch) => ({
         if(startDate == new Date()){
             finishDate = new Date();
         }else if(startDate < new Date()) {
-        console.log("cek");
         finishDate = new Date(startDate);
         finishDate.setDate(finishDate.getDate() + 3);
         }

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React from 'react'
 import { Text, View } from "react-native";
-import { COLOR_BLACK, COLOR_GRAY_2 } from '../../../tools/constant';
+import { COLOR_GRAY_2 } from '../../../tools/constant';
 
 // Fungsi utama untuk membuat data berdasarkan rentang tanggal
 export const generateChartData = (listHistory) => {
@@ -69,7 +69,7 @@ const createDataObject = (date) => {
               paddingVertical: 5,
               borderRadius: 4,
             }}>
-            <Text style={{ color: 'white' }}>{value}</Text>
+            <Text style={{ color: 'white' }}>{value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
           </View>
         );
       },

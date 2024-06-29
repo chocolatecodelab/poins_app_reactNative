@@ -6,6 +6,8 @@ import NavigationService from '../../tools/navigationService';
 import { NAV_NAME_NOTIFICATION, NAV_NAME_PROFILE } from '../../tools/constant';
 import { Linking } from 'react-native';
 import { downloadingActiveBargingAsync } from '../../redux/features/activeBarging/activeBargingSlice';
+import { downloadingCustomerAsync } from '../../redux/features/barginOnline/barginOnlineSlice';
+import { downloadingBalanceCargoAsync } from '../../redux/features/balanceCargo/balanceCargoSlice';
 
 const mapStateToProps = state => {
     return ({
@@ -17,7 +19,8 @@ const mapStateToProps = state => {
         notification: state.home?.notification,
         listHistory: state.activeBarging?.listHistory,
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
-        isDownloadingApps: state.home.isDownloadingApps
+        isDownloadingApps: state.home.isDownloadingApps,
+        companyUserId: state.profile.data.companyId,
     })
 };
 
@@ -30,6 +33,8 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(downlodingCheckVersionAsync())
         dispatch(downloadingActiveBargingAsync())
         dispatch(downlodingListNotificationAsync(userId))
+        dispatch(downloadingCustomerAsync())
+        dispatch(downloadingBalanceCargoAsync())
     },
     onCloseModal: () => {
         dispatch(resetHome())

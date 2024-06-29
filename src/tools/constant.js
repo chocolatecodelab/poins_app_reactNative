@@ -19,6 +19,8 @@ export const NAV_NAME_CCTV = 'NAV_NAME_CCTV';
 export const NAV_NAME_DETAIL_CCTV = 'NAV_NAME_DETAIL_CCTV';
 export const NAV_NAME_WEATHER = 'NAV_NAME_WEATHER';
 export const NAV_NAME_SENSLOG = 'NAV_NAME_SENSLOG';
+export const NAV_NAME_DELIVERY_CARGO = 'NAV_NAME_DELIVERY_CARGO';
+export const NAV_NAME_BALANCE_CARGO = 'NAV_NAME_BALANCE_CARGO';
 
 export const REST_BASE_URL = 'https://opr-poins-mobile-01-kpd.azurewebsites.net/api';
 // export const REST_BASE_URL = 'https://ap.kppmining.com:12201/api';
@@ -43,7 +45,7 @@ export const REST_URL_FORGET_PASSWORD_STEP_THREE = '/login/ChangePassword';
 export const REST_URL_BARGING_RECAPITULATION = '/barging_online/Get_BargingOnlineByFilter/{id}?startDate={startDate}&endDate={finishDate}';
 export const REST_URL_BARGING_RECAPITULATION_EXPORT_TO_EXCEL = '/barging_online/ExportDataToExcel?startDate={startDate}&endDate={endDate}&company_id={company_id}';
 export const REST_URL_BARGING_RECAPITULATION_EXPORT_TO_PDF = '/barging_online/ExportDataToPDF?startDate={startDate}&endDate={endDate}&company_id={company_id}';
-export const REST_URL_HISTORY_BARGING = '/barging_online/Get_BargininOnlineByCompanyId/{id}';
+export const REST_URL_HISTORY_BARGING = '/barging_online/Get_BargingOnlineByCompanyId/{id}';
 export const REST_URL_TIME_BARGIN_ONLINE = '/barging_online/Get_ValidasiBookingTime?filterDate={date}&jetty={jetty}';
 export const REST_URL_BARGING_SCHEDULE = '/barging_online/Get_BargingSchedule/{id}?startDate={startDate}&endDate={finishDate}';
 export const REST_URL_ACTIVE_BARGING = '/barging_online/RilDashboard';
@@ -56,6 +58,11 @@ export const REST_URL_GET_LAST_SENSELOG_WATER_BENDER = '/senselog/Get_Last_Sense
 export const REST_URL_GET_AVG_SENSELOG_WATER_BENDER = '/senselog/Get_Avg_Senselog?startDate={startDate}&endDate={endDate}';
 export const REST_URL_GET_MONTHLY_SENSELOG_WATER_BENDER = '/senselog/Get_MonthlyTrans_WaterBender?year={year}';
 export const REST_URL_GET_DAILY_SENSELOG_WATER_BENDER = '/senselog/Get_TodayTrans_WaterBender';
+export const REST_URL_GET_DELIVERY_CARGO = '/cargo/GetDevCargoDate?startDate={startDate}&endDate={endDate}';
+export const REST_URL_DELIVERY_CARGO_EXPORT_TO_EXCEL = '/cargo/ExportDataToExcel?startDate={startDate}&endDate={endDate}&shift={shift}&jetty={jetty}';
+export const REST_URL_DELIVERY_CARGO_EXPORT_TO_PDF = '/cargo/ExportDataToPDF?startDate={startDate}&endDate={endDate}&shift={shift}&jetty={jetty}';
+export const REST_URL_BALANCE_CARGO = '/cargo/GetRTBalanceCargo';
+export const REST_URL_BALANCE_CARGO_HISTORY = '/cargo/GetBalanceCargoHistory';
 
 export const REST_METHOD_GET = 'Get';
 export const REST_METHOD_POST = 'Post';

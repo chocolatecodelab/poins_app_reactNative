@@ -20,6 +20,7 @@ import DatePicker from "./calender/Calender";
 import CalendarYear from "./calendarYear/CalendarYear";
 import CalendarMonth from "./calendarMonth/calendarMonth";
 import DividerLine from "./dividerLine/DividerLine";
+import Legend from './legendItem/LegendItem';
 export * from "./labels/Labels";
 
 export {
@@ -44,5 +45,6 @@ export {
     DatePicker,
     CalendarMonth,
     CalendarYear,
-    DividerLine
+    DividerLine,
+    Legend
 };

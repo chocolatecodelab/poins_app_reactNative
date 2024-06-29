@@ -95,7 +95,7 @@ const Senslog = ({ waterBenderAvgDistance, waterBenderLast, waterBenderAvg, wate
                 </View>
               </View>
             </View>
-            {!isLoading ?
+            {!isLoading && generateChartWaterBenderMonthly != undefined ?
               <View>
                 <View style={[styles.card, { marginTop: 20 }]}>
                   <View style={{ width: "100%", marginTop: 10 }}>
@@ -119,8 +119,8 @@ const Senslog = ({ waterBenderAvgDistance, waterBenderLast, waterBenderAvg, wate
                     startOpacity={0.8}
                     endFillColor="rgb(72, 209, 204)" // Lighter sea blue
                     endOpacity={0.3}
-                    isAnimated
-                    animationDuration={1200}
+                    // isAnimated
+                    // animationDuration={1200}
                   />
                 </View>
                 <View style={[styles.card, { marginTop: 20 }]}>
@@ -145,8 +145,8 @@ const Senslog = ({ waterBenderAvgDistance, waterBenderLast, waterBenderAvg, wate
                     startOpacity={0.8}
                     endFillColor="rgb(72, 209, 204)" // Lighter sea blue
                     endOpacity={0.3}
-                    isAnimated
-                    animationDuration={1200}
+                    // isAnimated
+                    // animationDuration={1200}
                   />
                 </View>
                 <View style={[styles.card, { marginTop: 20, }]}>
@@ -171,8 +171,8 @@ const Senslog = ({ waterBenderAvgDistance, waterBenderLast, waterBenderAvg, wate
                     startOpacity={0.8}
                     endFillColor="rgb(72, 209, 204)" // Lighter sea blue
                     endOpacity={0.3}
-                    isAnimated
-                    animationDuration={1200}
+                    // isAnimated
+                    // animationDuration={1200}
                   />
                 </View>
               </View>

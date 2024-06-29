@@ -12,6 +12,7 @@ const mapStateToProps = state => {
         message: state.historyBarging.message,
         userId: state.auth?.loginInfo?.ID ? state.auth?.loginInfo?.ID : '',
         companyUserId: state.profile.data.companyId,
+        customers: state.barginOnline.customers,
     })
 };
 

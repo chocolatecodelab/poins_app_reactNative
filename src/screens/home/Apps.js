@@ -6,28 +6,31 @@ import { COLOR_GRAY_1, COLOR_WHITE } from '../../tools/constant';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useState } from 'react';
 
-const MenuHorizontal = ({ data, onItemPressed, refresh }) => {
+const MenuHorizontal = ({ 
+    data, onItemPressed, refresh, companyUserId 
+}) => {
     const { height, width } = getScreenDimension()
     return (
-        <ScrollView
-        refreshControl={
-            <RefreshControl
-                refreshing={false}
-                onRefresh={() => {
-                    refresh(true);
-                    // Panggil fungsi refresh data di sini
-                    setTimeout(() => refresh(false), 1000); // Atur status refreshing kembali ke false setelah 1 detik
-                }}
-            />
-        }
-        >
+        // <ScrollView
+        // refreshControl={
+        //     <RefreshControl
+        //         refreshing={false}
+        //         onRefresh={() => {
+        //             refresh(true);
+        //             // Panggil fungsi refresh data di sini
+        //             setTimeout(() => refresh(false), 1000); // Atur status refreshing kembali ke false setelah 1 detik
+        //         }}
+        //     />
+        // }
+        // >
             <View style={styles.cardColumn}>
                 {data?.map((item, index) => {
                     return (
                         <TouchableOpacity
                             key={item.ID}
-                            style={styles.appCard(width, height)}
-                            onPress={() => { onItemPressed(ios ? item.URL_IOS : item.URL_ANDROID) }}
+                            style={[styles.appCard(width, height), {display: companyUserId === 5 && item.ID === 1 ? "none" : "flex"}]}
+                            // onPress={() => { onItemPressed(ios ? item.URL_IOS : item.URL_ANDROID) }}
+                            onPress={() => { onItemPressed( item.URL_ANDROID) }}
                         >
                             <View style={styles.appIconSize}>
                                 {item.ICON ?
@@ -49,7 +52,7 @@ const MenuHorizontal = ({ data, onItemPressed, refresh }) => {
                     )
                 })}
             </View>
-        </ScrollView>
+        // </ScrollView>
 
     );
 };

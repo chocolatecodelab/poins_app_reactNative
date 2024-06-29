@@ -28,6 +28,18 @@ export const ios = Platform.OS === 'ios';
 export const android = Platform.OS === 'android';
 export const iPad = DeviceInfo.getModel().includes('iPad');
 
+export const formatTotal = (total) => {
+  if (total === 0) {
+      return '0.000';
+  } else if (total >= 1000000000) {
+      return (total / 1000000000).toFixed(2) + 'm';
+  } else if (total >= 1000000) {
+      return (total / 1000000).toFixed(2) + 'jt';
+  } else {
+      return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+};
+
 export const stringMonth = [
   "Jan",
   "Feb",

@@ -17,6 +17,8 @@ import RealtimeCCTVSlice from './features/realtimeCCTV/realtimeCCTVSlice';
 import HistoryBargingSlice from './features/historyBarging/historyBargingSlice';
 import weatherSlice from './features/weather/weatherSlice';
 import senslogSlice from './features/senslog/senslogSlice';
+import deliveryCargoSlice from './features/deliveryCargo/deliveryCargoSlice';
+import balanceCargoSlice from './features/balanceCargo/balanceCargoSlice';
 
 
 const reducers = combineReducers({
@@ -33,6 +35,8 @@ const reducers = combineReducers({
     historyBarging: HistoryBargingSlice,
     weather: weatherSlice,
     senslog: senslogSlice,
+    deliveryCargo: deliveryCargoSlice,
+    balanceCargo: balanceCargoSlice,
 });
 
 const persistConfig = {
@@ -48,7 +52,9 @@ const persistConfig = {
         'realtimeCCTV',
         'historyBarging',
         'weather',
-        'senslog'
+        'senslog',
+        'deliveryCargo',
+        'balanceCargo'
     ],
 };
 

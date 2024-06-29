@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native';
 import { Text } from 'react-native';
 import { COLOR_BLACK, COLOR_PRIMARY } from '../../../tools/constant';
+import { formatTotal } from '../../../tools/helper';
 
 // untuk data Expansion
 export const filterByDateAndFilter = (data, dateBy, filterBy, startDate, finishDate) => {
@@ -16,16 +17,6 @@ export const filterByDateAndFilter = (data, dateBy, filterBy, startDate, finishD
   }
 
   const colors = ['#003285', '#2A629A', '#FF7F3E', '#FFDA78']; 
-
-  // Fungsi untuk menghasilkan warna hex acak
-// const getRandomColor = () => {
-//   const letters = '0123456789ABCDEF';
-//   let color = '#';
-//   for (let i = 0; i < 6; i++) {
-//     color += letters[Math.floor(Math.random() * 16)];
-//   }
-//   return color;
-// };
 
   // Filter data berdasarkan tahun
   const year = finishDate.getFullYear();
@@ -51,7 +42,7 @@ export const filterByDateAndFilter = (data, dateBy, filterBy, startDate, finishD
       value: periodDataMonthly[month],
       label: month,
       topLabelComponent: () => (
-        <Text style={styles.textBarTopComponent}>{periodDataMonthly[month]}</Text>
+        <Text style={styles.textBarTopComponent}>{formatTotal(periodDataMonthly[month])}</Text>
       ),
       frontColor:  COLOR_PRIMARY
     }));
@@ -61,7 +52,7 @@ export const filterByDateAndFilter = (data, dateBy, filterBy, startDate, finishD
       value: jettyData[jettyKey],
       label: jettyKey,
       topLabelComponent: () => (
-        <Text style={styles.textBarTopComponent}>{jettyData[jettyKey]}</Text>
+        <Text style={styles.textBarTopComponent}>{formatTotal(jettyData[jettyKey])}</Text>
       ),
       frontColor: colors[index % colors.length], 
 
