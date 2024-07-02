@@ -5,15 +5,15 @@ import { COLOR_GRAY_2 } from '../../tools/constant';
 import { formatTotal } from '../../tools/helper';
 
 // Fungsi utama untuk membuat data berdasarkan rentang tanggal
-export const generateChartData = (data, companyUserId) => {
+export const generateChartData = (data, companyName) => {
   let dates;
-  dates = getDatesInRangeSecondMethod(data, companyUserId);
+  dates = getDatesInRangeSecondMethod(data, companyName);
   const result = createDataObject(dates);
   return result;
 };
 
 // Fungsi untuk membuat array jam dan tanggal yang digabungkan
-const getDatesInRangeSecondMethod = (data, companyUserId) => {
+const getDatesInRangeSecondMethod = (data, companyName) => {
   const mergeAndSortData = (data) => {
     // Menggabungkan semua data menjadi satu array
     const combinedData = data.reduce((acc, item) => {
@@ -30,13 +30,17 @@ const getDatesInRangeSecondMethod = (data, companyUserId) => {
   let cargo;
   let dates = {};
   mergedData.forEach(item => {
-    if (item.ID_COMPANY === companyUserId) {
-      jam = formatHour(item.JAM);
+    if (item.CUSTOMER === companyName) {
+      jam = parseInt(item.JAM.split(":")[0]);
       tanggal = (moment(item.TANGGAL).format('DD MMMM YYYY'));
       cargo = item.CARGO;
-      dates[`${tanggal} ${jam}`] = cargo;
+      if (!dates[jam]) {
+        dates[`${tanggal} ${jam}`] = cargo;
+      }
+      dates[`${tanggal} ${jam}`] += cargo;
     }
   })
+  console.log(dates);
   return dates;
 }
 
@@ -65,12 +69,7 @@ const aggregateDataByKey = (data) => {
 };
 
 const formatHour = (hour) => {
-  if (hour == null) {
-    return;
-  } else {
-    const parts = hour.split(' ');
-    return parts[0]; // This will return the time without "AM" or "PM"
-  }
+  return `${hour.toString().padStart(2, '0')}:00`;
 };
 
 // Fungsi untuk membuat objek data untuk setiap tanggal
@@ -82,9 +81,13 @@ const createDataObject = (date) => {
   // Ambil kunci pertama
   const firstKey = keys[0];
   return Object.entries(aggregatedDates).map(([key, value], index) => {
-
+    const parts = key.split(' ');
+    const tanggal = `${parts[0]} ${parts[1]}`;
+    const lastValue = parts[parts.length - 1];
+    const formattedHour = formatHour(lastValue);
+    // const formattedday = `${}`;
     // Memisahkan kembali key menjadi tanggal dan jam
-    const formattedDate = key;
+    const formattedDate = `${tanggal} ${formattedHour}`;
     return {
       value,
       labelComponent: () => {

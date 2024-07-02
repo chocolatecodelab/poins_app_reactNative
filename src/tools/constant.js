@@ -23,6 +23,7 @@ export const NAV_NAME_DELIVERY_CARGO = 'NAV_NAME_DELIVERY_CARGO';
 export const NAV_NAME_BALANCE_CARGO = 'NAV_NAME_BALANCE_CARGO';
 
 export const REST_BASE_URL = 'https://opr-poins-mobile-01-kpd.azurewebsites.net/api';
+export const REST_BASE_URL_ADMIN = 'http://Opr-poins-admin-01-kpd.azurewebsites.net/api';
 // export const REST_BASE_URL = 'https://ap.kppmining.com:12201/api';
 // export const REST_BASE_URL = 'http://10.90.32.32/api';
 export const REST_URL_LOGIN = '/login/Login';
@@ -63,6 +64,7 @@ export const REST_URL_DELIVERY_CARGO_EXPORT_TO_EXCEL = '/cargo/ExportDataToExcel
 export const REST_URL_DELIVERY_CARGO_EXPORT_TO_PDF = '/cargo/ExportDataToPDF?startDate={startDate}&endDate={endDate}&shift={shift}&jetty={jetty}';
 export const REST_URL_BALANCE_CARGO = '/cargo/GetRTBalanceCargo';
 export const REST_URL_BALANCE_CARGO_HISTORY = '/cargo/GetBalanceCargoHistory';
+export const REST_URL_BALANCE_CARGO_HISTORY_PERIODIC = '/Cargo/GetPeriodicBalanceCargo?startDateTime={startDateTime}&endDateTime={endDateTime}';
 
 export const REST_METHOD_GET = 'Get';
 export const REST_METHOD_POST = 'Post';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ScrollView, RefreshControl, ActivityIndicator } from 'react-native';
-import { BaseScreen, DividerLine, MyHeader } from '../../components';
-import { COLOR_BLACK, COLOR_GRAY_2, COLOR_HORIZONTAL_LINE, COLOR_MAIN_SECONDARY, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
+import { BaseScreen, DatePicker, DividerLine, Legend, MyHeader, MyModal } from '../../components';
+import { COLOR_BLACK, COLOR_GRAY_1, COLOR_GRAY_2, COLOR_HORIZONTAL_LINE, COLOR_MAIN_SECONDARY, COLOR_PRIMARY, COLOR_TRANSPARENT_DARK, COLOR_WHITE } from '../../tools/constant';
 import { formatTotal, getScreenDimension, iPad, ios } from '../../tools/helper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
@@ -9,45 +9,60 @@ import { LineChart } from 'react-native-gifted-charts';
 import { generateChartData } from './dataChart';
 
 const BalanceCargo = ({
-    listBalanceCargo, onAppear, isLoading, companyUserId, listBalanceCargoHistory
+    listBalanceCargo, onAppear, isLoading, companyUserId, listBalanceCargoHistory, company
 }) => {
     const today = new Date()
     const [refreshing, setRefreshing] = useState(false);
-    const [generateChartBalanceCargo, setGenerateChartBalanceCargo] = useState(listBalanceCargoHistory);
-    const [generateChartBRE, setGenerateChartBRE] = useState(listBalanceCargoHistory);
-    const [generateChartEBL, setGenerateChartEBL] = useState(listBalanceCargoHistory);
-    const [generateChartTAJ, setGenerateChartTAJ] = useState(listBalanceCargoHistory);
-    const [generateChartHMS, setGenerateChartHMS] = useState(listBalanceCargoHistory);
+    const [startDate, setStartDate] = useState(new Date())
+    const [modalStartDate, setModalStartDate] = useState(false)
 
-    const generateChart = () => {
-        if (companyUserId !== 5) {
-            setGenerateChartBalanceCargo(generateChartData(listBalanceCargoHistory, companyUserId));
-        } else {
-            if (listBalanceCargoHistory !== undefined) {
-                setGenerateChartBRE(generateChartData(listBalanceCargoHistory, 1));
-                setGenerateChartEBL(generateChartData(listBalanceCargoHistory, 2));
-                setGenerateChartTAJ(generateChartData(listBalanceCargoHistory, 3));
-                setGenerateChartHMS(generateChartData(listBalanceCargoHistory, 4));
+    let generateChartBalanceCargo, generateChartBRE, generateChartEBL, generateChartTAJ, generateChartHMS, maxValueCargo;
+    if (companyUserId !== 5) {
+        company.forEach(item => {
+            if (item.id == companyUserId) {
+                generateChartBalanceCargo = generateChartData(listBalanceCargoHistory, item.name);
             }
+        })
+    } else {
+        if (listBalanceCargoHistory !== undefined) {
+            company.forEach(item => {
+                if (item.id == 1) {
+                    console.log(item.name);
+                    generateChartBRE = generateChartData(listBalanceCargoHistory, item.name);
+                }else if(item.id == 2) {
+                    console.log(item.name);
+                    generateChartEBL = generateChartData(listBalanceCargoHistory, item.name);
+                }else if(item.id == 3) {
+                    console.log(item.name);
+                    generateChartTAJ = generateChartData(listBalanceCargoHistory, item.name);
+                }else if(item.id == 4) {
+                    console.log(item.name);
+                    generateChartHMS = generateChartData(listBalanceCargoHistory, item.name);
+                }
+            })
         }
     }
-
 
     const getMaxValue = (data) => {
         return Math.max(...data.map(item => item.value));
     };
     // Hitung nilai maksimum dari data dan kalikan dengan 2 untuk mendapatkan maxValue
-    const maxValueCargo = getMaxValue(generateChartBalanceCargo) * 1.5;
+    if (companyUserId !== 5) {
+         maxValueCargo = getMaxValue(generateChartBalanceCargo) * 1.5;
+    } else {
+         maxValueCargo = getMaxValue(generateChartBRE) * 1.5;
+
+    }
+    
+        
 
     useEffect(() => {
-        onAppear();
-        generateChart();
-    }, [])
+        onAppear(startDate);
+    }, [startDate])
 
     useEffect(() => {
         if (refreshing) {
-            onAppear();
-            generateChart();
+            onAppear(startDate);
         }
     }, [refreshing == true]);
 
@@ -228,12 +243,32 @@ const BalanceCargo = ({
                                 </View>
                             </View>
                         </View>
+                        <View style={{ width: "90%", marginTop: 70, marginBottom: -20, alignSelf: "center" }}>
+                            <Text style={{ bottom: 34, padding: 7, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 15, backgroundColor: COLOR_PRIMARY, color: COLOR_WHITE }}>Update Total Cargo</Text>
+                        </View>
+                        <Text style={{ marginTop: 5, textAlign: "center", fontSize: 16, fontWeight: "bold", }}> Select 'Start date' first</Text>
+                        <View style={{ marginTop: 15, flexDirection: "row", justifyContent: "space-evenly", borderBottomColor: COLOR_TRANSPARENT_DARK, borderBottomWidth: 1, paddingBottom: 10, }}>
+                            <View style={{ width: "90%", }}>
+                                <Text style={{ color: COLOR_GRAY_2, fontSize: 16, marginBottom: -20, marginLeft: 20, zIndex: 1, backgroundColor: COLOR_WHITE, width: "35%", textAlign: "center" }}>Start date</Text>
+                                <TouchableOpacity style={{
+                                    backgroundColor: COLOR_WHITE,
+                                    borderColor: COLOR_TRANSPARENT_DARK,
+                                    marginVertical: 10,
+                                }}
+                                    onPress={() => setModalStartDate(!modalStartDate)}>
+                                    <View style={{ flexDirection: "row", borderWidth: 1, alignItems: 'center', borderRadius: 8, borderColor: COLOR_GRAY_1, padding: 15, }}>
+                                        <MaterialCommunityIcons name={"calendar-outline"} size={20} color={COLOR_PRIMARY} style={{ marginHorizontal: 10 }} />
+                                        <Text style={{ fontWeight: "bold", textAlign: "center" }}>{moment(startDate).format('DD MMMM YYYY')}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                         <View style={[styles.card, { flexDirection: "column", marginTop: 20, paddingTop: 30, paddingBottom: 50 }]}>
                             <View style={{ width: "100%", marginTop: 10 }}>
                                 <Text style={{ bottom: 24, padding: 7, textAlign: "center", borderRadius: 3, fontWeight: "bold", fontSize: 15, backgroundColor: COLOR_MAIN_SECONDARY, color: COLOR_WHITE }}>Total Cargo By Period</Text>
                             </View>
                             <LineChart
-                                areaChart
+                                // areaChart
                                 curved
                                 noOfSections={5}
                                 spacing={140}
@@ -249,14 +284,33 @@ const BalanceCargo = ({
                                 xAxisLabelTextStyle={{ color: 'gray', textAlign: 'center', fontSize: 12 }}
                                 width={260} // Full width
                                 height={getScreenDimension().height / 1.9} // Adjust height as needed
-                                startFillColor="rgb(0, 105, 148)" // Darker sea blue
-                                startOpacity={0.8}
-                                endFillColor="rgb(72, 209, 204)" // Lighter sea blue
-                                endOpacity={0.3}
-                            // isAnimated
-                            // animationDuration={1200}
+                                dataPointsColor1='red'
+                                dataPointsColor2='blue'
+                                dataPointsColor3='green'
+                                dataPointsColor4='yellow'
+                                // startFillColor="rgb(0, 105, 148)" // Darker sea blue
+                                // startOpacity={0.8}
+                                // endFillColor="rgb(72, 209, 204)" // Lighter sea blue
+                                // endOpacity={0.3}
+                                // isAnimated
+                                // animationDuration={1200}
                             />
+                            <View style={[styles.containerLegend, { marginTop: 50, display: companyUserId !== 5 ? "none" : "flex", flexDirection: "row" }]}>
+                                <Legend color="red" text="BRE" />
+                                <Legend color="blue" text="EBL" />
+                                <Legend color="green" text="TAJ" />
+                                <Legend color="yellow" text="HMS" />
+                            </View>
                         </View>
+                        <MyModal isVisible={modalStartDate} closeModal={() => setModalStartDate(!modalStartDate)}>
+                            <View style={{ maxHeight: '100%', paddingVertical: 20, paddingHorizontal: 25 }}>
+                                <DatePicker
+                                    value={startDate}
+                                    onChangeDate={setStartDate}
+                                    closeDate={() => setModalStartDate(!modalStartDate)}
+                                />
+                            </View>
+                        </MyModal>
                     </View>
                     :
                     <View style={{ height: '100%', zIndex: 999, paddingTop: 300, justifyContent: 'center', }} >

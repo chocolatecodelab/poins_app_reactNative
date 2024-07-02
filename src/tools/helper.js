@@ -7,7 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import { HTTP_HEADER_VALUE_JSON, HTTP_HEADER_X_API_SECRET_WEATHER, REST_BASE_URL, REST_METHOD_DELETE, REST_METHOD_GET, REST_METHOD_POST, REST_METHOD_PUT } from "./constant";
+import { HTTP_HEADER_VALUE_JSON, HTTP_HEADER_X_API_SECRET_WEATHER, REST_BASE_URL, REST_BASE_URL_ADMIN, REST_METHOD_DELETE, REST_METHOD_GET, REST_METHOD_POST, REST_METHOD_PUT } from "./constant";
 import DeviceInfo from 'react-native-device-info';
 // import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -112,6 +112,14 @@ export const sendPostFormRequest = async (apiPath, body, authenticationToken, cu
 
 export const sendGetRequest = async (apiPath, authenticationToken, customBaseUrl) => {
   const url = customBaseUrl ? `${customBaseUrl}${apiPath}` : `${REST_BASE_URL}${apiPath}`;
+  const method = REST_METHOD_GET;
+  const headers = await getHttpHeaders(authenticationToken);
+  const response = await fetch(url, { method, headers });
+  return processResponse(response, url);
+};
+
+export const sendGetRequestBalanceCargo = async (apiPath, authenticationToken, customBaseUrl) => {
+  const url = customBaseUrl ? `${customBaseUrl}${apiPath}` : `${REST_BASE_URL_ADMIN}${apiPath}`;
   const method = REST_METHOD_GET;
   const headers = await getHttpHeaders(authenticationToken);
   const response = await fetch(url, { method, headers });

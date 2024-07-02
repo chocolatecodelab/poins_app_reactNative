@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         width: 15,
         height: 15,
         borderRadius: 10,
-        marginRight: 10,
+        marginHorizontal: 10, 
     },
     legendText: {
         fontSize: 14,

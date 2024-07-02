@@ -14,9 +14,9 @@ export const downloadingBalanceCargoAsync = createAsyncThunk(
 )
 
 export const downloadingBalanceCargoHistoryAsync = createAsyncThunk(
-    'downloadingBalanceCargoHistoryAsync', async (_, thunkAPI) => {
+    'downloadingBalanceCargoHistoryAsync', async (params, thunkAPI) => {
         try {
-            return await downloadingBalanceCargoHistory()
+            return await downloadingBalanceCargoHistory(params)
         } catch (error) {
             const message =
                 (JSON.stringify(error.response) && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -62,16 +62,19 @@ export const balanceCargoSlice = createSlice({
             })
             .addCase(downloadingBalanceCargoHistoryAsync.pending, (state) => {
                 state.isLoading = true;
+                console.log("pending");
             })
             .addCase(downloadingBalanceCargoHistoryAsync.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.listBalanceCargoHistory = action.payload;
+                console.log("sukses");
             })
             .addCase(downloadingBalanceCargoHistoryAsync.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
+                console.log("error");
             })
     }
 })
